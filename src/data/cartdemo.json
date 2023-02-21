@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Kẹo bông gòn",
+        "quantity": 9,
+        "price": 19000,
+        "uri": "/",
+        "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-60-346x310.jpg"
+    },
+    {
+        "name": "Kẹo Hồng Sâm HQ Jinny-J 200g (Hộp Giấy) - Đỏ",
+        "quantity": 9,
+        "price": 19000,
+        "uri": "/",
+        "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-60-346x310.jpg"
+    },
+    {
+        "name": "Kẹo đường",
+        "quantity": 9,
+        "price": 19000,
+        "uri": "/",
+        "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-60-346x310.jpg"
+    },
+    {
+        "name": "Kẹo đắng",
+        "quantity": 9,
+        "price": 19000,
+        "uri": "/",
+        "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-60-346x310.jpg"
+    },
+    {
+        "name": "Kẹo trái cây",
+        "quantity": 9,
+        "price": 19000,
+        "uri": "/",
+        "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-60-346x310.jpg"
+    }
+]

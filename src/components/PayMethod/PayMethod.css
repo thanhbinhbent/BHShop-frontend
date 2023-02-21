@@ -1,0 +1,23 @@
+.footer-payment__list {
+    display: flex;
+}
+
+.footer-payment__item {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid var(--color-border);
+    padding: 5px;
+    min-width: 100px;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+.footer-payment__item:not(:first-child) {
+    margin-left: 2rem;
+}
+
+.footer-payment__item img {
+    height: 100%;
+}

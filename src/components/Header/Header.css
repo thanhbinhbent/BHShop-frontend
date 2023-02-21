@@ -1,0 +1,81 @@
+.header-top {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    min-height: 42px;
+    font-size: 1.3rem;
+}
+
+.header-top .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-top__menu {
+    display: flex;
+}
+
+.menu-top__item:not(:first-child) {
+    margin-left: 20px;
+}
+
+.header-main {
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+}
+
+.header-main .col-center {
+    flex: 1;
+    margin: 0 60px;
+}
+
+.header-logo__site a img {
+    height: 50px;
+}
+
+.header-search {
+    margin-left: 20px;
+    flex: 1;
+}
+
+.header-cart {
+    margin-left: 20px;
+    font-weight: 700;
+}
+
+.header-cart:hover {
+    cursor: pointer;
+}
+
+.header-cart__badge {
+    background-color: #fff1ee;
+    width: 4.2rem;
+    height: 4.2rem;
+    border-radius: 50%;
+    margin-left: 2rem;
+}
+
+.header-cart__total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-cart__tooltip {
+    padding: 2rem;
+    width: 500px;
+}
+
+/* Custom Tooltip */
+.header-cart__tooltip .ant-tooltip-inner {
+    min-width: 320px;
+}
+
+.header-nav__list {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size);
+}
+
+/* Responsive */
