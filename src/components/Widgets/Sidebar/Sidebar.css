@@ -1,0 +1,36 @@
+.sidebar-container {
+    /* border-inline-end: 1px solid rgba(5, 5, 5, 0.06); */
+    border: 1px solid rgba(5, 5, 5, 0.06);
+    border-top: none;
+}
+
+.sidebar__menu {
+    border-inline-end: none !important;
+}
+
+.sidebar-container .section-title {
+    margin-top: 0;
+    padding-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-container .section-title img {
+    margin-right: 10px;
+    height: 26px;
+}
+
+.sidebar__category--ranking {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.sidebar__category--ranking img {
+    display: block;
+    height: 22px;
+    margin-right: 6px;
+
+}

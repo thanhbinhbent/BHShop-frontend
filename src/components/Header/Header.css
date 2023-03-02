@@ -41,6 +41,7 @@
 .header-cart {
     margin-left: 20px;
     font-weight: 700;
+    align-items: center;
 }
 
 .header-cart:hover {
@@ -61,15 +62,20 @@
     justify-content: center;
 }
 
+.header-cart__total * {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+}
+
 .header-cart__tooltip {
-    padding: 2rem;
-    width: 500px;
+    min-width: 30rem;
+    max-width: 32rem;
 }
 
 /* Custom Tooltip */
-.header-cart__tooltip .ant-tooltip-inner {
-    min-width: 320px;
-}
+
 
 .header-nav__list {
     width: 100%;

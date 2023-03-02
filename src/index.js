@@ -4,11 +4,19 @@ import './index.css';
 import App from '@/App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from '@/components/GlobalStyles';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '@/app/store';
+import SpinLoading from '@/components/SpinLoading';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <GlobalStyles>
-            <App />
+            <Provider store={store}>
+                <PersistGate loading={<SpinLoading />} persistor={persistor}>
+                    <App />
+                </PersistGate>
+            </Provider>
         </GlobalStyles>
     </React.StrictMode>,
 );

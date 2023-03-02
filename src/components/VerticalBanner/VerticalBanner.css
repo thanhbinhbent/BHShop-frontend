@@ -1,0 +1,33 @@
+.banner-container--vertical {
+    width: 100%;
+    position: relative;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.banner-container--vertical .banner__img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.banner-container--vertical .banner-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 40px;
+    color: var(--dark);
+}
+
+.banner-container--vertical .banner__title {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    margin: 10px 0;
+}
+
+.banner-container--vertical .banner__value {
+    display: block;
+    margin-top: 10px;
+    font-size: 2.8rem;
+    color: var(--red);
+    font-weight: 700;
+}

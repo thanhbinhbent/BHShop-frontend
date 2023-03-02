@@ -1,0 +1,23 @@
+.home-container {
+    display: flex;
+    margin-bottom: 140px;
+    flex-wrap: wrap;
+}
+
+.home-col--right {
+    flex: 1;
+    min-width: 1px;
+    padding: 20px 0 20px 20px;
+}
+
+
+.new-products-container,
+.best-seller-container,
+.forweek {
+    margin-top: 40px;
+}
+
+/* Left Column */
+.home-banner--vertical .banner-container--vertical {
+    margin: 20px 0;
+}

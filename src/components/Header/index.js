@@ -1,16 +1,21 @@
-import React from 'react';
+import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AudioOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
-import { Select, Input, Row, Col, Avatar, Badge, theme, Tooltip } from 'antd';
-import TopNavbar from '../TopNavbar';
-import CartModal from '../CartModal';
+import { Select, Input, Row, Col, Avatar, Badge, theme, Popover } from 'antd';
+import TopNavbar from '@/components/Widgets/TopNavbar';
+import CartModal from '@/components/CartModal';
 import { handleMoney } from '@/utils';
 
 import './Header.css';
 import SourceImg from '@/assets/images';
 // import demo data
-import cartData from '@/data/cartdemo.json';
 
 function Header() {
+    const { cartItems } = useSelector((state) => state.cart);
+    const totalCart = cartItems.reduce((sum, object) => {
+        return sum + object.price * object.quantity;
+    }, 0);
+
     // Custom theme
     const { useToken } = theme;
     const { token } = useToken();
@@ -27,17 +32,10 @@ function Header() {
     );
 
     // Count of Cart Items
-    let cartAmount = cartData.length;
-
+    let cartBadge = cartItems.length;
     // Search Handle
     const onSearch = (value) => console.log(value);
     // Format Money
-    const totalCart = cartData.reduce((sum, object) => {
-        console.log(sum);
-        return sum + object.price * object.quantity;
-    }, 0);
-    // console.log(totalCart);
-    // Handle CartModal
 
     return (
         <header className="header-container">
@@ -101,7 +99,7 @@ function Header() {
                                 size="large"
                                 suffix={suffix}
                                 onSearch={onSearch}
-                                style={{}}
+                                allowClear
                             />
                         </Col>
                     </Row>
@@ -110,13 +108,12 @@ function Header() {
                             <Col className="header-user">
                                 <Avatar size="large" icon={<UserOutlined />} />
                             </Col>
-                            <Row className="header-cart">
-                                <Tooltip
-                                    overlayClassName="header-cart__tooltip"
-                                    placement="bottom"
-                                    title={CartModal}
-                                    color="white"
-                                >
+
+                            <Popover
+                                content={<CartModal cartItems={cartItems} />}
+                                overlayClassName="header-cart__tooltip"
+                            >
+                                <Row className="header-cart">
                                     <Row>
                                         <Col className="header-cart__total">
                                             <div>
@@ -124,7 +121,7 @@ function Header() {
                                             </div>
                                         </Col>
                                         <Col className="header-cart__list">
-                                            <Badge count={cartAmount}>
+                                            <Badge count={cartBadge}>
                                                 <Row
                                                     justify="center"
                                                     align="middle"
@@ -140,8 +137,8 @@ function Header() {
                                             </Badge>
                                         </Col>
                                     </Row>
-                                </Tooltip>
-                            </Row>
+                                </Row>
+                            </Popover>
                         </Row>
                     </Col>
                 </Row>
@@ -153,4 +150,10 @@ function Header() {
     );
 }
 
-export default Header;
+function mapStateToProps(state) {
+    return {
+        cartItems: state.cart.cartItems,
+    };
+}
+
+export default connect(mapStateToProps)(Header);
