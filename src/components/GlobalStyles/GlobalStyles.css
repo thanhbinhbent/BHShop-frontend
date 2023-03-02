@@ -3,6 +3,7 @@
 
 :root {
     --color-primary: #233a95;
+    --color-primary-50: rgba(35, 58, 149, 0.5);
     --color-secondary: #2bbef9;
     --size-border-radius: 7px;
     --size-form-radius: 4px;
@@ -21,7 +22,7 @@
     --teal: #20c997;
     --cyan: #17a2b8;
     --white: #fff;
-    --gray: #6c757d;
+    --gray: rgba(5, 5, 5, 0.06);
     --gray-dark: #343a40;
     --primary: #007bff;
     --secondary: #6c757d;
@@ -33,7 +34,7 @@
     --dark: #343a40;
     /* component color */
     --color-text: #202435;
-    --color-border: #e3e4e6;
+    --color-border: rgba(5, 5, 5, 0.06);
     /* breakpoint */
     --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
@@ -56,8 +57,9 @@ body {
     font-family: var(--font-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 2rem;
     text-rendering: optimizeSpeed;
+    font-size: 1.5rem;
+    font-weight: 500 !important;
 
 }
 
@@ -90,6 +92,55 @@ li {
 .ant-menu-item-danger:hover.ant-menu-item-danger:after {
     border-bottom-color: var(--red) !important;
 }
+
+/* Product */
+.product-item__name {
+    display: inline-block;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* số dòng hiển thị */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    margin-bottom: 8px
+}
+
+/* Section */
+.section__title {
+    font-size: 2rem;
+    margin-bottom: 6px;
+    margin-top: 0;
+}
+
+.section__desc {
+    color: var(--secondary);
+    font-size: 1.3rem;
+}
+
+/* Product List */
+.products-list-container {
+    margin-top: 40px;
+    color: var(--color-text);
+}
+
+
+.products-list__items {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start
+}
+
+.products-list__wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* product-item__name */
+.product-item__name {
+    overflow: hidden;
+}
+
 
 /* Responsive */
 @media screen and (min-width: 750px) {

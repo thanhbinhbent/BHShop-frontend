@@ -10,7 +10,7 @@ import {
 
 import { Input, Row, Col, Form, Button } from 'antd';
 import './Footer.css';
-import PayMethod from '../PayMethod';
+import PayMethod from '@/components/Widgets/PayMethod';
 import SourceImg from '../../assets/images';
 function Footer() {
     return (

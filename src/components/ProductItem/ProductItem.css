@@ -1,0 +1,124 @@
+.product-item {
+    width: 218px;
+    border: 1px solid var(--color-border);
+    border-radius: 7px;
+    padding: 2rem;
+}
+
+.product-item__container {
+    position: relative;
+}
+
+.product-item__img img {
+    width: 100%;
+    height: 158px;
+    object-fit: cover;
+}
+
+.product-item__name {
+    font-size: 1.5rem;
+}
+
+.product-item__rating ul {
+    font-size: 1.5rem;
+}
+
+.product-item__rating ul li {
+    margin-inline-end: 4px !important;
+}
+
+.product-item__price {
+    margin: 16px 0;
+    font-size: 1.8rem;
+}
+
+.product-item__price--old {
+    color: var(--secondary);
+    text-decoration: line-through;
+    margin-right: 10px;
+    font-size: 90%;
+}
+
+.product-item__price--sale {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.product-item__btn:hover {
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
+}
+
+.product-item__addcart .anticon {
+    font-size: 1.6rem;
+}
+
+.product-item__more {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    justify-content: space-between;
+    font-size: 1.6rem;
+}
+
+.product-item__col:first-child {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.product-item__category,
+.product-item__discount {
+    display: flex;
+    font-size: 1.2rem;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    line-height: 100%;
+
+}
+
+.product-item__discount {
+    background-color: var(--red);
+}
+
+.product-item__category {
+    background-color: var(--teal);
+    margin-top: 5px;
+}
+
+.product-item__more .product-item__col:nth-child(2) {
+    font-size: 1.8rem;
+    position: relative;
+    opacity: 0;
+    left: 15px;
+    transition: opacity 0.4s cubic-bezier(0.17, 0.62, 0.44, 0.99), transform 0.4s cubic-bezier(0.17, 0.62, 0.44, 0.99);
+}
+
+.product-item__container:hover .product-item__more .product-item__col:nth-child(2) {
+    opacity: 1;
+    transform: translateX(-10px);
+}
+
+.product-item__tag {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+}
+
+.product-item__tag:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.product-item__preview {
+    margin-bottom: 6px;
+}

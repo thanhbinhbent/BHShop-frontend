@@ -1,0 +1,28 @@
+.coupon-noti {
+    margin-top: 30px;
+    background-color: #FFEEF2;
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+    border-radius: 7px;
+}
+
+.coupon-noti__content {
+    color: var(--red);
+    font-size: 1.6rem;
+}
+
+.coupon-noti__content u {
+    font-weight: bold;
+}
+
+.coupon__code--fist {
+
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 1px dashed var(--red);
+    padding: 4px 1.25rem;
+    border-radius: 1.875rem;
+    margin: 0 0.9375rem;
+}

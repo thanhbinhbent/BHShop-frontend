@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import '@/App.css';
 import { publicRoutes, privateRoutes } from '@/routes';
 import { DefaultLayout } from '@/components/Layouts';
 function App() {
+    const [cartItems, setCartItems] = useState([]);
+    const addToCart = (product) => {
+        setCartItems([...cartItems, product]);
+    };
     return (
         <Router>
             <div>
@@ -24,8 +28,8 @@ function App() {
                                     key={index}
                                     path={route.path}
                                     element={
-                                        <Layout>
-                                            <Page />
+                                        <Layout cartItems={cartItems}>
+                                            <Page addToCart={addToCart} />
                                         </Layout>
                                     }
                                 />

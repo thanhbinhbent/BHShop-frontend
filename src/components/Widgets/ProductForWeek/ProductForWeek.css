@@ -1,0 +1,74 @@
+.forweek-section__heading {
+    margin-bottom: 24px;
+}
+
+.forweek-container {
+    border: 1.4px solid var(--red);
+    padding: 20px;
+    border-radius: 7px;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.forweek-col {
+    position: relative;
+}
+
+.forweek-col:nth-child(1) {
+    width: 200px;
+    margin-right: 20px;
+}
+
+.forweek-col:nth-child(2) {
+    flex: 1;
+}
+
+.forweek-product__img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forweek-product__img img {
+    width: 100%;
+}
+
+.forweek-product__discount {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.forweek-product__discount {
+    width: 70px;
+    height: 70px;
+    background-color: var(--danger);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    color: #fff;
+}
+
+.forweek-product__price {
+    font-size: 1.8rem;
+}
+
+.forweek-product__name {
+    font-size: 2.2rem;
+    margin-top: 10px;
+    font-weight: 500;
+    overflow: visible;
+}
+
+.forweek-product__stock {
+    color: var(--secondary);
+}
+
+.forweek-product__stock .forweek-product__quantity {
+    color: var(--teal);
+    margin-left: 10px;
+}

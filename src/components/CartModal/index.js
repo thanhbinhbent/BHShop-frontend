@@ -1,46 +1,61 @@
+import { connect } from 'react-redux';
+import { updateQuantity, updateTotalPrice, removeFromCart } from '@/actions/cartActions';
 import { Row, Empty, Button, InputNumber } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import './CartModal.css';
 import { handleMoney } from '@/utils';
 // import demo data
-import cartDemo from '@/data/cartdemo.json';
-function CartModal() {
-    const data = cartDemo;
-    return data.length !== 0 ? (
+function CartModal(props) {
+    const { cartItems, updateQuantity } = props;
+
+    const handleQuantityChange = (productId, quantity) => {
+        updateQuantity(productId, quantity);
+    };
+    // Remove  item
+    const handleRemoveItem = (productId) => {
+        props.removeFromCart(productId);
+    };
+
+    return cartItems.length !== 0 ? (
         <div className="cart-modal">
             <Row className="cart-modal__container">
                 <Row>
                     <h3 className="cart-modal__title">Giỏ hàng</h3>
                 </Row>
-                {data.map((data, index) => {
+                {cartItems.map((item, index) => {
                     return (
                         <Row className="cart-modal__item" key={index}>
                             <div className="cart-img__container">
                                 <img
                                     className="cart-item__img"
-                                    src={data.thumbnail}
+                                    src={item.thumbnail}
                                     alt=""
                                 />
                             </div>
                             <div className="cart-modal__col cart-product__detail">
-                                <p className="product-title">{data.name}</p>
+                                <p className="product-title">{item.title}</p>
                                 <Row className="cart-modal__row">
-                                    <p>
+                                    <div>
                                         <span className="product-quantity">
                                             <InputNumber
                                                 className="product-quantity__value"
                                                 size="small"
                                                 min={1}
-                                                defaultValue={data.quantity}
+                                                max={100000}
+                                                value={item.quantity}
+                                                defaultValue={item.quantity}
+                                                onChange={(value) =>
+                                                    handleQuantityChange(item.id, value)
+                                                }
                                             />
                                         </span>
                                         <span>{` x `}</span>
                                         <span className="product-price">
-                                            {handleMoney(data.price)}
+                                            {handleMoney(item.price)}
                                         </span>
-                                    </p>
+                                    </div>
                                     <div className="cart-product__delete">
-                                        <span>
+                                        <span onClick={() => handleRemoveItem(item.id)}>
                                             <DeleteOutlined className="cart__icon--delete" />
                                         </span>
                                     </div>
@@ -64,9 +79,20 @@ function CartModal() {
         </div>
     ) : (
         <div className="cart-modal cart-empty">
-            <Empty />
+            <Empty description={<span>Giỏ hàng trống!</span>} />
         </div>
     );
 }
 
-export default CartModal;
+function mapStateToProps(state) {
+    return {
+        cartItems: state.cart.cartItems,
+    };
+}
+
+const mapDispatchToProps = {
+    updateQuantity,
+    updateTotalPrice,
+    removeFromCart,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CartModal);
