@@ -30,7 +30,7 @@ function Footer() {
                         <Row className="footer-letter__container">
                             <Form
                                 size="large"
-                                name="normal_login"
+                                name="normal_letter"
                                 className="email-form"
                                 initialValues={{ remember: true }}
                             >
