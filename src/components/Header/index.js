@@ -106,7 +106,9 @@ function Header() {
                     <Col className="col col-right">
                         <Row className="header-action" justify="center" align="middle">
                             <Col className="header-user">
-                                <Avatar size="large" icon={<UserOutlined />} />
+                                <a href="/account">
+                                    <Avatar size="large" icon={<UserOutlined />} />
+                                </a>
                             </Col>
 
                             <Popover
