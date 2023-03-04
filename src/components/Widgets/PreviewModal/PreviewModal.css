@@ -1,0 +1,25 @@
+.product-item__modal .ant-modal .ant-modal-title {
+    font-size: 2.4rem;
+}
+
+@media (min-width: 768px) {
+    .product-item__preview-modal {
+        width: 90% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .product-item__preview-modal {
+        width: 800px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .product-item__preview-modal {
+        width: 1000px !important;
+    }
+
+    .product-item__modal .ant-modal-content {
+        padding: 30px 35px;
+    }
+}

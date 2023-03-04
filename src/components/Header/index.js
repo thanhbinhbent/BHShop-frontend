@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { AudioOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
-import { Select, Input, Row, Col, Avatar, Badge, theme, Popover } from 'antd';
+import { Select, Input, Row, Col, Avatar, Badge, theme, Popover, Menu } from 'antd';
 import TopNavbar from '@/components/Widgets/TopNavbar';
 import CartModal from '@/components/CartModal';
 import { handleMoney } from '@/utils';
-
 import './Header.css';
 import SourceImg from '@/assets/images';
 // import demo data
@@ -36,35 +35,55 @@ function Header() {
     // Search Handle
     const onSearch = (value) => console.log(value);
     // Format Money
+    const navLeft: MenuProps['items'] = [
+        {
+            label: 'Giới thiệu',
+            key: '0',
+            icon: '',
+        },
+        {
+            label: 'Tài khoản',
+            key: '1',
+            icon: '',
+        },
+        {
+            label: 'Sản phẩm yêu thích',
+            key: '2',
+            icon: '',
+        },
+        {
+            label: 'Tra cứu đơn hàng',
+            key: '3',
+            icon: '',
+        },
+    ];
+    const navRight: MenuProps['items'] = [
+        {
+            label: (
+                <span>
+                    Tổng đài hỗ trợ: <a href="tel:19006128">19006128</a>
+                </span>
+            ),
+            key: '1',
+            icon: '',
+        },
+    ];
 
     return (
         <header className="header-container">
             <div className="header-top">
                 <div className="container">
-                    <div className="col col-left">
-                        <nav className="menu-top__container">
-                            <ul className="header-top__menu">
-                                <li className="menu-top__item">
-                                    <a href="/">Giới thiệu</a>
-                                </li>
-                                <li className="menu-top__item">
-                                    <a href="/">Tài khoản</a>
-                                </li>
-                                <li className="menu-top__item">
-                                    <a href="/"> Sản phẩm yêu thích</a>
-                                </li>
-                                <li className="menu-top__item">
-                                    <a href="/">Tra cứu đơn hàng</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div className="col col-right">
-                        <div className="header-top__action">
-                            <span className="header-top__phone">
-                                Tổng đài hỗ trợ: <a href="tel:19006128">19006128</a>
-                            </span>
-                        </div>
+                    <div className="header-top__container">
+                        <Menu
+                            mode="horizontal"
+                            className="col col-left"
+                            items={navLeft}
+                        />
+                        <Menu
+                            mode="horizontal"
+                            className="col col-right"
+                            items={navRight}
+                        />
                     </div>
                 </div>
             </div>
