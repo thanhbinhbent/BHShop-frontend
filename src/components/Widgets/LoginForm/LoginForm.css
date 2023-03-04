@@ -4,6 +4,7 @@
 
 .login-form__other {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 10px;
     position: relative;

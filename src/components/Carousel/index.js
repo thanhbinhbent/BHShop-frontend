@@ -6,7 +6,7 @@ function CarouselSlide() {
     const onChange = (currentSlide) => {};
     return (
         <div>
-            <Carousel afterChange={onChange} autoplay>
+            <Carousel afterChange={onChange} autoplay swipeToSlide={true}>
                 <div className="carousel-img">
                     <img src={SourceImg.slide1} alt="" />
                 </div>
