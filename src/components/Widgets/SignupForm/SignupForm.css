@@ -6,3 +6,9 @@
     flex: 0 0 37.33333333333333% !important;
     max-width: 37.33333333333333%;
 }
+
+@media only screen and (max-width: 768px) {
+    .account-container .ant-tabs {
+        width: 100%;
+    }
+}

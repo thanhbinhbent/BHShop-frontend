@@ -27,6 +27,7 @@
 .forweek-product__img {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -47,6 +48,7 @@
     background-color: var(--danger);
     border-radius: 50%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     font-size: 2.4rem;

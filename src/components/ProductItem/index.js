@@ -1,5 +1,6 @@
 import { Rate } from 'antd';
 import { Button } from 'antd';
+import { useState } from 'react';
 import {
     ShoppingCartOutlined,
     FullscreenOutlined,
@@ -8,33 +9,46 @@ import {
 import { handleMoney } from '@/utils';
 import { connect } from 'react-redux';
 import { addToCart } from '@/actions/cartActions';
+import PreviewModal from '@/components/Widgets/PreviewModal';
 import './ProductItem.css';
 function ProductItem(props) {
     const { product, addToCart } = props;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
     return (
         <div className="product-item">
-            <a href="thanhbinhbent.com" className="product-item__container">
-                <div className="product-item__img">
-                    <img src={product.thumbnail} alt="" />
-                </div>
-                <h3 className="product-item__name">{product.title}</h3>
-                <div className="product-item__rating">
-                    <Rate
-                        class="product-item__star"
-                        disabled
-                        defaultValue={product.rating}
-                    />
-                </div>
-                <div className="product-item__price">
-                    <span className="product-item__price--old">
-                        {product.oldPrice
-                            ? handleMoney(product.oldPrice)
-                            : handleMoney('20000')}
-                    </span>
-                    <span className="product-item__price--sale">
-                        {handleMoney(product.price)}
-                    </span>
-                </div>
+            <div className="product-item__container">
+                <a href="#" className="product-item__link">
+                    <div className="product-item__img">
+                        <img src={product.thumbnail} alt="" />
+                    </div>
+                    <h3 className="product-item__name">{product.title}</h3>
+                    <div className="product-item__rating">
+                        <Rate
+                            class="product-item__star"
+                            disabled
+                            defaultValue={product.rating}
+                        />
+                    </div>
+                    <div className="product-item__price">
+                        <span className="product-item__price--old">
+                            {product.oldPrice
+                                ? handleMoney(product.oldPrice)
+                                : handleMoney('20000')}
+                        </span>
+                        <span className="product-item__price--sale">
+                            {handleMoney(product.price)}
+                        </span>
+                    </div>
+                </a>
                 <div className="product-item__more">
                     <div className="product-item__col">
                         <span className="product-item__discount">
@@ -45,15 +59,25 @@ function ProductItem(props) {
                         </span>
                     </div>
                     <div className="product-item__col">
-                        <div className="product-item__preview  product-item__tag">
+                        <div
+                            className="product-item__preview  product-item__tag"
+                            onClick={showModal}
+                        >
                             <FullscreenOutlined />
                         </div>
+                        <PreviewModal
+                            addToCart={addToCart}
+                            open={isModalOpen}
+                            product={product}
+                            close={handleCancel}
+                            oK={handleOk}
+                        />
                         <div className="product-item__wishlist  product-item__tag">
                             <HeartOutlined />
                         </div>
                     </div>
                 </div>
-            </a>
+            </div>
             <div className="product-item__addcart">
                 <Button
                     block

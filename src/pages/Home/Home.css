@@ -1,6 +1,6 @@
 .home-container {
     display: flex;
-    margin-bottom: 140px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
 }
 
@@ -20,4 +20,13 @@
 /* Left Column */
 .home-banner--vertical .banner-container--vertical {
     margin: 20px 0;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .home-col.home-col--right {
+        width: 100%;
+        padding-left: 0;
+    }
+
 }
