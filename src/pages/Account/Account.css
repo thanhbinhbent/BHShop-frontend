@@ -1,0 +1,32 @@
+.account-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 300px;
+    margin: 42px 0;
+    line-height: 2rem !important;
+}
+
+.account-container .ant-form-item-explain-error {
+    line-height: 2.8rem !important;
+}
+
+.account-container .ant-tabs-nav {
+    margin-bottom: 0;
+}
+
+.account-container .ant-tabs-nav-list {
+    transform: translateX(20px) !important;
+}
+
+.account-container .ant-tabs-nav::before {
+    display: none;
+}
+
+.account-container .ant-tabs-content-holder {
+    border-radius: 7px;
+    border: 1px solid var(--gray);
+    padding: 40px;
+}

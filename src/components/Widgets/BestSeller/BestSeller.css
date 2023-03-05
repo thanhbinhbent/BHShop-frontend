@@ -1,0 +1,9 @@
+.best-seller-container .splide__arrows {
+    top: 50%;
+    margin: 0 auto;
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}

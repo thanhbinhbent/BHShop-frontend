@@ -1,9 +1,14 @@
+.slick-list {
+    border-radius: 7px;
+}
+
 .carousel-img {
     height: 486px;
+    overflow: hidden;
 }
 
 .carousel-img img {
     width: 100%;
-
+    height: 100%;
     object-fit: cover;
 }
