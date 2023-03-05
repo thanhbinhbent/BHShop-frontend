@@ -102,7 +102,11 @@ li {
     text-overflow: ellipsis;
     margin-bottom: 8px;
     color: var(--color-text)
-}
+
+.product-item__price {
+    display: flex;
+    flex-wrap: wrap;
+
 
 /* Section */
 .section__title {
@@ -144,23 +148,28 @@ li {
 }
 
 
-@media only screen and (max-width: 768px) {
+/* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 992px<=1200 */
+@media screen and (max-width: 1200px) {
+    .container {
+        padding: 0px 120px;
+    }
+}
+
+/* Các đoạn code CSS cho máy tính bảng ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
+@media screen and (max-width: 992px) {}
+
+/* Các đoạn code CSS cho điện thoại ở đây */
+/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
+@media screen and (max-width: 768px) {
     .container {
         padding: 0px 10px;
     }
 
     .products-list__group {
         margin-top: 10px;
+
     }
 
 }
-
-
-@media only screen and (min-width: 1024px) {
-    .container {
-        padding: 0px 120px;
-    }
-
-}
-
-/* Extra small devices (phones, 600px and down) */
