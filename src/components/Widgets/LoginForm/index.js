@@ -1,5 +1,6 @@
 import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
+import { phoneValidator } from '@/utils';
 import './LoginForm.css';
 function LoginForm() {
     const onFinish = (values) => {
@@ -15,12 +16,13 @@ function LoginForm() {
             onFinish={onFinish}
         >
             <Form.Item
-                name="username"
+                name="phonenumber"
                 rules={[
                     {
                         required: true,
                         message: 'Vui lòng nhập số điện thoại!',
                     },
+                    { validator: phoneValidator },
                 ]}
             >
                 <Input

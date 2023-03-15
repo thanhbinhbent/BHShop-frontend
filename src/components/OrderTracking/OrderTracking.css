@@ -1,11 +1,18 @@
-.best-seller-container .splide__arrows {
-    top: 50%;
-    margin: 0 auto;
-    position: absolute;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
+.tracking-detail__container {
+    margin: 20px 0;
+}
+
+.order-tracking__customer {
+    line-height: 2.4rem;
+}
+
+.order-tracking__container {
+    max-width: 600px;
+}
+
+.order-tracking__total {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
@@ -14,7 +21,11 @@
 
 /* Các đoạn code CSS cho máy tính bảng ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
+    .order-tracking__container {
+        max-width: auto;
+    }
+}
 
 /* Các đoạn code CSS cho điện thoại ở đây */
 /* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */

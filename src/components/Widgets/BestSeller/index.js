@@ -25,6 +25,9 @@ function BestSeller() {
             768: {
                 perPage: 1,
             },
+            992: {
+                perPage: 1,
+            },
         },
     };
     useEffect(() => {

@@ -83,8 +83,9 @@ li {
 
 .container {
     width: 100%;
-    margin: 0 auto;
     box-sizing: border-box;
+    padding: 0px 80px;
+
 }
 
 /* Custom Ant Design */
@@ -148,27 +149,32 @@ li {
     overflow: hidden;
 }
 
+.ant-btn-primary.ant-btn-dangerous.ant-btn-background-ghost:not(:disabled):hover {
+    background-color: var(--danger) !important;
+}
 
 /* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 992px<=1200 */
 @media screen and (max-width: 1200px) {
     .container {
-        padding: 0px 120px;
+        padding: 0px 80px;
     }
 }
 
 /* Các đoạn code CSS cho máy tính bảng ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
+    .products-list__group {
+        margin-top: 20px;
+    }
+}
 
 /* Các đoạn code CSS cho điện thoại ở đây */
 /* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
 @media screen and (max-width: 768px) {
     .container {
-        padding: 0px 10px;
+        padding: 0px 20px;
     }
 
-    .products-list__group {
-        margin-top: 10px;
-    }
+
 }

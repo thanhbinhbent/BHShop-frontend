@@ -1,10 +1,10 @@
-import { Rate } from 'antd';
-import { Button } from 'antd';
+import { Button, Popover, Rate } from 'antd';
 import { useState } from 'react';
 import {
     ShoppingCartOutlined,
     FullscreenOutlined,
     HeartOutlined,
+    CloseOutlined,
 } from '@ant-design/icons';
 import { handleMoney } from '@/utils';
 import { connect } from 'react-redux';
@@ -89,6 +89,17 @@ function ProductItem(props) {
                     <ShoppingCartOutlined />
                     Thêm vào giỏ
                 </Button>
+                <Popover content={'Xoá khỏi danh sách yêu thích'}>
+                    <Button
+                        block
+                        type="primary"
+                        className="product-item__btn product-item__btn-love-clear"
+                        danger
+                        ghost
+                    >
+                        <CloseOutlined />
+                    </Button>
+                </Popover>
             </div>
         </div>
     );

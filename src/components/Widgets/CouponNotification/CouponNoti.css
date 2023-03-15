@@ -36,7 +36,13 @@
 
 /* Các đoạn code CSS cho máy tính bảng ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
+    .coupon__code--fist {
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+}
 
 /* Các đoạn code CSS cho điện thoại ở đây */
 /* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */

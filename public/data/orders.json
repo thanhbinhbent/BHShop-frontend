@@ -1,0 +1,65 @@
+[
+    {
+        "orderId": "BHH12640",
+        "productItems": [
+            {
+                "id": 2,
+                "title": "Field Roast Chao Cheese Creamy Original",
+                "description": "Field Roast Chao Cheese Creamy Original",
+                "price": 85000,
+                "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-59-346x310.jpg",
+                "quantity": 2
+            }
+        ],
+        "nowStatus": {
+            "statusId": 0,
+            "statusName": "Đang chuẩn bị hàng"
+        },
+        "customerID": "C00001"
+    },
+    {
+        "orderId": "BHH12641",
+        "productItems": [
+            {
+                "id": 2,
+                "title": "Field Roast Chao Cheese Creamy Original",
+                "description": "Field Roast Chao Cheese Creamy Original",
+                "price": 85000,
+                "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-59-346x310.jpg",
+                "quantity": 2
+            }
+        ],
+        "customerID": "C00001",
+        "nowStatus": {
+            "statusId": 1,
+            "statusName": "Đang giao"
+        }
+    },
+    {
+        "orderId": "BHH12642",
+        "productItems": [
+            {
+                "id": 2,
+                "title": "Field Roast Chao Cheese Creamy Original",
+                "description": "Field Roast Chao Cheese Creamy Original",
+                "price": 85000,
+                "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-59-346x310.jpg",
+                "quantity": 2
+            },
+            {
+                "id": 3,
+                "title": "Blue Diamond Almonds Lightly Salted",
+                "description": "Blue Diamond Almonds Lightly Salted",
+                "oldPrice": 90000,
+                "price": 86000,
+                "thumbnail": "https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-61-346x310.jpg",
+                "quantity": 3
+            }
+        ],
+        "nowStatus": {
+            "statusId": 2,
+            "statusName": "Giao thành công"
+        },
+        "customerID": "C00001"
+    }
+]

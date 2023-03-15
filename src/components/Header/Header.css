@@ -121,10 +121,25 @@
     font-size: var(--font-size);
 }
 
-/* Responsive */
+/* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
+@media screen and (max-width: 1200px) {}
 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
+/* Các đoạn code CSS cho máy tính bảng ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
+@media screen and (max-width: 992px) {
+    .header-location {
+        display: none
+    }
+
+    .header-logo__site a img {
+        height: 30px;
+    }
+}
+
+/* Các đoạn code CSS cho điện thoại ở đây */
+/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
+@media screen and (max-width: 768px) {
     .home-container {
         flex-direction: column;
     }
@@ -132,21 +147,7 @@
     .home-banner--vertical {
         display: none
     }
-}
 
-
-
-/* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
-/* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
-@media screen and (max-width: 1200px) {}
-
-/* Các đoạn code CSS cho máy tính bảng ở đây */
-/* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
-@media screen and (max-width: 992px) {}
-
-/* Các đoạn code CSS cho điện thoại ở đây */
-/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
-@media screen and (max-width: 768px) {
     .header-container .container {
         flex-wrap: wrap;
     }
@@ -167,12 +168,13 @@
         flex-direction: column;
     }
 
-    .header-location {
-        display: none;
-    }
-
     .header-search {
         width: 100%;
         margin: 10px 20px 30px 20px;
     }
+
+    .header-logo__site a img {
+        height: 50px;
+    }
+
 }
