@@ -1,4 +1,10 @@
 import { Button, Cascader, Checkbox, Form, Input, Select } from 'antd';
+import {
+    nameValidator,
+    emailValidator,
+    phoneValidator,
+    passwordValidator,
+} from '@/utils';
 import './SignupForm.css';
 function SignupForm() {
     const { Option } = Select;
@@ -100,27 +106,37 @@ function SignupForm() {
             scrollToFirstError
         >
             <Form.Item
-                name="email"
-                label="E-mail"
+                name="name"
+                label="Họ và tên"
                 rules={[
                     {
-                        type: 'email',
-                        message: 'E-mail không đúng định dạng!',
+                        validator: nameValidator,
                     },
                     {
                         required: true,
-                        message: 'Vui lòng nhập email!',
+                        message: 'Vui lòng nhập Họ và tên!',
                     },
                 ]}
             >
                 <Input />
             </Form.Item>
+
             <Form.Item
                 name="phone"
                 label="Số điện thoại"
-                rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                rules={[
+                    { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                    { validator: phoneValidator },
+                ]}
             >
                 <Input addonBefore={'+84'} style={{ width: '100%' }} />
+            </Form.Item>
+            <Form.Item
+                name="email"
+                label="E-mail"
+                rules={[{ validator: emailValidator }]}
+            >
+                <Input />
             </Form.Item>
             <Form.Item
                 name="password"
@@ -130,6 +146,7 @@ function SignupForm() {
                         required: true,
                         message: 'Vui lòng nhập mật khẩu!',
                     },
+                    { validator: passwordValidator },
                 ]}
                 hasFeedback
             >
@@ -158,6 +175,7 @@ function SignupForm() {
                             );
                         },
                     }),
+                    { validator: passwordValidator },
                 ]}
             >
                 <Input.Password />

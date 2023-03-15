@@ -9,9 +9,8 @@ import './NewProducts.css';
 function NewProducts() {
     const [state, setState] = useState([]);
     const [hasError, setHasError] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        setLoading(true);
         axios
             .get('/data/products.json')
             .then((res) => {

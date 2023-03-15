@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import '@/App.css';
 import { publicRoutes, privateRoutes } from '@/routes';
@@ -21,15 +21,19 @@ function App() {
                 >
                     <Routes>
                         {publicRoutes.map((route, index) => {
-                            const Page = route.component;
+                            const { component: Component, children, ...rest } = route;
                             const Layout = route.layout || DefaultLayout;
+                            const Page = route.component;
                             return (
                                 <Route
-                                    key={index}
+                                    exact
                                     path={route.path}
+                                    key={index}
                                     element={
                                         <Layout cartItems={cartItems}>
-                                            <Page addToCart={addToCart} />
+                                            <Page {...rest} addToCart={addToCart}>
+                                                {children && <Outlet />}
+                                            </Page>
                                         </Layout>
                                     }
                                 />

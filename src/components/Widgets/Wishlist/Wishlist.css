@@ -1,0 +1,68 @@
+.wishlist-item__container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start
+}
+
+.wishlist__list.products-list__items {
+    display: grid;
+    gap: 20px;
+    -webkit-gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.wishlist-illustration {
+    display: flex;
+    justify-content: center;
+    min-width: 200px;
+    max-width: 350px;
+    flex: 1;
+    margin-top: 30px;
+
+}
+
+.wishlist-illustration img {
+    width: 80%;
+    object-fit: contain;
+}
+
+.wishlist__list.products-list__items .product-item {
+    max-width: 300px;
+}
+
+.wishlist__list .product-item__wishlist {
+    display: none;
+}
+
+.wishlist__list.products-list__items .product-item .product-item__btn-love-clear {
+    display: block;
+    width: 50px;
+    margin-left: 10px;
+}
+
+.wishlist__list.products-list__items .product-item .product-item__addcart {
+    display: flex;
+    align-items: center;
+    justify-items: space-between;
+}
+
+/* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
+@media screen and (max-width: 1200px) {}
+
+
+/* Các đoạn code CSS cho máy tính bảng ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
+@media screen and (max-width: 992px) {
+    .wishlist-item__container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Các đoạn code CSS cho điện thoại ở đây */
+/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
+@media screen and (max-width: 768px) {}

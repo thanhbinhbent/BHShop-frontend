@@ -117,30 +117,26 @@ p {
 
 /* Các đoạn code CSS cho máy tính bảng ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
 
-/* Các đoạn code CSS cho điện thoại ở đây */
-/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
-@media only screen and (max-width: 768px) {
-  .footer-letter {
+    .footer-letter {
         position: relative;
     }
 
     .footer-letter .footer-letter__form {
         padding: 20px;
         z-index: 2;
+        width: 100%;
     }
 
     .footer-letter__img {
         position: absolute;
         opacity: 0.2;
         bottom: 0;
+        right: 0;
 
     }
 
-    .email-form-button {
-        margin-left: 0;
-    }
 
     .footer-letter .ant-form-item {
         margin-bottom: 15px
@@ -164,4 +160,13 @@ p {
         align-items: center;
         flex-direction: column;
     }
+}
+
+/* Các đoạn code CSS cho điện thoại ở đây */
+/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
+@media screen and (max-width: 768px) {
+    .email-form-button {
+        margin-left: 0;
+    }
+
 }

@@ -127,6 +127,11 @@
     margin-bottom: 6px;
 }
 
+.product-item__btn-love-clear {
+    /* margin-top: 10px; */
+    display: none;
+  
+}
 
 /* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
