@@ -144,6 +144,7 @@
 /* Các đoạn code CSS cho điện thoại ở đây */
 /* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
 @media screen and (max-width: 768px) {
+
     .product-item__more .product-item__col:nth-child(2) {
         opacity: 1;
     }

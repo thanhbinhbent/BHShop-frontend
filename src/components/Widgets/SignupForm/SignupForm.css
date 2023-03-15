@@ -19,6 +19,7 @@
 /* Các đoạn code CSS cho điện thoại ở đây */
 /* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
 @media screen and (max-width: 768px) {
+
     .account-container .ant-tabs {
         width: 100%;
     }

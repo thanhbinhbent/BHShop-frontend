@@ -104,12 +104,11 @@ li {
     margin-bottom: 8px;
     color: var(--color-text)
 }
-
 .product-item__price {
     display: flex;
     flex-wrap: wrap;
-}
 
+}
 /* Section */
 .section__title {
     font-size: 2rem;
@@ -176,5 +175,7 @@ li {
         padding: 0px 20px;
     }
 
-
+    .products-list__group {
+        margin-top: 10px;
+    }
 }

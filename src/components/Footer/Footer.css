@@ -111,7 +111,6 @@ p {
 }
 
 
-
 /* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
 @media screen and (max-width: 1200px) {}

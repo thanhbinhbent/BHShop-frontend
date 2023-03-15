@@ -89,8 +89,13 @@ function Addresses() {
                                 onCancel={handleAddressCancel}
                             />
                         </div>,
-
-                        <a key="list-loadmore-more">Đặt mặc định</a>,
+                        <div>
+                            {item.default ? (
+                               <span className="default-text-noselect">Địa chỉ mặc định</span>
+                            ) : (
+                                <a key="set-default-btn">Đặt làm mặc định</a>
+                            )}
+                        </div>,
                     ]}
                 >
                     <Skeleton avatar title={false} loading={item.loading} active>
