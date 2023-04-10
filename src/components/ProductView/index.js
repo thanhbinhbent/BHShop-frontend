@@ -92,26 +92,10 @@ function ProductView(props) {
                         <p className="product-item__status product-view__status">
                             <Tag color="cyan">Còn hàng</Tag>
                         </p>
+                        <h4 className="product-view__category-heading">Mô tả:</h4>
                         <p className="product-item__description product-view__desciption">
                             {product.description}
                         </p>
-                        <div className="product-item__quantity product-view__quantity">
-                            <InputNumber
-                                size="medium"
-                                min={1}
-                                max={30}
-                                defaultValue={1}
-                            />
-                            <Button
-                                block
-                                type="primary"
-                                className="product-item__btn product-view__addcart"
-                                onClick={() => addToCart(product)}
-                            >
-                                <ShoppingCartOutlined />
-                                Thêm vào giỏ
-                            </Button>
-                        </div>
                         <ul className="product-view__category">
                             <h4 className="product-view__category-heading">Danh mục:</h4>
                             <li className="product-view__category-item">
@@ -124,6 +108,17 @@ function ProductView(props) {
                                 <Tag>Chăm sóc da</Tag>
                             </li>
                         </ul>
+                        <div className="product-item__quantity product-view__quantity">
+                            <Button
+                                block
+                                type="primary"
+                                className="product-item__btn product-view__addcart"
+                                onClick={() => addToCart(product)}
+                            >
+                                <ShoppingCartOutlined />
+                                Thêm vào giỏ
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

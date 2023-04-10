@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { AudioOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { Select, Input, Row, Col, Avatar, Badge, theme, Popover, Menu } from 'antd';
 import TopNavbar from '@/components/Widgets/TopNavbar';
@@ -52,7 +53,11 @@ function Header() {
             icon: '',
         },
         {
-            label: 'Tra cứu đơn hàng',
+            label: (
+                <span>
+                    <Link to="/tracking">Tra cứu đơn hàng</Link>
+                </span>
+            ),
             key: '3',
             icon: '',
         },
@@ -91,9 +96,9 @@ function Header() {
                 <Row className="container" align="middle" justify="space-between">
                     <Col className="col col-left">
                         <div className="header-logo__site">
-                            <a href="/">
+                            <Link to="/">
                                 <img src={SourceImg.logoWeb} alt="" />
-                            </a>
+                            </Link>
                         </div>
                     </Col>
                     <Row className="col col-center">
@@ -125,9 +130,9 @@ function Header() {
                     <Col className="col col-right">
                         <Row className="header-action" justify="center" align="middle">
                             <Col className="header-user">
-                                <a href="/account">
+                                <Link to="/account">
                                     <Avatar size="large" icon={<UserOutlined />} />
-                                </a>
+                                </Link>
                             </Col>
 
                             <Popover

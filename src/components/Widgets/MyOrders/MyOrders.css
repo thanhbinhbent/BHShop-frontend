@@ -1,0 +1,4 @@
+.my-order__price-total {
+    color: var(--red);
+    font-weight: bold;
+}

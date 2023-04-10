@@ -8,18 +8,18 @@ function Page404() {
                 <WarningOutlined className="page404-warning" />
                 Lỗi 404 - Không tìm thấy trang được yêu cầu
             </h1>
-            <p class="zoom-area">
+            <p className="zoom-area">
                 Bạn vui lòng kiểm tra lại <b>đường dẫn!</b>
             </p>
-            <section class="error-container">
+            <section className="error-container">
                 <span>4</span>
                 <span>
-                    <span class="screen-reader-text">0</span>
+                    <span className="screen-reader-text">0</span>
                 </span>
                 <span>4</span>
             </section>
-            <div class="link-container">
-                <a href="/" class="more-link">
+            <div className="link-container">
+                <a href="/" className="more-link">
                     <Button type="primary" ghost>
                         <DoubleLeftOutlined /> Về trang chủ
                     </Button>

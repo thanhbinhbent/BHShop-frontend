@@ -12,5 +12,10 @@ const SourceImg = {
     //Banner
     bannerleft1: require('./banner/vertical/1.jpg'),
     bannerleft2: require('./banner/vertical/2.jpg'),
+    goldRank: require('./profile/rank-gold.png'),
+    sliverRank: require('./profile/rank-sliver.png'),
+    copperRank: require('./profile/rank-copper.png'),
+    defaultCover: require('./profile/default-cover.webp'),
+    loveProduct: require('./profile/love-illustration.png'),
 };
 export default SourceImg;

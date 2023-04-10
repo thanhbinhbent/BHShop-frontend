@@ -1,0 +1,51 @@
+.tracking-container {
+    margin-top: 42px;
+    margin-bottom: 120px;
+}
+
+.tracking-row {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+
+.tracking__heading {
+    font-size: 2.8rem;
+    max-width: 400px;
+    line-height: 4rem;
+    margin-bottom: 0;
+}
+
+.tracking-illustration img {
+    height: 300px;
+    transform: scaleX(-1);
+}
+
+.tracking-description {
+    margin: 16px 0;
+    line-height: 3rem;
+}
+
+.tracking-row.tracking-infor__detailed {
+    margin-top: 20px;
+}
+
+/* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
+@media screen and (max-width: 1200px) {}
+
+/* Các đoạn code CSS cho máy tính bảng ở đây */
+/* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
+@media screen and (max-width: 992px) {}
+
+/* Các đoạn code CSS cho điện thoại ở đây */
+/* Độ rộng màn hình nhỏ hơn hoặc bằng 767px */
+@media screen and (max-width: 768px) {
+    .tracking-result {
+        margin-left: 0;
+
+    }
+
+}

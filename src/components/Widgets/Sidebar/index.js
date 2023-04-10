@@ -1,5 +1,5 @@
 import { Menu, Col } from 'antd';
-import type { MenuProps } from 'antd/es/menu';
+import { MenuProps } from 'antd/es/menu';
 import './Sidebar.css';
 function Sidebar() {
     const items: MenuProps['items'] = [
