@@ -1,54 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     nameValidator,
     emailValidator,
     phoneValidator,
     passwordValidator,
 } from '@/utils';
-import {
-    Form,
-    Input,
-    Button,
-    message,
-    Avatar,
-    Card,
-    Popover,
-    Select,
-    Col,
-    Row,
-    Statistic,
-} from 'antd';
+import { Form, Input, Button, message, Card, Popover, Select, Statistic } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 
 import {
     EditOutlined,
     SaveOutlined,
     SafetyOutlined,
-    InfoCircleOutlined,
-    EllipsisOutlined,
     ShoppingOutlined,
     CommentOutlined,
 } from '@ant-design/icons';
 import SourceImg from '@/assets/images/';
 import './MyAccount.css';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { setUserFirstName } from '@/actions/userActions';
 const FormBasic = () => {
+    const dispatch = useDispatch();
+    const currentUser = useSelector((state) => state.user.user);
+
     const { Meta } = Card;
     const { Option } = Select;
     const [form] = useForm();
-    const userFullName = 'Trần Thanh Bình';
-    const userEmail = 'binhtt20406c@st.uel.edu.vn';
-    const userPhone = '0968213964';
     const ordersSum = 51;
     const userAddressDefault = '669 QL1A, Khu phố 3, P. Linh Xuân, Tp. Thủ Đức, Tp. HCM';
-    const userGender = true; // true is Male and false is Female
     const accountVerified = true;
     const [isEditingBasic, setIsEditingBasic] = useState(false);
     const [data, setData] = useState({});
     const handleSave = () => {
-        form.validateFields().then((values) => {
+        form.validateFields().then(async (values) => {
             setData(values);
             setIsEditingBasic(false);
-            message.success('Đã lưu thành công!');
+            await axios.put(`http://localhost:3100/users`, values).then((res) => {
+                message.success('Đã lưu thành công!');
+                dispatch(setUserFirstName(values.name.trim().split(' ').pop()));
+            });
         });
     };
     const handleRank = (ordersSum) => {
@@ -67,7 +58,17 @@ const FormBasic = () => {
                 <span className="my-account__title">Thông tin cơ bản</span>
             </h2> */}
             {isEditingBasic ? (
-                <Form id="my-account__basic" form={form} layout="vertical">
+                <Form
+                    id="my-account__basic"
+                    form={form}
+                    layout="vertical"
+                    initialValues={{
+                        ['name']: `${currentUser.last_name} ${currentUser.first_name}`,
+                        ['email']: currentUser.email,
+                        ['phone']: currentUser.phone_number,
+                        ['gender']: currentUser.gender,
+                    }}
+                >
                     <Form.Item
                         name="name"
                         label="Họ và tên"
@@ -76,7 +77,9 @@ const FormBasic = () => {
                             { validator: nameValidator },
                         ]}
                     >
-                        <Input placeholder={userFullName} />
+                        <Input
+                            placeholder={`${currentUser.last_name} ${currentUser.first_name}`}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="email"
@@ -88,7 +91,7 @@ const FormBasic = () => {
                             },
                         ]}
                     >
-                        <Input placeholder={userEmail} />
+                        <Input placeholder={currentUser.email} />
                     </Form.Item>
                     <Form.Item
                         name="phone"
@@ -100,7 +103,7 @@ const FormBasic = () => {
                             },
                         ]}
                     >
-                        <Input placeholder={userPhone} />
+                        <Input placeholder={currentUser.phone_number} />
                     </Form.Item>
                     <Form.Item
                         name="gender"
@@ -112,7 +115,7 @@ const FormBasic = () => {
                             },
                         ]}
                     >
-                        <Select placeholder={userGender ? 'Nam' : 'Nữ'}>
+                        <Select placeholder={currentUser.gender == 'Nam' ? 'Nam' : 'Nữ'}>
                             <Option value="Nam">Nam</Option>
                             <Option value="Nữ">Nữ</Option>
                             <Option value="other">Khác</Option>
@@ -162,7 +165,7 @@ const FormBasic = () => {
                             title={
                                 <h2 className="my-account__fullname">
                                     {!form.getFieldValue('name')
-                                        ? userFullName
+                                        ? `${currentUser.last_name} ${currentUser.first_name}`
                                         : form.getFieldValue('name')}
                                     <Popover
                                         content={
@@ -192,7 +195,7 @@ const FormBasic = () => {
                                             Email:{' '}
                                             <b>
                                                 {!form.getFieldValue('email')
-                                                    ? userEmail
+                                                    ? currentUser.email
                                                     : form.getFieldValue('email')}
                                             </b>
                                         </p>
@@ -200,7 +203,7 @@ const FormBasic = () => {
                                             Số điện thoại:{' '}
                                             <b>
                                                 {!form.getFieldValue('phone')
-                                                    ? userPhone
+                                                    ? currentUser.phone_number
                                                     : form.getFieldValue('phone')}
                                             </b>
                                         </p>
@@ -208,7 +211,7 @@ const FormBasic = () => {
                                             Giới tính:{' '}
                                             <b>
                                                 {!form.getFieldValue('gender')
-                                                    ? userGender
+                                                    ? currentUser.gender
                                                         ? 'Nam'
                                                         : 'Nữ'
                                                     : form.getFieldValue('gender')}
@@ -239,19 +242,27 @@ const FormBasic = () => {
 };
 
 const ChangePasswordForm = () => {
+    const currentUser = useSelector((state) => state.user.user);
     const [passform] = useForm();
     const [isEditingPassword, setIsEditingPassword] = useState(false);
-    const [data, setData] = useState({});
 
     const handleEdit = () => {
         setIsEditingPassword(true);
     };
 
     const handleSave = () => {
-        passform.validateFields().then((values) => {
-            setData(values);
-            setIsEditingPassword(false);
-            message.success('Đã lưu thành công');
+        passform.validateFields().then(async (values) => {
+            values.user_id = currentUser.user_id;
+            await axios
+                .put('http://localhost:3100/users/pass', values)
+                .then((res) => {
+                    setIsEditingPassword(false);
+                    message.success('Đã lưu thành công');
+                })
+                .catch((err) => {
+                    message.error('Mật khẩu hiện tại không đúng');
+                    setIsEditingPassword(false);
+                });
         });
     };
 

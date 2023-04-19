@@ -6,7 +6,7 @@ import './CartModal.css';
 import { handleMoney } from '@/utils';
 // import demo data
 function CartModal(props) {
-    const { cartItems, updateQuantity } = props;
+    const { cartItems } = props;
 
     const handleQuantityChange = (productId, quantity) => {
         updateQuantity(productId, quantity);

@@ -1,5 +1,5 @@
-import { Button, Popover, Rate } from 'antd';
-import { useState } from 'react';
+import { Button, Popover, Rate, message } from 'antd';
+import { useEffect, useState } from 'react';
 import {
     ShoppingCartOutlined,
     FullscreenOutlined,
@@ -7,13 +7,26 @@ import {
     CloseOutlined,
 } from '@ant-design/icons';
 import { handleMoney } from '@/utils';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/actions/cartActions';
 import PreviewModal from '@/components/Widgets/PreviewModal';
+import axios from 'axios';
 import './ProductItem.css';
+let GetCategoryNameById = async (id) => {
+    const body = { category_id: id };
+    try {
+        const response = await axios.post('http://localhost:3100/categories/name', body);
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
 function ProductItem(props) {
-    const { product, addToCart } = props;
+    const { product } = props;
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [categoryName, setCategoryName] = useState('');
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -23,40 +36,60 @@ function ProductItem(props) {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const handleAddToCart = (product) => {
+        if(!isLoggedIn) {
+            message.error('Bạn cần đăng nhập để thực hiện chức năng này')
+            return;
+        }
+        dispatch(addToCart(product));
+    };
+    useEffect(() => {
+        GetCategoryNameById(product.category_id).then((res) => {
+            setCategoryName(res);
+        });
+    }, [product.category_id]);
+
     return (
         <div className="product-item">
             <div className="product-item__container">
-                <a href="#" className="product-item__link">
+                <button className="product-item__link">
                     <div className="product-item__img">
-                        <img src={product.thumbnail} alt="" />
+                        {product.thumbnail !== undefined ? (
+                            <img src={product?.thumbnail} alt="" />
+                        ) : (
+                            <img src={product?.image_url[0]} alt="" />
+                        )}
                     </div>
-                    <h3 className="product-item__name">{product.title}</h3>
+                    <h3 className="product-item__name">{product?.name}</h3>
                     <div className="product-item__rating">
                         <Rate
                             class="product-item__star"
                             disabled
-                            defaultValue={product.rating}
+                            defaultValue={product?.rating}
                         />
                     </div>
                     <div className="product-item__price">
                         <span className="product-item__price--old">
-                            {product.oldPrice
-                                ? handleMoney(product.oldPrice)
+                            {product?.oldPrice
+                                ? handleMoney(product?.oldPrice)
                                 : handleMoney('20000')}
                         </span>
                         <span className="product-item__price--sale">
-                            {handleMoney(product.price)}
+                            {handleMoney(product?.price)}
                         </span>
                     </div>
-                </a>
+                </button>
                 <div className="product-item__more">
                     <div className="product-item__col">
                         <span className="product-item__discount">
-                            {'-' + product.discountPercentage + ' %'}
+                            {'-' + product?.discountPercentage + ' %'}
                         </span>
-                        <span className="product-item__category ">
-                            {product.category}
-                        </span>
+                        {product.category !== undefined ? (
+                            <span className="product-item__category ">{product.category}</span>
+                        ) : (
+                            <span className="product-item__category ">{categoryName}</span>
+                        )}
+                        
                     </div>
                     <div className="product-item__col">
                         <div
@@ -66,7 +99,6 @@ function ProductItem(props) {
                             <FullscreenOutlined />
                         </div>
                         <PreviewModal
-                            addToCart={addToCart}
                             open={isModalOpen}
                             product={product}
                             close={handleCancel}
@@ -84,7 +116,7 @@ function ProductItem(props) {
                     type="primary"
                     className="product-item__btn"
                     ghost
-                    onClick={() => addToCart(product)}
+                    onClick={() => handleAddToCart(product)}
                 >
                     <ShoppingCartOutlined />
                     Thêm vào giỏ
@@ -105,4 +137,4 @@ function ProductItem(props) {
     );
 }
 
-export default connect(null, { addToCart })(ProductItem);
+export default ProductItem;

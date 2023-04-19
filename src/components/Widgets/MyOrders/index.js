@@ -4,7 +4,10 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import OrderTracking from '@/components/OrderTracking';
 
 import './MyOrders.css';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 function MyOrders() {
+    const currentUser = useSelector((state) => state.user.user);
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -13,37 +16,42 @@ function MyOrders() {
     const [cancelLoading, setCancelLoading] = useState(false);
     const [openPop, setOpenPop] = useState(false);
 
-    const count = 3;
-    const ordersData = '/data/customerOrders.json';
+    // const ordersData = '/data/customerOrders.json';
     useEffect(() => {
-        fetch(ordersData)
-            .then((res) => res.json())
-            .then((res) => {
-                setInitLoading(false);
-                setData(res);
-                setList(res);
-            });
+        // fetch(ordersData)
+        //     .then((res) => res.json())
+        //     .then((res) => {
+        //         setInitLoading(false);
+        //         setData(res);
+        //         setList(res);
+        //     });
+        axios.post('http://localhost:3100/orders', { user_id: currentUser.user_id }).then((res) => {
+            console.log(res.data);
+            setInitLoading(false);
+            setData(res.data);
+            setList(res.data);
+        });
     }, []);
     const onLoadMore = () => {
-        setLoading(true);
-        setList(
-            data.concat(
-                [...new Array(5)].map(() => ({
-                    loading: true,
-                    name: {},
-                    picture: {},
-                })),
-            ),
-        );
-        fetch(ordersData)
-            .then((res) => res.json())
-            .then((res) => {
-                const newData = data.concat(res);
-                setData(newData);
-                setList(newData);
-                setLoading(false);
-                window.dispatchEvent(new Event('resize'));
-            });
+        // setLoading(true);
+        // setList(
+        //     data.concat(
+        //         [...new Array(5)].map(() => ({
+        //             loading: true,
+        //             name: {},
+        //             picture: {},
+        //         })),
+        //     ),
+        // );
+        // fetch(ordersData)
+        //     .then((res) => res.json())
+        //     .then((res) => {
+        //         const newData = data.concat(res);
+        //         setData(newData);
+        //         setList(newData);
+        //         setLoading(false);
+        //         window.dispatchEvent(new Event('resize'));
+        //     });
     };
     const loadMore =
         !initLoading && !loading ? (
@@ -81,7 +89,7 @@ function MyOrders() {
             dataSource={list}
             renderItem={(item) => (
                 <List.Item
-                    key={item.orderId}
+                    key={item.order_id}
                     actions={[
                         <div>
                             {' '}
@@ -127,8 +135,7 @@ function MyOrders() {
                                 ]}
                             >
                                 <OrderTracking
-                                    order={data}
-                                    key={data.orderId}
+                                    order_id={item.order_id}
                                 ></OrderTracking>
                             </Modal>
                         </div>,
@@ -137,12 +144,12 @@ function MyOrders() {
                 >
                     <Skeleton avatar title={false} loading={item.loading} active>
                         <List.Item.Meta
-                            avatar={<Avatar src={item.productItems[0].thumbnail} />}
-                            title={<a href="#">{item.orderId}</a>}
-                            description={item.productItems[0].title}
+                            // avatar={<Avatar src={item?.productItems[0].thumbnail} />}
+                            title={<a href="#">{item.order_id}</a>}
+                            // description={item?.productItems[0]?.title}
                         />
                         <div>
-                            <p>Đặt ngày: {item.orderDate}</p>
+                            <p>Đặt ngày: {item.order_date}</p>
                             <p className="my-order__price-total">Tổng tiền: {'45000'}</p>
                         </div>
                     </Skeleton>

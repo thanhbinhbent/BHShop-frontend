@@ -7,7 +7,19 @@ import NewProducts from '@/components/Widgets/NewProducts';
 import VerticalBanner from '@/components/VerticalBanner';
 import SourceImg from '@/assets/images';
 import './Home.css';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 function HomePage() {
+    // async function checkUser() {
+    //     await axios.get(`http://127.0.0.1:3100/users`).then((res) => {
+    //         console.log(res.data)
+    //       }).catch((err) => {
+    //         console.log(err);
+    //       });
+    // }
+    // useEffect(() => {
+    //     checkUser();
+    // },[])
     return (
         <div className="container">
             <div className="home-container">

@@ -15,7 +15,7 @@ function ProductForWeek() {
     useEffect(() => {
         setLoading(true);
         axios
-            .get('/data/products.json')
+            .get('http://127.0.0.1:3100/products')
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);
@@ -40,7 +40,7 @@ function ProductForWeek() {
                 'Lỗi tải dữ liệu!'
             ) : (
                 state.slice(0, 1).map((products) => (
-                    <div className="forweek-container" key={products.id}>
+                    <div className="forweek-container" key={products.product_id}>
                         <div className="forweek-col">
                             <div className="forweek-product__img">
                                 <img src={products.thumbnail} alt="" />

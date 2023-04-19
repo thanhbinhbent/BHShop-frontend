@@ -1,7 +1,7 @@
-import { Avatar, Button, List, Skeleton } from 'antd';
+import { Avatar, List, Skeleton } from 'antd';
 import { EnvironmentOutlined } from '@ant-design/icons';
 import AddressEditModal from '@/components/AddressEdit';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './Addresses.css';
 function Addresses() {
     const fakeData = [
@@ -37,10 +37,6 @@ function Addresses() {
         },
     ];
 
-    const [initLoading, setInitLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
-    const [list, setList] = useState([]);
     // Modal edit
     const [selectedItem, setSelectedItem] = useState({});
     const [isAddressModal, setIsAddressModal] = useState(false);
@@ -65,74 +61,88 @@ function Addresses() {
     ></div>;
 
     return (
-        <List
-            className="demo-loadmore-list"
-            itemLayout="horizontal"
-            dataSource={fakeData}
-            renderItem={(item) => (
-                <List.Item
-                    key={item.id}
-                    actions={[
-                        <div>
-                            <a
-                                key="list-loadmore-edit"
-                                onClick={() => {
-                                    showAddressModal(item);
-                                }}
-                            >
-                                Chỉnh sửa
-                            </a>
-                            <AddressEditModal
-                                data={selectedItem}
-                                isOpen={isAddressModal}
-                                onOk={handleAddressOk}
-                                onCancel={handleAddressCancel}
-                            />
-                        </div>,
-                        <div>
-                            {item.default ? (
-                               <span className="default-text-noselect">Địa chỉ mặc định</span>
-                            ) : (
-                                <a key="set-default-btn">Đặt làm mặc định</a>
-                            )}
-                        </div>,
-                    ]}
-                >
-                    <Skeleton avatar title={false} loading={item.loading} active>
-                        <List.Item.Meta
-                            avatar={
-                                <Avatar
-                                    size={{
-                                        xs: 24,
-                                        sm: 24,
-                                        md: 24,
-                                        xl: 30,
-                                        xxl: 30,
-                                    }}
-                                    icon={<EnvironmentOutlined />}
-                                />
-                            }
-                            title={item.receiptName}
-                            description={
+        <div>
+            <List
+                className="demo-loadmore-list"
+                itemLayout="horizontal"
+                dataSource={fakeData}
+                renderItem={(item) => {
+                    return (
+                        <List.Item
+                            key={item.id}
+                            actions={[
                                 <div>
-                                    <p>{'Số điện thoại: ' + item.phoneNumber}</p>
-                                    <p>
-                                        {'Địa chỉ: ' +
-                                            item.address +
-                                            ', ' +
-                                            item.ward +
-                                            ', ' +
-                                            item.district +
-                                            ', ' +
-                                            item.city}
-                                    </p>
-                                </div>
-                            }
-                        />
-                    </Skeleton>
-                </List.Item>
-            )}
-        />
+                                    <button
+                                        key="list-loadmore-edit"
+                                        onClick={() => {
+                                            showAddressModal(item);
+                                        }}
+                                    >
+                                        Chỉnh sửa
+                                    </button>
+                                </div>,
+                                <div>
+                                    {item.default ? (
+                                        <span className="default-text-noselect">
+                                            Địa chỉ mặc định
+                                        </span>
+                                    ) : (
+                                        <button key="set-default-btn">Đặt làm mặc định</button>
+                                    )}
+                                </div>,
+                            ]}
+                        >
+                            <Skeleton
+                                key={item.id + 'skeleton'}
+                                avatar
+                                title={false}
+                                loading={item.loading}
+                                active
+                            >
+                                <List.Item.Meta
+                                    key={item.id + 'meta'}
+                                    avatar={
+                                        <Avatar
+                                            size={{
+                                                xs: 24,
+                                                sm: 24,
+                                                md: 24,
+                                                xl: 30,
+                                                xxl: 30,
+                                            }}
+                                            icon={<EnvironmentOutlined />}
+                                        />
+                                    }
+                                    title={item.receiptName}
+                                    description={
+                                        <div>
+                                            <p>{'Số điện thoại: ' + item.phoneNumber}</p>
+                                            <p>
+                                                {'Địa chỉ: ' +
+                                                    item.address +
+                                                    ', ' +
+                                                    item.ward +
+                                                    ', ' +
+                                                    item.district +
+                                                    ', ' +
+                                                    item.city}
+                                            </p>
+                                        </div>
+                                    }
+                                />
+                            </Skeleton>
+                        </List.Item>
+                    );
+                }}
+            />
+            <AddressEditModal
+                data={selectedItem}
+                isOpen={isAddressModal}
+                onOk={handleAddressOk}
+                onCancel={handleAddressCancel}
+                key={'addressEditModal'}
+            />
+        </div>
     );
 }
 

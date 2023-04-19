@@ -33,7 +33,7 @@ function BestSeller() {
     useEffect(() => {
         setLoading(true);
         axios
-            .get('/data/products.json')
+            .get('http://127.0.0.1:3100/products')
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);
@@ -71,7 +71,7 @@ function BestSeller() {
                         className="best-seller__list products-list__items"
                     >
                         {state.slice(0, 10).map((product) => (
-                            <SplideSlide key={product.id}>
+                            <SplideSlide key={product._id}>
                                 <ProductItem
                                     product={product}
                                     className="product-carousel__item"

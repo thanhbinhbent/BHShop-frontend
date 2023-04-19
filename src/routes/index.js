@@ -10,8 +10,7 @@ import Wishlist from '@/components/Widgets/Wishlist';
 const publicRoutes = [
     { path: '/', component: HomePage },
     {
-        path: '/profile/*',
-        component: Profile,
+        path: '/profile/*', component: Profile,
         children: [
             { path: '', element: <MyAccount /> },
             { path: 'account', element: <MyAccount /> },

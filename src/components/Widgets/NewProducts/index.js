@@ -12,7 +12,8 @@ function NewProducts() {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         axios
-            .get('/data/products.json')
+            .get('http://127.0.0.1:3100/products')
+            // .get('/data/products.json')
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);
@@ -45,7 +46,7 @@ function NewProducts() {
             ) : (
                 <div className="new-products__list products-list__items">
                     {state.slice(0, 8).map((products) => (
-                        <ProductItem key={products.id} product={products}></ProductItem>
+                        <ProductItem key={products.product_id} product={products}></ProductItem>
                     ))}
                 </div>
             )}

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import {
   RestOutlined,
@@ -11,7 +10,7 @@ import {
 // Import Fake Data
 
 function TopNavbar() {
-  const items: MenuProps["items"] = [
+  const items = [
     {
       label: (
         <a href="/" target="_blank" rel="noopener noreferrer">
@@ -36,11 +35,15 @@ function TopNavbar() {
           label: "Tăng lực",
           children: [
             {
-              label: "Monster Energy",
+              label: (<a href="/" target="_parent">
+                Monster Energy
+              </a>),
               key: "setting:1",
             },
             {
-              label: "Gmax Premium",
+              label: (<a href="/" target="_parent">
+                Gmax Premium
+              </a>),
               key: "setting:2",
             },
           ],
@@ -50,11 +53,15 @@ function TopNavbar() {
           label: "Dinh dưỡng",
           children: [
             {
-              label: "Sắc đẹp",
+              label: (<a href="/" target="_parent">
+                Sắc đẹp
+              </a>),
               key: "setting:3",
             },
             {
-              label: "Sức khoẻ",
+              label: (<a href="/" target="_parent">
+                Sức khoẻ
+              </a>),
               key: "setting:4",
             },
           ],
@@ -83,7 +90,7 @@ function TopNavbar() {
   ];
   const [current, setCurrent] = useState("home");
 
-  const onClick: MenuProps["onClick"] = (e) => {
+  const onClick = (e) => {
     console.log("click ", e);
     setCurrent(e.key);
   };

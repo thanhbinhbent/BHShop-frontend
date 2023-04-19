@@ -2,16 +2,36 @@ import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AudioOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
-import { Select, Input, Row, Col, Avatar, Badge, theme, Popover, Menu } from 'antd';
+import {
+    Select,
+    Input,
+    Row,
+    Col,
+    Avatar,
+    Badge,
+    theme,
+    Popover,
+    Menu,
+    Button,
+    message,
+    Popconfirm,
+    Table,
+} from 'antd';
 import TopNavbar from '@/components/Widgets/TopNavbar';
 import CartModal from '@/components/CartModal';
 import { handleMoney } from '@/utils';
 import './Header.css';
 import SourceImg from '@/assets/images';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { setUser, setLoggedIn } from '@/actions/userActions';
+import { useDispatch } from 'react-redux';
 // import demo data
 
 function Header() {
     const { cartItems } = useSelector((state) => state.cart);
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const user = useSelector((state) => state.user.user);
     const totalCart = cartItems.reduce((sum, object) => {
         return sum + object.price * object.quantity;
     }, 0);
@@ -34,9 +54,13 @@ function Header() {
     // Count of Cart Items
     let cartBadge = cartItems.length;
     // Search Handle
-    const onSearch = (value) => console.log(value);
+    const onSearch = (value) => {
+        console.log(value);
+        setFilterInput(value);
+    };
     // Format Money
-    const navLeft: MenuProps['items'] = [
+    // const navLeft: MenuProps['items'] = [
+    const navLeft = [
         {
             label: 'Giới thiệu',
             key: '0',
@@ -62,7 +86,7 @@ function Header() {
             icon: '',
         },
     ];
-    const navRight: MenuProps['items'] = [
+    const navRight = [
         {
             label: (
                 <span>
@@ -73,7 +97,46 @@ function Header() {
             icon: '',
         },
     ];
-
+    const dispatch = useDispatch();
+    const onLogOut = () => {
+        message.warning('Đăng xuất thành công');
+        dispatch(setUser({}));
+        dispatch(setLoggedIn(false));
+    };
+    const [provinces, setProvinces] = useState([]);
+    const [productData, setProductData] = useState([]);
+    const [filterInput, setFilterInput] = useState('');
+    const getProvince = async () => {
+        const response = await axios.post('http://localhost:3100/provinces');
+        return response.data;
+    };
+    const getAllProductWithName = async () => {
+        const response = await axios.post(
+            'http://localhost:3100/products/allWithOnlyName',
+        );
+        return response.data;
+    };
+    const filterData = (value) => {
+        return productData.filter((item) =>
+            item.name.toLowerCase().includes(value.toLowerCase()),
+        );
+    };
+    useEffect(() => {
+        getProvince().then((res) => {
+            setProvinces(res);
+        });
+        getAllProductWithName().then((res) => {
+            setProductData(res);
+        });
+    }, []);
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            render: (text) => <a>{text}</a>,
+        },
+    ];
     return (
         <header className="header-container">
             <div className="header-top">
@@ -107,13 +170,7 @@ function Header() {
                                 defaultValue="Chọn chi nhánh"
                                 style={{ width: 140 }}
                                 size="large"
-                                options={[
-                                    { value: '', label: '--Chi nhánh--', disabled: true },
-                                    { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
-                                    { value: 'Hà Nội', label: 'Hà Nội' },
-                                    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
-                                    { value: 'Cần Thơ', label: 'Cần Thơ' },
-                                ]}
+                                options={provinces}
                             />
                         </Col>
                         <Col className="header-search">
@@ -125,14 +182,33 @@ function Header() {
                                 onSearch={onSearch}
                                 allowClear
                             />
+                            <Table
+                                columns={columns}
+                                dataSource={filterData(filterInput)}
+                            />
                         </Col>
                     </Row>
                     <Col className="col col-right">
                         <Row className="header-action" justify="center" align="middle">
                             <Col className="header-user">
-                                <Link to="/account">
-                                    <Avatar size="large" icon={<UserOutlined />} />
-                                </Link>
+                                {isLoggedIn ? (
+                                    <Col>
+                                        <span>Xin chào {user.first_name}</span>
+                                        <Popconfirm
+                                            title="Log out"
+                                            description="Are you sure to log out?"
+                                            okText="Yes"
+                                            cancelText="No"
+                                            onConfirm={onLogOut}
+                                        >
+                                            <Button type="primary">Đăng xuất</Button>
+                                        </Popconfirm>
+                                    </Col>
+                                ) : (
+                                    <Link to="/account">
+                                        <Avatar size="large" icon={<UserOutlined />} />
+                                    </Link>
+                                )}
                             </Col>
 
                             <Popover

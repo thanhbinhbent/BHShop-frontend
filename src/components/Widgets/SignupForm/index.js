@@ -6,58 +6,11 @@ import {
     passwordValidator,
 } from '@/utils';
 import './SignupForm.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 function SignupForm() {
     const { Option } = Select;
-    const residences = [
-        {
-            value: 'TP. Hồ Chí Minh',
-            label: 'TP. Hồ Chí Minh',
-            children: [
-                {
-                    value: 'Thủ Đức',
-                    label: 'Thủ Đức',
-                    children: [
-                        {
-                            value: 'Linh Xuân',
-                            label: 'Linh Xuân',
-                        },
-                        {
-                            value: 'Linh Trung',
-                            label: 'Linh Trung',
-                        },
-                        {
-                            value: 'Linh Đông',
-                            label: 'Linh Đông',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            value: 'Bình Định',
-            label: 'Bình Định',
-            children: [
-                {
-                    value: 'Hoài Ân',
-                    label: 'Hoài Ân',
-                    children: [
-                        {
-                            value: 'Ân Tường Tây',
-                            label: 'Ân Tường Tây',
-                        },
-                        {
-                            value: 'Tăng Bạc Hổ',
-                            label: 'Tăng Bạc Hổ',
-                        },
-                        {
-                            value: 'Ân Hảo Tây',
-                            label: 'Ân Hảo Tây',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
     const formItemLayout = {
         labelCol: {
             xs: {
@@ -90,9 +43,35 @@ function SignupForm() {
     };
     const [form] = Form.useForm();
 
-    const onFinish = (values) => {
-        console.log('Dữ liệu nhận từ Form đăng ký: ', values);
+    const [success, setSuccess] = useState(false);
+    const onFinish = async (values) => {
+        let full_name = values.name.trim().split(' ');
+        values.first_name = full_name.pop();
+        values.last_name = full_name.join(' ');
+        await axios.post('http://localhost:3100/users/regis', values).then((res) => {
+            setSuccess(true);
+        });
     };
+    let navigate = useNavigate();
+    const [residences, setResidences] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const getResidence = async () => {
+        const response = await axios.get('http://localhost:3100/residences');
+        return response.data;
+    };
+    useEffect(() => {
+        if (success) {
+            return navigate('/');
+        }
+    },[success,navigate]);
+    useEffect(() => {
+        if (isLoading) {
+            getResidence().then((res) => {
+                setResidences(res);
+            });
+            setIsLoading(false);
+        }
+    }, [isLoading]);
     return (
         <Form
             {...formItemLayout}
@@ -220,7 +199,7 @@ function SignupForm() {
                 {...tailFormItemLayout}
             >
                 <Checkbox>
-                    Tôi đồng ý với chính sách của <a href=""> BHShop.</a>
+                    Tôi đồng ý với chính sách của <a href="/"> BHShop.</a>
                 </Checkbox>
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
