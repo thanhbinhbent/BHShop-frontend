@@ -70,7 +70,24 @@
 
 .header-search {
     margin-left: 20px;
+    position: relative;
     flex: 1;
+}
+
+.search-table {
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    display: none;
+}
+
+.logined-name {
+    color: var(--color-primary);
+}
+
+.logout-btn {
+    color: var(--danger);
+    margin-left: 10px;
 }
 
 .header-cart {
