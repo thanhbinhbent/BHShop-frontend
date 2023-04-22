@@ -10,12 +10,12 @@ import { handleMoney } from '@/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/actions/cartActions';
 import PreviewModal from '@/components/Widgets/PreviewModal';
-import axios from 'axios';
 import './ProductItem.css';
+import productService from '@/services/productService';
 let GetCategoryNameById = async (id) => {
     const body = { category_id: id };
     try {
-        const response = await axios.post('http://localhost:3100/categories/name', body);
+        const response = await productService.getCategoryNameByProductId(body);
         return response.data;
     } catch (err) {
         console.log(err);

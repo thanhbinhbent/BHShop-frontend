@@ -7,8 +7,9 @@ import {
 } from '@/utils';
 import './SignupForm.css';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import userService from '@/services/userService';
+import residenceService from '@/services/residenceService';
 function SignupForm() {
     const { Option } = Select;
     const formItemLayout = {
@@ -48,7 +49,7 @@ function SignupForm() {
         let full_name = values.name.trim().split(' ');
         values.first_name = full_name.pop();
         values.last_name = full_name.join(' ');
-        await axios.post('http://localhost:3100/users/regis', values).then((res) => {
+        await userService.register(values).then((res) => {
             setSuccess(true);
         });
     };
@@ -56,14 +57,14 @@ function SignupForm() {
     const [residences, setResidences] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const getResidence = async () => {
-        const response = await axios.get('http://localhost:3100/residences');
+        const response = await residenceService.getResidences();
         return response.data;
     };
     useEffect(() => {
         if (success) {
             return navigate('/');
         }
-    },[success,navigate]);
+    }, [success, navigate]);
     useEffect(() => {
         if (isLoading) {
             getResidence().then((res) => {

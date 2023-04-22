@@ -4,6 +4,7 @@ import { handleMoney } from '@/utils';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import orderService from '@/services/orderService';
 function OrderTracking(props) {
     const shipFee = 30000;
     const { order_id } = props;
@@ -40,11 +41,11 @@ function OrderTracking(props) {
             unit: 120000,
         },
     ];
-    
+
     const [productsInOrder, setProductsInOrder] = useState([]);
     const currentUser = useSelector((state) => state.user.user);
     const getOrdersDetail = async () => {
-        const response = await axios.post('http://localhost:3100/orders/detail', {
+        const response = await orderService.getOrderById({
             order_id: order_id,
         });
         return response;
@@ -70,7 +71,11 @@ function OrderTracking(props) {
                 <p>
                     SĐT người nhận: &nbsp;
                     <span>
-                        <b>{currentUser.phone_number.slice(-3).padStart(currentUser.phone_number.length, '*')}</b>
+                        <b>
+                            {currentUser.phone_number
+                                .slice(-3)
+                                .padStart(currentUser.phone_number.length, '*')}
+                        </b>
                     </span>
                 </p>
                 <p>
@@ -97,7 +102,11 @@ function OrderTracking(props) {
                 ]}
             />
             <div className="order-tracking__view">
-                <Table pagination={false} columns={columns} dataSource={productsInOrder} />
+                <Table
+                    pagination={false}
+                    columns={columns}
+                    dataSource={productsInOrder}
+                />
             </div>
             <div className="order-tracking__total">
                 <p>

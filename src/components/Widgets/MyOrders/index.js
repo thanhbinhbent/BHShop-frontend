@@ -1,57 +1,27 @@
 import { useEffect, useState } from 'react';
-import { Avatar, Button, List, Skeleton, Modal, Popconfirm } from 'antd';
+import { Button, List, Skeleton, Modal, Popconfirm } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import OrderTracking from '@/components/OrderTracking';
 
 import './MyOrders.css';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
+import orderService from '@/services/orderService';
 function MyOrders() {
     const currentUser = useSelector((state) => state.user.user);
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
     const [list, setList] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [cancelLoading, setCancelLoading] = useState(false);
     const [openPop, setOpenPop] = useState(false);
-
-    // const ordersData = '/data/customerOrders.json';
     useEffect(() => {
-        // fetch(ordersData)
-        //     .then((res) => res.json())
-        //     .then((res) => {
-        //         setInitLoading(false);
-        //         setData(res);
-        //         setList(res);
-        //     });
-        axios.post('http://localhost:3100/orders', { user_id: currentUser.user_id }).then((res) => {
-            console.log(res.data);
+        orderService.getOrdersOfUser({ user_id: currentUser.user_id }).then((res) => {
             setInitLoading(false);
-            setData(res.data);
             setList(res.data);
         });
-    }, []);
+    }, [currentUser.user_id]);
     const onLoadMore = () => {
-        // setLoading(true);
-        // setList(
-        //     data.concat(
-        //         [...new Array(5)].map(() => ({
-        //             loading: true,
-        //             name: {},
-        //             picture: {},
-        //         })),
-        //     ),
-        // );
-        // fetch(ordersData)
-        //     .then((res) => res.json())
-        //     .then((res) => {
-        //         const newData = data.concat(res);
-        //         setData(newData);
-        //         setList(newData);
-        //         setLoading(false);
-        //         window.dispatchEvent(new Event('resize'));
-        //     });
+        setLoading(true);
     };
     const loadMore =
         !initLoading && !loading ? (
@@ -93,12 +63,12 @@ function MyOrders() {
                     actions={[
                         <div>
                             {' '}
-                            <a
+                            <button className="button-detail"
                                 key="list-loadmore-edit"
                                 onClick={() => setModalOpen(true)}
                             >
                                 Chi tiết
-                            </a>
+                            </button>
                             <Modal
                                 style={{ top: 20 }}
                                 open={modalOpen}
@@ -139,13 +109,13 @@ function MyOrders() {
                                 ></OrderTracking>
                             </Modal>
                         </div>,
-                        <a key="list-loadmore-more">Đánh giá</a>,
+                        <button className='button-rate' key="list-loadmore-more">Đánh giá</button>,
                     ]}
                 >
                     <Skeleton avatar title={false} loading={item.loading} active>
                         <List.Item.Meta
                             // avatar={<Avatar src={item?.productItems[0].thumbnail} />}
-                            title={<a href="#">{item.order_id}</a>}
+                            title={<span>{item.order_id}</span>}
                             // description={item?.productItems[0]?.title}
                         />
                         <div>

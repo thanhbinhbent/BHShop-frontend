@@ -1,6 +1,6 @@
 import { Button, Form, Input, message, Space, Modal, Cascader } from 'antd';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import residenceService from '@/services/residenceService';
 function AddressEditModal(props) {
     const { data, isOpen, onOk, onCancel } = props;
     const [form] = Form.useForm();
@@ -27,7 +27,7 @@ function AddressEditModal(props) {
     const [residences, setResidences] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const getResidence = async () => {
-        const response = await axios.get('http://localhost:3100/residences');
+        const response = await residenceService.getResidences();
         return response.data;
     };
 

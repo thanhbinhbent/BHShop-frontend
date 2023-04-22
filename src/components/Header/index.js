@@ -23,9 +23,10 @@ import { handleMoney } from '@/utils';
 import './Header.css';
 import SourceImg from '@/assets/images';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { setUser, setLoggedIn } from '@/actions/userActions';
 import { useDispatch } from 'react-redux';
+import residenceService from '@/services/residenceService';
+import productService from '@/services/productService';
 // import demo data
 
 function Header() {
@@ -107,13 +108,11 @@ function Header() {
     const [productData, setProductData] = useState([]);
     const [filterInput, setFilterInput] = useState('');
     const getProvince = async () => {
-        const response = await axios.post('http://localhost:3100/provinces');
+        const response = await residenceService.getProvinces();
         return response.data;
     };
     const getAllProductWithName = async () => {
-        const response = await axios.post(
-            'http://localhost:3100/products/allWithOnlyName',
-        );
+        const response = await productService.getAllProductWithOnlyName();
         return response.data;
     };
     const filterData = (value) => {
@@ -134,7 +133,7 @@ function Header() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text) => <a>{text}</a>,
+            render: (text) => <a href='/'>{text}</a>,
         },
     ];
     return (

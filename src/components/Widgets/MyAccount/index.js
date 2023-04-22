@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     nameValidator,
     emailValidator,
@@ -18,8 +18,8 @@ import {
 import SourceImg from '@/assets/images/';
 import './MyAccount.css';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { setUserFirstName } from '@/actions/userActions';
+import userService from '@/services/userService';
 const FormBasic = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.user);
@@ -31,12 +31,10 @@ const FormBasic = () => {
     const userAddressDefault = '669 QL1A, Khu phố 3, P. Linh Xuân, Tp. Thủ Đức, Tp. HCM';
     const accountVerified = true;
     const [isEditingBasic, setIsEditingBasic] = useState(false);
-    const [data, setData] = useState({});
     const handleSave = () => {
         form.validateFields().then(async (values) => {
-            setData(values);
             setIsEditingBasic(false);
-            await axios.put(`http://localhost:3100/users`, values).then((res) => {
+            await userService.update(values).then((res) => {
                 message.success('Đã lưu thành công!');
                 dispatch(setUserFirstName(values.name.trim().split(' ').pop()));
             });
@@ -63,10 +61,10 @@ const FormBasic = () => {
                     form={form}
                     layout="vertical"
                     initialValues={{
-                        ['name']: `${currentUser.last_name} ${currentUser.first_name}`,
-                        ['email']: currentUser.email,
-                        ['phone']: currentUser.phone_number,
-                        ['gender']: currentUser.gender,
+                        'name': `${currentUser.last_name} ${currentUser.first_name}`,
+                        'email': currentUser.email,
+                        'phone': currentUser.phone_number,
+                        'gender': currentUser.gender,
                     }}
                 >
                     <Form.Item
@@ -115,7 +113,7 @@ const FormBasic = () => {
                             },
                         ]}
                     >
-                        <Select placeholder={currentUser.gender == 'Nam' ? 'Nam' : 'Nữ'}>
+                        <Select placeholder={currentUser.gender === 'Nam' ? 'Nam' : 'Nữ'}>
                             <Option value="Nam">Nam</Option>
                             <Option value="Nữ">Nữ</Option>
                             <Option value="other">Khác</Option>
@@ -156,7 +154,7 @@ const FormBasic = () => {
 
                         <div className="my-account__rank">
                             <p className="my-account__rank-title">Hạng</p>
-                            <img src={handleRank(ordersSum).rankLogo} />
+                            <img src={handleRank(ordersSum).rankLogo} alt=''/>
                         </div>,
                     ]}
                 >
@@ -253,8 +251,8 @@ const ChangePasswordForm = () => {
     const handleSave = () => {
         passform.validateFields().then(async (values) => {
             values.user_id = currentUser.user_id;
-            await axios
-                .put('http://localhost:3100/users/pass', values)
+            await userService
+                .changePassword(values)
                 .then((res) => {
                     setIsEditingPassword(false);
                     message.success('Đã lưu thành công');

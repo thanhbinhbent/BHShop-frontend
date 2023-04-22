@@ -1,14 +1,19 @@
 import axios from 'axios';
 
-const apiUrl = '/data/orders.json'; // đường dẫn của API
+const serverUrl = 'http://127.0.0.1:3100';
+
+const errorHandler = (err) => {
+    console.log(err);
+};
+
 
 const orderService = {
-    getAllOrders: async () => {
-        const response = await axios.get(`${apiUrl}`);
+    getOrdersOfUser: async (id) => {
+        const response = await axios.post(`${serverUrl}/orders`,id).catch(errorHandler);
         return response;
     },
     getOrderById: async (orderId) => {
-        const response = await axios.get(`${apiUrl}/${orderId}`);
+        const response = await axios.post(`${serverUrl}/orders/detail`,orderId).catch(errorHandler);
         return response;
     },
 };
