@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Progress, Statistic } from 'antd';
 import SpinLoading from '@/components/SpinLoading';
 import './ProductForWeek.css';
 import { handleMoney } from '@/utils';
+import productService from '@/services/productService';
 function ProductForWeek() {
     const { Countdown } = Statistic;
 
@@ -14,8 +14,8 @@ function ProductForWeek() {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
-        axios
-            .get('http://127.0.0.1:3100/products')
+        productService
+            .getAllProduct()
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);

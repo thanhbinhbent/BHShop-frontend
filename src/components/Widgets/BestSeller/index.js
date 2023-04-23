@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Button, Carousel } from 'antd';
 import SpinLoading from '@/components/SpinLoading';
 import ProductItem from '@/components/ProductItem';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import { LeftOutlined, RightOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { AppstoreOutlined } from '@ant-design/icons';
 
 import './BestSeller.css';
 import '@splidejs/react-splide/css';
+import productService from '@/services/productService';
 
 function BestSeller() {
     const [state, setState] = useState([]);
@@ -32,8 +32,8 @@ function BestSeller() {
     };
     useEffect(() => {
         setLoading(true);
-        axios
-            .get('http://127.0.0.1:3100/products')
+        productService
+            .getAllProduct()
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);

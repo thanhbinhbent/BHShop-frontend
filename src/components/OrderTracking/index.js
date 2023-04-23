@@ -2,14 +2,12 @@ import { Steps, Table } from 'antd';
 import './OrderTracking.css';
 import { handleMoney } from '@/utils';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import orderService from '@/services/orderService';
 function OrderTracking(props) {
     const shipFee = 30000;
     const { order_id } = props;
     const address = '669 QL 1A, phường Linh Xuân, TP. Thủ Đức, TP. HCM';
-    const phoneNumber = '0968213964';
     const columns = [
         {
             title: 'Tên sản phẩm',
@@ -25,20 +23,6 @@ function OrderTracking(props) {
             render: (price) => {
                 return handleMoney(price);
             },
-        },
-    ];
-    const dataRows = [
-        {
-            key: 'BH001',
-            name: 'Sản phẩm 1',
-            quantity: 12,
-            unit: 120000,
-        },
-        {
-            key: 'BH002',
-            name: 'Sản phẩm 2',
-            quantity: 12,
-            unit: 120000,
         },
     ];
 
