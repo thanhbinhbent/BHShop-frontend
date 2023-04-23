@@ -1,7 +1,12 @@
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AudioOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
+import {
+    AudioOutlined,
+    UserOutlined,
+    ShoppingOutlined,
+    LogoutOutlined,
+} from '@ant-design/icons';
 import {
     Select,
     Input,
@@ -182,6 +187,7 @@ function Header() {
                                 allowClear
                             />
                             <Table
+                                className="search-table"
                                 columns={columns}
                                 dataSource={filterData(filterInput)}
                             />
@@ -192,15 +198,23 @@ function Header() {
                             <Col className="header-user">
                                 {isLoggedIn ? (
                                     <Col>
-                                        <span>Xin chào {user.first_name}</span>
+                                        <Link to="/profile">
+                                            <span className="logined-name">
+                                                Xin chào <b>{user.first_name + ''}</b>!
+                                            </span>
+                                        </Link>
+
                                         <Popconfirm
-                                            title="Log out"
-                                            description="Are you sure to log out?"
-                                            okText="Yes"
-                                            cancelText="No"
+                                            title="Đăng xuất"
+                                            description="Bạn có chắc muốn đăng xuất?"
+                                            okText="Đăng xuất"
+                                            cancelText="Huỷ"
                                             onConfirm={onLogOut}
                                         >
-                                            <Button type="primary">Đăng xuất</Button>
+                                            <LogoutOutlined
+                                                title="Đăng xuất"
+                                                className="logout-btn"
+                                            />
                                         </Popconfirm>
                                     </Col>
                                 ) : (
