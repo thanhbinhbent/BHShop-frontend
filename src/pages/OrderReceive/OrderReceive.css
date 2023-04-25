@@ -1,0 +1,14 @@
+.header-thanks{
+    border: 3px dashed rgb(14, 215, 14);
+    color: rgb(14, 215, 14);
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 20px ;
+}
+.content-brief--info{
+    margin-top: 20px;
+    border: 1px solid rgb(243, 236, 236);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}

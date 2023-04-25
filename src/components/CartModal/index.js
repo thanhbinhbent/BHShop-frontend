@@ -56,7 +56,7 @@ function CartModal(props) {
                                     </div>
                                     <div className="cart-product__delete">
                                         <span onClick={() => handleRemoveItem(item.id)}>
-                                            <DeleteOutlined className="cart__icon--delete" />
+                                            <DeleteOutlined style={{ fontSize: '16px', color: 'black' }} className="cart__icon--delete" />
                                         </span>
                                     </div>
                                 </Row>

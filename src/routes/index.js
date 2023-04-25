@@ -8,9 +8,16 @@ import MyAccount from '@/components/Widgets/MyAccount';
 import MyOrders from '@/components/Widgets/MyOrders';
 import Addresses from '@/components/Widgets/Addresses';
 import Wishlist from '@/components/Widgets/Wishlist';
+import Cart from '@/pages/Cart';
+import CheckOut from '@/pages/CheckOut';
+import OrderReceive from '@/pages/OrderReceive';
+import ProductItemDetail from '@/components/ProductItemDetail';
+import ProductItem from '@/components/ProductItem';
 const publicRoutes = [
-    { path: '/', component: HomePage },
+    { path: '/*', component: HomePage},
+    { path: '/:id', component: ProductItemDetail},
     {
+        
         path: '/profile/*',
         component: Profile,
         children: [
@@ -23,6 +30,10 @@ const publicRoutes = [
     },
     { path: '/account', component: Account },
     { path: '/shop', component: Shop },
+    { path: '/cart', component: Cart },
+    { path: '/checkout/*', component: CheckOut },
+    { path: '/order-received', component: OrderReceive },
+    { path: '/item-detail', component: ProductItemDetail },
     { path: '*', component: Page404 },
     {
         path: '/tracking',

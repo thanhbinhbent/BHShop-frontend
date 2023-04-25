@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import { addToCart } from '@/actions/cartActions';
 import PreviewModal from '@/components/Widgets/PreviewModal';
 import './ProductItem.css';
+import { Link } from 'react-router-dom';
+
 function ProductItem(props) {
     const { product, addToCart } = props;
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +28,7 @@ function ProductItem(props) {
     return (
         <div className="product-item">
             <div className="product-item__container">
-                <a href="#" className="product-item__link">
+                <a href='#' className="product-item__link">
                     <div className="product-item__img">
                         <img src={product.thumbnail} alt="" />
                     </div>

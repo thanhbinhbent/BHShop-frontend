@@ -1,0 +1,24 @@
+body{
+    font-size: var(1.5 rem);
+    font-family: var(--font-primary);
+}
+a{
+    color: black;
+    
+}
+.right-header_img img{
+    width: 100%;
+}
+.right-filter--view{
+ display: flex;
+ padding: 10px 20px;
+ background-color: rgb(250, 246, 246);
+ margin-top: 5px;
+}
+.view-selector{
+    flex: 2;
+}
+
+.sort-product--quantity{
+    display: flex;
+}

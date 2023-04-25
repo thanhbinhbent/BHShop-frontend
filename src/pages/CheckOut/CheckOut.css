@@ -1,0 +1,36 @@
+.checkout-content{
+    display: flex;
+}
+.checkout-content--left{
+    flex: 3;
+    border: 1px solid rgb(243, 236, 236) ;
+    padding: 20px 40px;
+    margin: 20px 40px;
+}
+.checkout-content--right{
+    flex: 2;
+
+}
+.checkout-form--content{
+    max-width: 480px;
+    border: 3px solid var(--color-primary) ;
+    padding: 20px 10px;
+    border-radius: 10px;
+    margin: 20px 10px;
+}
+.checkout-form--content tr:last-child{
+    text-align: center;
+}
+.checkout-form--content Button{
+    font-size: 25px;
+    height: fit-content;
+
+}
+.checkout-progress--bar{
+    margin: 20px 140px 20px 40px;
+}
+.policy a{
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
+}

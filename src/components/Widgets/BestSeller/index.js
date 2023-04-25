@@ -8,6 +8,7 @@ import { LeftOutlined, RightOutlined, AppstoreOutlined } from '@ant-design/icons
 
 import './BestSeller.css';
 import '@splidejs/react-splide/css';
+import ProductItemDetail from '@/components/ProductItemDetail';
 
 function BestSeller() {
     const [state, setState] = useState([]);
@@ -71,12 +72,15 @@ function BestSeller() {
                         className="best-seller__list products-list__items"
                     >
                         {state.slice(0, 10).map((product) => (
-                            <SplideSlide key={product.id}>
-                                <ProductItem
-                                    product={product}
-                                    className="product-carousel__item"
-                                ></ProductItem>
-                            </SplideSlide>
+                            <>
+                                <SplideSlide key={product.id}>
+                                    <ProductItem
+                                        product={product}
+                                        className="product-carousel__item"
+                                    ></ProductItem>
+                                </SplideSlide>
+                                
+                            </>
                         ))}
                     </Splide>
                 </div>

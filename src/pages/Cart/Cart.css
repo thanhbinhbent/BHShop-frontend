@@ -1,0 +1,33 @@
+
+.cart-content{
+    display: flex;
+}
+.cart-content--left{
+    flex: 3;
+}
+.cart-progress--bar{
+    border: 1px solid rgb(243, 236, 236);
+    border-radius: 10px;
+    padding: 10px 30px 10px 20px;
+    margin: 10px 0;
+}
+.cart-progress--bar span{
+    color: red;
+    font-weight: bold;
+}
+.cart-content--right {
+    flex: 2;
+}
+.cart-content--right Table{
+    border: 1px solid rgb(243, 236, 236);
+    border-radius: 10px;
+    margin: 20px;
+    
+}
+.total-invoice{
+
+}
+.cart-product__delete{
+    color: black;
+    font-weight: bold;
+}
