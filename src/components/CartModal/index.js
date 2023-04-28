@@ -6,7 +6,7 @@ import './CartModal.css';
 import { handleMoney } from '@/utils';
 // import demo data
 function CartModal(props) {
-    const { cartItems } = props;
+    const { cartItems, updateQuantity } = props;
 
     const handleQuantityChange = (productId, quantity) => {
         updateQuantity(productId, quantity);
@@ -45,7 +45,7 @@ function CartModal(props) {
                                                 value={item.quantity}
                                                 defaultValue={item.quantity}
                                                 onChange={(value) =>
-                                                    handleQuantityChange(item.id, value)
+                                                    handleQuantityChange(item._id, value)
                                                 }
                                             />
                                         </span>
@@ -55,7 +55,7 @@ function CartModal(props) {
                                         </span>
                                     </div>
                                     <div className="cart-product__delete">
-                                        <span onClick={() => handleRemoveItem(item.id)}>
+                                        <span onClick={() => handleRemoveItem(item._id)}>
                                             <DeleteOutlined className="cart__icon--delete" />
                                         </span>
                                     </div>
