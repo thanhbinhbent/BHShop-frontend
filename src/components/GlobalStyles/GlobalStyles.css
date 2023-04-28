@@ -104,11 +104,13 @@ li {
     margin-bottom: 8px;
     color: var(--color-text)
 }
+
 .product-item__price {
     display: flex;
     flex-wrap: wrap;
 
 }
+
 /* Section */
 .section__title {
     font-size: 2rem;
@@ -122,6 +124,10 @@ li {
 }
 
 /* Product List */
+.products-list-wrapper {
+    justify-content: stretch;
+}
+
 .products-list-container {
     margin-top: 40px;
     color: var(--color-text);
