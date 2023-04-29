@@ -1,3 +1,5 @@
+import React from 'react';
+import SpeechRecognition from 'react-speech-recognition';
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,6 +8,7 @@ import {
     UserOutlined,
     ShoppingOutlined,
     LogoutOutlined,
+    AudioFilled,
 } from '@ant-design/icons';
 import {
     Select,
@@ -42,14 +45,70 @@ function Header() {
         return sum + object.price * object.quantity;
     }, 0);
 
+    // Custom Voice search
+    const [isListening, setIsListening] = useState(false);
+    const [searchInput, setSearchInput] = useState('');
+    const [tempSearchInput, setTempSearchInput] = useState(''); // thêm biến tạm thời
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+    recognition.continous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'vi-VN';
+    const toggleListening = () => {
+        if (!recognition) {
+            console.log('Trình duyệt bạn chưa hỗ trợ tìm kiếm bằng giọng nói!');
+            return;
+        }
+        if (!isListening) {
+            recognition.start();
+            setIsListening(true);
+        } else {
+            recognition.stop();
+            setIsListening(false);
+        }
+    };
+
+    useEffect(() => {
+        if (recognition) {
+            recognition.onstart = () => {
+                setIsListening(true);
+            };
+            recognition.onend = () => {
+                setIsListening(false);
+            };
+            recognition.onresult = (event) => {
+                setTempSearchInput(event.results[0][0].transcript); // lưu giá trị nói vào biến tạm thời
+                console.log(tempSearchInput);
+            };
+        } else {
+        }
+    }, [recognition, tempSearchInput]);
+
+    const onSearch = (value) => {
+        setSearchInput(value);
+        setTempSearchInput(''); // đặt lại giá trị biến tạm thời khi người dùng nhấn tìm kiếm
+        console.log(searchInput);
+    };
+    const onChange = (e) => {
+        setSearchInput(e.target.value);
+    };
     // Custom theme
     const { useToken } = theme;
     const { token } = useToken();
     //Search Variable
     const { Search } = Input;
     // Voice Search icon
-    const suffix = (
+    const suffix = isListening ? (
+        <AudioFilled
+            style={{
+                fontSize: 16,
+                color: token.colorPrimary,
+            }}
+        />
+    ) : (
         <AudioOutlined
+            onClick={toggleListening}
             style={{
                 fontSize: 16,
                 color: token.colorPrimary,
@@ -59,11 +118,6 @@ function Header() {
 
     // Count of Cart Items
     let cartBadge = cartItems.length;
-    // Search Handle
-    const onSearch = (value) => {
-        console.log(value);
-        setFilterInput(value);
-    };
     // Format Money
     // const navLeft: MenuProps['items'] = [
     const navLeft = [
@@ -109,7 +163,6 @@ function Header() {
         dispatch(setUser({}));
         dispatch(setLoggedIn(false));
     };
-    const [provinces, setProvinces] = useState([]);
     const [productData, setProductData] = useState([]);
     const [filterInput, setFilterInput] = useState('');
     const getProvince = async () => {
@@ -126,9 +179,6 @@ function Header() {
         );
     };
     useEffect(() => {
-        getProvince().then((res) => {
-            setProvinces(res);
-        });
         getAllProductWithName().then((res) => {
             setProductData(res);
         });
@@ -138,7 +188,7 @@ function Header() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text) => <a href='/'>{text}</a>,
+            render: (text) => <a href="/">{text}</a>,
         },
     ];
     return (
@@ -169,14 +219,6 @@ function Header() {
                         </div>
                     </Col>
                     <Row className="col col-center">
-                        <Col className="header-location">
-                            <Select
-                                defaultValue="Chọn chi nhánh"
-                                style={{ width: 140 }}
-                                size="large"
-                                options={provinces}
-                            />
-                        </Col>
                         <Col className="header-search">
                             <Search
                                 placeholder="Nhập tên sản phẩm..."
@@ -184,7 +226,9 @@ function Header() {
                                 size="large"
                                 suffix={suffix}
                                 onSearch={onSearch}
+                                onChange={onChange}
                                 allowClear
+                                value={tempSearchInput || searchInput}
                             />
                             <Table
                                 className="search-table"
