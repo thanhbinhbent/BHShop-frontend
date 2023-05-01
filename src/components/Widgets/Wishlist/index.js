@@ -16,6 +16,7 @@ function Wishlist() {
             .get('/data/wishlist.json')
             .then((res) => {
                 setLoading(false);
+                console.log(res.data);
                 return setState(res.data);
             })
             .catch((err) => {

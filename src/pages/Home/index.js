@@ -7,7 +7,13 @@ import NewProducts from '@/components/Widgets/NewProducts';
 import VerticalBanner from '@/components/VerticalBanner';
 import SourceImg from '@/assets/images';
 import './Home.css';
+import React, { useEffect } from 'react';
+import userService from '@/services/userService';
+
 function HomePage() {
+    useEffect(() => {
+        userService.getAllUsers().then((res) => {});
+    }, []);
     return (
         <div className="container">
             <div className="home-container">

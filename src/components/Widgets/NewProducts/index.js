@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Button } from 'antd';
 import { AppstoreOutlined } from '@ant-design/icons';
 import SpinLoading from '@/components/SpinLoading';
 import ProductItem from '@/components/ProductItem';
 import './NewProducts.css';
+import productService from '@/services/productService';
 
 function NewProducts() {
     const [state, setState] = useState([]);
     const [hasError, setHasError] = useState(false);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        axios
-            .get('/data/products.json')
+        productService
+            .getAllProduct()
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);
@@ -45,7 +45,10 @@ function NewProducts() {
             ) : (
                 <div className="new-products__list products-list__items">
                     {state.slice(0, 8).map((products) => (
-                        <ProductItem key={products.id} product={products}></ProductItem>
+                        <ProductItem
+                            key={products.product_id}
+                            product={products}
+                        ></ProductItem>
                     ))}
                 </div>
             )}

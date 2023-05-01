@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Button, Carousel } from 'antd';
 import SpinLoading from '@/components/SpinLoading';
 import ProductItem from '@/components/ProductItem';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import { LeftOutlined, RightOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { AppstoreOutlined } from '@ant-design/icons';
 
 import './BestSeller.css';
 import '@splidejs/react-splide/css';
 import ProductItemDetail from '@/components/ProductItemDetail';
+import productService from '@/services/productService';
 
 function BestSeller() {
     const [state, setState] = useState([]);
@@ -33,8 +33,8 @@ function BestSeller() {
     };
     useEffect(() => {
         setLoading(true);
-        axios
-            .get('/data/products.json')
+        productService
+            .getAllProduct()
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);
@@ -72,15 +72,12 @@ function BestSeller() {
                         className="best-seller__list products-list__items"
                     >
                         {state.slice(0, 10).map((product) => (
-                            <>
-                                <SplideSlide key={product.id}>
-                                    <ProductItem
-                                        product={product}
-                                        className="product-carousel__item"
-                                    ></ProductItem>
-                                </SplideSlide>
-                                
-                            </>
+                            <SplideSlide key={product._id}>
+                                <ProductItem
+                                    product={product}
+                                    className="product-carousel__item"
+                                ></ProductItem>
+                            </SplideSlide>
                         ))}
                     </Splide>
                 </div>

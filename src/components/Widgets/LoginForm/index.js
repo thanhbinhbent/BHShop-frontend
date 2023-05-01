@@ -2,10 +2,34 @@ import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { phoneValidator } from '@/utils';
 import './LoginForm.css';
-function LoginForm() {
-    const onFinish = (values) => {
-        console.log('Login đã truyền đi giá trị: ', values);
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { setLoggedIn, setUser } from '@/actions/userActions';
+import { connect } from 'react-redux';
+import userService from '@/services/userService';
+function LoginForm(props) {
+    const { isLoggedIn } = props;
+    const navigate = useNavigate();
+    const onFinish = async (values) => {
+        await userService
+            .login(values)
+            .then((res) => {
+                if (res.status === 200) {
+                    props.setLoggedIn(true);
+                    props.setUser(res.data);
+                } else if (res.status === 404) {
+                    throw new Response('Not Found', { status: 404 });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
+    useEffect(() => {
+        if (isLoggedIn) {
+            return navigate('/');
+        }
+    }, [isLoggedIn, navigate]);
     return (
         <Form
             name="normal_login"
@@ -50,9 +74,9 @@ function LoginForm() {
                     <Checkbox>Lưu tài khoản</Checkbox>
                 </Form.Item>
 
-                <a className="login-form-forgot" href="">
+                <button className="login-form-forgot" href="">
                     Quên mật khẩu?
-                </a>
+                </button>
             </Form.Item>
 
             <Form.Item>
@@ -93,4 +117,15 @@ function LoginForm() {
     );
 }
 
-export default LoginForm;
+function mapStateToProps(state) {
+    return {
+        isLoggedIn: state.user.isLoggedIn,
+        user: state.user.user,
+    };
+}
+
+const mapDispatchToProps = {
+    setLoggedIn,
+    setUser,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

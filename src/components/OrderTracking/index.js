@@ -1,46 +1,47 @@
 import { Steps, Table } from 'antd';
 import './OrderTracking.css';
 import { handleMoney } from '@/utils';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import orderService from '@/services/orderService';
 function OrderTracking(props) {
     const shipFee = 30000;
-    const { order } = props;
+    const { order_id } = props;
     const address = '669 QL 1A, phường Linh Xuân, TP. Thủ Đức, TP. HCM';
-    const phoneNumber = '0968213964';
     const columns = [
         {
             title: 'Tên sản phẩm',
-            dataIndex: 'name',
+            dataIndex: 'product_id',
         },
         {
             title: 'SL',
-            dataIndex: 'quantity',
+            dataIndex: 'product_quantity',
         },
         {
             title: 'Đơn giá',
-            dataIndex: 'unit',
+            dataIndex: 'product_price',
             render: (price) => {
                 return handleMoney(price);
             },
         },
     ];
-    const dataRows = [
-        {
-            key: 'BH001',
-            name: 'Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1Sản phẩm 1',
-            quantity: 12,
-            unit: 120000,
-        },
-        {
-            key: 'BH002',
-            name: 'Sản phẩm 2',
-            quantity: 12,
-            unit: 120000,
-        },
-    ];
-    const sumOrder = dataRows.reduce((sum, item) => {
+
+    const [productsInOrder, setProductsInOrder] = useState([]);
+    const currentUser = useSelector((state) => state.user.user);
+    const getOrdersDetail = async () => {
+        const response = await orderService.getOrderById({
+            order_id: order_id,
+        });
+        return response;
+    };
+    const sumOrder = productsInOrder.reduce((sum, item) => {
         return sum + item.quantity * item.unit;
     }, 0);
-
+    useEffect(() => {
+        getOrdersDetail().then((res) => {
+            setProductsInOrder(res.data);
+        });
+    }, []);
     return (
         <div className="order-tracking__container">
             <h2>Chi tiết đơn hàng</h2>
@@ -54,7 +55,11 @@ function OrderTracking(props) {
                 <p>
                     SĐT người nhận: &nbsp;
                     <span>
-                        <b>{phoneNumber.slice(-3).padStart(phoneNumber.length, '*')}</b>
+                        <b>
+                            {currentUser.phone_number
+                                .slice(-3)
+                                .padStart(currentUser.phone_number.length, '*')}
+                        </b>
                     </span>
                 </p>
                 <p>
@@ -81,7 +86,11 @@ function OrderTracking(props) {
                 ]}
             />
             <div className="order-tracking__view">
-                <Table pagination={false} columns={columns} dataSource={dataRows} />
+                <Table
+                    pagination={false}
+                    columns={columns}
+                    dataSource={productsInOrder}
+                />
             </div>
             <div className="order-tracking__total">
                 <p>

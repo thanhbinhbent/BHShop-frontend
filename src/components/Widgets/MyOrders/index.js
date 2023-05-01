@@ -1,49 +1,27 @@
 import { useEffect, useState } from 'react';
-import { Avatar, Button, List, Skeleton, Modal, Popconfirm } from 'antd';
+import { Button, List, Skeleton, Modal, Popconfirm } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import OrderTracking from '@/components/OrderTracking';
 
 import './MyOrders.css';
+import { useSelector } from 'react-redux';
+import orderService from '@/services/orderService';
 function MyOrders() {
+    const currentUser = useSelector((state) => state.user.user);
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
     const [list, setList] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [cancelLoading, setCancelLoading] = useState(false);
     const [openPop, setOpenPop] = useState(false);
-
-    const count = 3;
-    const ordersData = '/data/customerOrders.json';
     useEffect(() => {
-        fetch(ordersData)
-            .then((res) => res.json())
-            .then((res) => {
-                setInitLoading(false);
-                setData(res);
-                setList(res);
-            });
-    }, []);
+        orderService.getOrdersOfUser({ user_id: currentUser.user_id }).then((res) => {
+            setInitLoading(false);
+            setList(res.data);
+        });
+    }, [currentUser.user_id]);
     const onLoadMore = () => {
         setLoading(true);
-        setList(
-            data.concat(
-                [...new Array(5)].map(() => ({
-                    loading: true,
-                    name: {},
-                    picture: {},
-                })),
-            ),
-        );
-        fetch(ordersData)
-            .then((res) => res.json())
-            .then((res) => {
-                const newData = data.concat(res);
-                setData(newData);
-                setList(newData);
-                setLoading(false);
-                window.dispatchEvent(new Event('resize'));
-            });
     };
     const loadMore =
         !initLoading && !loading ? (
@@ -81,16 +59,16 @@ function MyOrders() {
             dataSource={list}
             renderItem={(item) => (
                 <List.Item
-                    key={item.orderId}
+                    key={item.order_id}
                     actions={[
                         <div>
                             {' '}
-                            <a
+                            <button className="button-detail"
                                 key="list-loadmore-edit"
                                 onClick={() => setModalOpen(true)}
                             >
                                 Chi tiết
-                            </a>
+                            </button>
                             <Modal
                                 style={{ top: 20 }}
                                 open={modalOpen}
@@ -127,22 +105,21 @@ function MyOrders() {
                                 ]}
                             >
                                 <OrderTracking
-                                    order={data}
-                                    key={data.orderId}
+                                    order_id={item.order_id}
                                 ></OrderTracking>
                             </Modal>
                         </div>,
-                        <a key="list-loadmore-more">Đánh giá</a>,
+                        <button className='button-rate' key="list-loadmore-more">Đánh giá</button>,
                     ]}
                 >
                     <Skeleton avatar title={false} loading={item.loading} active>
                         <List.Item.Meta
-                            avatar={<Avatar src={item.productItems[0].thumbnail} />}
-                            title={<a href="#">{item.orderId}</a>}
-                            description={item.productItems[0].title}
+                            // avatar={<Avatar src={item?.productItems[0].thumbnail} />}
+                            title={<span>{item.order_id}</span>}
+                            // description={item?.productItems[0]?.title}
                         />
                         <div>
-                            <p>Đặt ngày: {item.orderDate}</p>
+                            <p>Đặt ngày: {item.order_date}</p>
                             <p className="my-order__price-total">Tổng tiền: {'45000'}</p>
                         </div>
                     </Skeleton>

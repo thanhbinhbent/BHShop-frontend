@@ -1,17 +1,43 @@
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AudioOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
-import { Select, Input, Row, Col, Avatar, Badge, theme, Popover, Menu } from 'antd';
+import {
+    AudioOutlined,
+    UserOutlined,
+    ShoppingOutlined,
+    LogoutOutlined,
+} from '@ant-design/icons';
+import {
+    Select,
+    Input,
+    Row,
+    Col,
+    Avatar,
+    Badge,
+    theme,
+    Popover,
+    Menu,
+    Button,
+    message,
+    Popconfirm,
+    Table,
+} from 'antd';
 import TopNavbar from '@/components/Widgets/TopNavbar';
 import CartModal from '@/components/CartModal';
 import { handleMoney } from '@/utils';
 import './Header.css';
 import SourceImg from '@/assets/images';
+import { useEffect, useState } from 'react';
+import { setUser, setLoggedIn } from '@/actions/userActions';
+import { useDispatch } from 'react-redux';
+import residenceService from '@/services/residenceService';
+import productService from '@/services/productService';
 // import demo data
 
 function Header() {
     const { cartItems } = useSelector((state) => state.cart);
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const user = useSelector((state) => state.user.user);
     const totalCart = cartItems.reduce((sum, object) => {
         return sum + object.price * object.quantity;
     }, 0);
@@ -34,9 +60,13 @@ function Header() {
     // Count of Cart Items
     let cartBadge = cartItems.length;
     // Search Handle
-    const onSearch = (value) => console.log(value);
+    const onSearch = (value) => {
+        console.log(value);
+        setFilterInput(value);
+    };
     // Format Money
-    const navLeft: MenuProps['items'] = [
+    // const navLeft: MenuProps['items'] = [
+    const navLeft = [
         {
             label: 'Giới thiệu',
             key: '0',
@@ -62,7 +92,7 @@ function Header() {
             icon: '',
         },
     ];
-    const navRight: MenuProps['items'] = [
+    const navRight = [
         {
             label: (
                 <span>
@@ -73,7 +103,44 @@ function Header() {
             icon: '',
         },
     ];
-
+    const dispatch = useDispatch();
+    const onLogOut = () => {
+        message.warning('Đăng xuất thành công');
+        dispatch(setUser({}));
+        dispatch(setLoggedIn(false));
+    };
+    const [provinces, setProvinces] = useState([]);
+    const [productData, setProductData] = useState([]);
+    const [filterInput, setFilterInput] = useState('');
+    const getProvince = async () => {
+        const response = await residenceService.getProvinces();
+        return response.data;
+    };
+    const getAllProductWithName = async () => {
+        const response = await productService.getAllProductWithOnlyName();
+        return response.data;
+    };
+    const filterData = (value) => {
+        return productData.filter((item) =>
+            item.name.toLowerCase().includes(value.toLowerCase()),
+        );
+    };
+    useEffect(() => {
+        getProvince().then((res) => {
+            setProvinces(res);
+        });
+        getAllProductWithName().then((res) => {
+            setProductData(res);
+        });
+    }, []);
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            render: (text) => <a href='/'>{text}</a>,
+        },
+    ];
     return (
         <header className="header-container">
             <div className="header-top">
@@ -107,13 +174,7 @@ function Header() {
                                 defaultValue="Chọn chi nhánh"
                                 style={{ width: 140 }}
                                 size="large"
-                                options={[
-                                    { value: '', label: '--Chi nhánh--', disabled: true },
-                                    { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
-                                    { value: 'Hà Nội', label: 'Hà Nội' },
-                                    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
-                                    { value: 'Cần Thơ', label: 'Cần Thơ' },
-                                ]}
+                                options={provinces}
                             />
                         </Col>
                         <Col className="header-search">
@@ -125,14 +186,42 @@ function Header() {
                                 onSearch={onSearch}
                                 allowClear
                             />
+                            <Table
+                                className="search-table"
+                                columns={columns}
+                                dataSource={filterData(filterInput)}
+                            />
                         </Col>
                     </Row>
                     <Col className="col col-right">
                         <Row className="header-action" justify="center" align="middle">
                             <Col className="header-user">
-                                <Link to="/account">
-                                    <Avatar size="large" icon={<UserOutlined />} />
-                                </Link>
+                                {isLoggedIn ? (
+                                    <Col>
+                                        <Link to="/profile">
+                                            <span className="logined-name">
+                                                Xin chào <b>{user.first_name + ''}</b>!
+                                            </span>
+                                        </Link>
+
+                                        <Popconfirm
+                                            title="Đăng xuất"
+                                            description="Bạn có chắc muốn đăng xuất?"
+                                            okText="Đăng xuất"
+                                            cancelText="Huỷ"
+                                            onConfirm={onLogOut}
+                                        >
+                                            <LogoutOutlined
+                                                title="Đăng xuất"
+                                                className="logout-btn"
+                                            />
+                                        </Popconfirm>
+                                    </Col>
+                                ) : (
+                                    <Link to="/account">
+                                        <Avatar size="large" icon={<UserOutlined />} />
+                                    </Link>
+                                )}
                             </Col>
 
                             <Popover

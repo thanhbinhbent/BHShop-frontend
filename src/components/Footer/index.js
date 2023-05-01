@@ -144,7 +144,7 @@ function Footer() {
             <Row className="footer-copyright container">
                 <div className="footer-copyright__row">
                     <Col className="footer-copyright__col">
-                        <p>Bản quyền nội dung 2022 © BHShop.</p>
+                        <p>Bản quyền nội dung 2023 © BHShop.</p>
                     </Col>
                     <Col className="footer-copyright__col">
                         <img

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Progress, Statistic } from 'antd';
 import SpinLoading from '@/components/SpinLoading';
 import './ProductForWeek.css';
 import { handleMoney } from '@/utils';
+import productService from '@/services/productService';
 function ProductForWeek() {
     const { Countdown } = Statistic;
 
@@ -14,8 +14,8 @@ function ProductForWeek() {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
-        axios
-            .get('/data/products.json')
+        productService
+            .getAllProduct()
             .then((res) => {
                 setLoading(false);
                 return setState(res.data);
@@ -40,7 +40,7 @@ function ProductForWeek() {
                 'Lỗi tải dữ liệu!'
             ) : (
                 state.slice(0, 1).map((products) => (
-                    <div className="forweek-container" key={products.id}>
+                    <div className="forweek-container" key={products.product_id}>
                         <div className="forweek-col">
                             <div className="forweek-product__img">
                                 <img src={products.thumbnail} alt="" />
