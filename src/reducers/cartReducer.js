@@ -14,11 +14,11 @@ export default function cartReducer(state = initialState, action) {
     switch (action.type) {
         case ADD_TO_CART:
             const item = action.payload;
-            const product = state.cartItems.find((x) => x.id === item.id);
+            const product = state.cartItems.find((x) => x._id === item._id);
             if (product) {
                 return {
                     cartItems: state.cartItems.map((x) =>
-                        x.id === product.id
+                        x._id === product._id
                             ? { ...product, quantity: product.quantity + 1 }
                             : x,
                     ),
@@ -32,7 +32,7 @@ export default function cartReducer(state = initialState, action) {
         case UPDATE_CART_ITEM:
             const { id, quantity } = action.payload;
             const updatedItems = state.cartItems.map((item) =>
-                item.id === id ? { ...item, quantity } : item,
+                item._id === id ? { ...item, quantity } : item,
             );
             const total = updatedItems.reduce(
                 (accumulator, current) => accumulator + current.price * current.quantity,
@@ -46,7 +46,7 @@ export default function cartReducer(state = initialState, action) {
         case UPDATE_QUANTITY:
             // handle updating product quantity in cart
             const updatedCartItems = state.cartItems.map((item) =>
-                item.id === action.payload.productId
+                item._id === action.payload.productId
                     ? { ...item, quantity: action.payload.quantity }
                     : item,
             );
@@ -58,7 +58,7 @@ export default function cartReducer(state = initialState, action) {
         case REMOVE_FROM_CART:
             const productId = action.payload;
             const changedCartItems = state.cartItems.filter(
-                (item) => item.id !== productId,
+                (item) => item._id !== productId,
             );
             const changedTotalPrice = changedCartItems.reduce(
                 (total, item) => total + item.price * item.quantity,

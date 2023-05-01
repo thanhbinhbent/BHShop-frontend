@@ -37,13 +37,8 @@ function ProductItem(props) {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const handleAddToCart = (product) => {
-        if(!isLoggedIn) {
-            message.error('Bạn cần đăng nhập để thực hiện chức năng này')
-            return;
-        }
-        dispatch(addToCart(product));
-    };
+    const handleAddToCart = (product) => dispatch(addToCart(product));
+
     useEffect(() => {
         GetCategoryNameById(product.category_id).then((res) => {
             setCategoryName(res);
@@ -89,11 +84,14 @@ function ProductItem(props) {
                             {'-' + product?.discountPercentage + ' %'}
                         </span>
                         {product.category !== undefined ? (
-                            <span className="product-item__category ">{product.category}</span>
+                            <span className="product-item__category ">
+                                {product.category}
+                            </span>
                         ) : (
-                            <span className="product-item__category ">{categoryName}</span>
+                            <span className="product-item__category ">
+                                {categoryName}
+                            </span>
                         )}
-                        
                     </div>
                     <div className="product-item__col">
                         <div
