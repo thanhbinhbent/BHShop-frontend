@@ -12,6 +12,7 @@ import { addToCart } from '@/actions/cartActions';
 import PreviewModal from '@/components/Widgets/PreviewModal';
 import './ProductItem.css';
 import productService from '@/services/productService';
+import { Route } from 'react-router-dom/dist';
 let GetCategoryNameById = async (id) => {
     const body = { category_id: id };
     try {
@@ -48,11 +49,14 @@ function ProductItem(props) {
             setCategoryName(res);
         });
     }, [product.category_id]);
-
+    const router = Route;
+    const viewDetail = (id) => {
+        router.navigate(['/products', product.product_id])
+    }
     return (
         <div className="product-item">
             <div className="product-item__container">
-                <button className="product-item__link">
+                <button onClick={() => viewDetail(product.product_id)} className="product-item__link">
                     <div className="product-item__img">
                         {product.thumbnail !== undefined ? (
                             <img src={product?.thumbnail} alt="" />

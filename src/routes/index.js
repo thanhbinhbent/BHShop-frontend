@@ -12,10 +12,10 @@ import Cart from '@/pages/Cart';
 import CheckOut from '@/pages/CheckOut';
 import OrderReceive from '@/pages/OrderReceive';
 import ProductItemDetail from '@/components/ProductItemDetail';
-import ProductItem from '@/components/ProductItem';
 const publicRoutes = [
-    { path: '/*', component: HomePage},
-    { path: '/:id', component: ProductItemDetail},
+    { path: '/', component: HomePage},
+    { path: '/products/*', component: ProductItemDetail},
+    { path: '/products/:id', component: ProductItemDetail},
     {
         
         path: '/profile/*',

@@ -1,5 +1,5 @@
 import './ProductItemDetail.css';
-import { Rate, InputNumber, Tag, Divider, Button } from 'antd';
+import { Rate, InputNumber, Tag, Divider, Button, message } from 'antd';
 import {
     ShoppingCartOutlined,
     FullscreenOutlined,
@@ -9,12 +9,38 @@ import {
     FileDoneOutlined,
     CarOutlined,
 } from '@ant-design/icons';
+import { addToCart } from '@/actions/cartActions';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import { useState } from 'react';
-
+import productService from '@/services/productService';
+import { useState, useEffect, useSelector } from 'react';
+import { useDispatch } from 'react-redux';
+let getProductID = async (id) => {
+    const body = { product_id: id };
+    try {
+        const response = await productService.getProduct(body);
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
 function ProductItemDetail(props) {
-    const { product, addToCart } = props;
+    const { product } = props;
+    const [productInfo, setproductInfo] = useState('');
     const [activeIndex, setActiveIndex] = useState(0);
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        getProductID(product.product_id).then((res) => {
+            setproductInfo(res);
+        });
+    }, [product.product_id]);
+    const handleAddToCart = (product) => {
+        if (!isLoggedIn) {
+            message.error('Bạn cần đăng nhập để thực hiện chức năng này');
+            return;
+        }
+        dispatch(addToCart(product));
+    };
     const customerReview = 10;
     const splideOptions = {
         autoWidth: true,
