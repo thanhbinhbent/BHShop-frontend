@@ -69,6 +69,7 @@ function ProductView(props) {
                                             src={product.image_url[activeIndex]}
                                             alt={product.name}
                                         />
+                                        
                                     </SplideSlide>
                                 );
                             })}

@@ -7,6 +7,7 @@ import { AppstoreOutlined } from '@ant-design/icons';
 
 import './BestSeller.css';
 import '@splidejs/react-splide/css';
+import ProductItemDetail from '@/components/ProductItemDetail';
 import productService from '@/services/productService';
 
 function BestSeller() {

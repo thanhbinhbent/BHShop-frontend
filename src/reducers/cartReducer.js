@@ -23,6 +23,7 @@ export default function cartReducer(state = initialState, action) {
                             : x,
                     ),
                 };
+            
             } else {
                 return {
                     cartItems: [...state.cartItems, { ...item, quantity: 1 }],
