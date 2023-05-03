@@ -14,8 +14,8 @@ import OrderReceive from '@/pages/OrderReceive';
 import ProductItemDetail from '@/components/ProductItemDetail';
 const publicRoutes = [
     { path: '/', component: HomePage},
-    { path: '/products/*', component: ProductItemDetail},
-    { path: '/products/:id', component: ProductItemDetail},
+    { path: '/products/*', component: ProductItemDetail,},
+    { path: '/products/:product_id', component: ProductItemDetail},
     {
         
         path: '/profile/*',
