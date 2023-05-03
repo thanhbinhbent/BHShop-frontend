@@ -2,7 +2,6 @@
 =======
 *This is BHShop guideline, please skip these if you don't want any headaches in the near future* 
 
-![1682134153490](image/README/1682134153490.png)
 
 # Getting Started with Create React App
 
@@ -12,7 +11,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm start` or `yarn start`
 
 Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
