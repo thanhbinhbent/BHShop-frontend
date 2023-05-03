@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 =======
 *This is BHShop guideline, please skip these if you don't want any headaches in the near future* 
 
