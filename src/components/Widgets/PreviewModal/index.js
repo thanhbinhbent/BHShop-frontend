@@ -3,7 +3,6 @@ import ProductView from '@/components/ProductView';
 import './PreviewModal.css';
 function PreviewModal(props) {
     const { product, open, close, oK } = props;
-    console.log("hi",product)
     return (
         <Modal
             wrapClassName="product-item__modal"

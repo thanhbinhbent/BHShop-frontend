@@ -12,7 +12,7 @@ const productService = {
         return response;
     },
     getProduct: async (id) => {
-        const response = await axios.get(`${serverUrl}/products/detail`,id).catch(errorHandler);
+        const response = await axios.get(`${serverUrl}/products/${id}`).catch(errorHandler);
         return response;
     },
     getAllProductWithOnlyName: async () => {

@@ -173,11 +173,13 @@ function Header() {
         const response = await productService.getAllProductWithOnlyName();
         return response.data;
     };
+
     const filterData = (value) => {
-        return productData.filter((item) =>
-            item.name.toLowerCase().includes(value.toLowerCase()),
+        return productData && productData.filter((item) =>
+        item && item.name
+        // item && item.name.toLowerCase().includes(value.toLowerCase())
         );
-    };
+      };
     useEffect(() => {
         getAllProductWithName().then((res) => {
             setProductData(res);
