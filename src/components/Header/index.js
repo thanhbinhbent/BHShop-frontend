@@ -2,7 +2,7 @@ import React from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useHistory } from 'react-router-dom';
 import {
     AudioOutlined,
     UserOutlined,
@@ -49,6 +49,7 @@ function Header() {
     const [isListening, setIsListening] = useState(false);
     const [searchInput, setSearchInput] = useState('');
     const [tempSearchInput, setTempSearchInput] = useState(''); // thêm biến tạm thời
+    const navigate = useNavigate();
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = SpeechRecognition ? new SpeechRecognition() : null;
@@ -84,7 +85,9 @@ function Header() {
         } else {
         }
     }, [recognition, tempSearchInput]);
-
+    const handleCartClick = () => {
+        navigate('/cart');
+    };
     const onSearch = (value) => {
         setSearchInput(value);
         setTempSearchInput(''); // đặt lại giá trị biến tạm thời khi người dùng nhấn tìm kiếm
@@ -175,11 +178,14 @@ function Header() {
     };
 
     const filterData = (value) => {
-        return productData && productData.filter((item) =>
-        item && item.name
-        // item && item.name.toLowerCase().includes(value.toLowerCase())
+        return (
+            productData &&
+            productData.filter(
+                (item) => item && item.name,
+                // item && item.name.toLowerCase().includes(value.toLowerCase())
+            )
         );
-      };
+    };
     useEffect(() => {
         getAllProductWithName().then((res) => {
             setProductData(res);
@@ -273,6 +279,7 @@ function Header() {
                             <Popover
                                 content={<CartModal cartItems={cartItems} />}
                                 overlayClassName="header-cart__tooltip"
+                                onClick={handleCartClick}
                             >
                                 <Row className="header-cart">
                                     <Row>

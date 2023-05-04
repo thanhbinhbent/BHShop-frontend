@@ -11,7 +11,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import axios from 'axios';
 import { Breadcrumb } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, message, Space, Tag, Pagination } from 'antd';
+import { Dropdown, message, Space, Tag, Pagination, Button } from 'antd';
 import productService from '@/services/productService';
 
 function Shop() {
@@ -25,6 +25,7 @@ function Shop() {
         priceRange: [20000, 1000000],
         tags: [],
     });
+
     const [currentPage, setCurrentPage] = useState(1);
     const [sort, setSort] = useState();
     const [itemsPerPage, setItemsPerPage] = useState(15);
@@ -75,12 +76,12 @@ function Shop() {
     useEffect(() => {
         // Update filtered products based on filter parameters
         let filtered = products;
-        if (filterParams.brand) {
+        if (filterParams.brand.length) {
             filtered = filtered.filter((product) =>
                 product.brand.includes(filterParams.brand),
             );
         }
-        if (filterParams.categories) {
+        if (filterParams.categories.length) {
             filtered = filtered.filter((product) =>
                 product.brand.includes(filterParams.categories),
             );
@@ -99,22 +100,41 @@ function Shop() {
         }
         setFilteredProducts(filtered);
     }, [filterParams, products]);
-
     const handleFilterParamsChange = (newParams) => {
         setFilterParams({
             ...filterParams,
             ...newParams,
         });
     };
+    console.log(
+        '11111111111111111',
+        filterParams['brand'].filter((param) => param === 'Pepperidge Farm'),
+    );
+    const handleFilterParamsChange1 = (type, newParams) => {
+        let updatedParams = {};
+        if (type === 'priceRange') {
+            updatedParams = { ...filterParams, ...newParams };
+        } else {
+            updatedParams = {
+                ...filterParams,
+                [type]:
+                    filterParams[type] &&
+                    filterParams[type].filter((param) => param !== newParams),
+            };
+        }
+        console.log('11111111111111111', filterParams, 'kkkk', updatedParams);
+        setFilterParams(updatedParams);
+    };
 
     const handleClearFilters = () => {
         setFilterParams({
             categories: [],
             brand: [],
-            priceRange: [],
+            priceRange: [20000, 1000000],
             tags: [],
         });
     };
+
     useEffect(() => {
         productService
             .getAllProduct()
@@ -209,7 +229,7 @@ function Shop() {
                         </div>
                         <div className="shop-search__display-filter">
                             <div>
-                                {filterParams.priceRange && (
+                                {filterParams.priceRange && filterParams.priceRange && (
                                     <p>
                                         <Tag
                                             style={{
@@ -219,36 +239,34 @@ function Shop() {
                                             color="geekblue"
                                             closable
                                             onClose={() =>
-                                                handleFilterParamsChange({
-                                                    priceRange: '',
-                                                })
+                                                handleFilterParamsChange1(
+                                                    'priceRange',
+                                                    [20000, 1000000],
+                                                )
                                             }
                                         >
                                             {`$${filterParams.priceRange[0]} - $${filterParams.priceRange[1]}`}
                                         </Tag>
                                     </p>
                                 )}
-                                {filterParams.tags.map((tag) => (
-                                    <p key={tag}>
-                                        <Tag
-                                            style={{
-                                                fontSize: '18px',
-                                                padding: '3px 7px',
-                                            }}
-                                            color="geekblue"
-                                            closable
-                                            onClose={() =>
-                                                handleFilterParamsChange({
-                                                    tags: filterParams.tags.filter(
-                                                        (t) => t !== tag,
-                                                    ),
-                                                })
-                                            }
-                                        >
-                                            {tag}
-                                        </Tag>
-                                    </p>
-                                ))}
+                                {filterParams.tags &&
+                                    filterParams.tags.map((tag) => (
+                                        <p key={tag}>
+                                            <Tag
+                                                style={{
+                                                    fontSize: '18px',
+                                                    padding: '3px 7px',
+                                                }}
+                                                color="geekblue"
+                                                closable
+                                                onClose={() =>
+                                                    handleFilterParamsChange1('tags', tag)
+                                                }
+                                            >
+                                                {tag}
+                                            </Tag>
+                                        </p>
+                                    ))}
                                 {'' && (
                                     <p>
                                         <Tag
@@ -265,42 +283,48 @@ function Shop() {
                                 )}
                             </div>
                             <div>
-                                {filterParams.categories.map((category) => (
-                                    <p>
-                                        <Tag
-                                            style={{
-                                                fontSize: '18px',
-                                                padding: '3px 7px',
-                                            }}
-                                            color="volcano"
-                                            closable
-                                            onClose={() =>
-                                                handleFilterParamsChange({
-                                                    category: '',
-                                                })
-                                            }
-                                        >
-                                            {category}
-                                        </Tag>
-                                    </p>
-                                ))}
-                                {filterParams.brand.map((brand) => (
-                                    <p>
-                                        <Tag
-                                            style={{
-                                                fontSize: '18px',
-                                                padding: '3px 7px',
-                                            }}
-                                            color="volcano"
-                                            closable
-                                            onClose={() =>
-                                                handleFilterParamsChange({ brand: '' })
-                                            }
-                                        >
-                                            {brand}
-                                        </Tag>
-                                    </p>
-                                ))}
+                                {filterParams.categories &&
+                                    filterParams.categories.map((category) => (
+                                        <p>
+                                            <Tag
+                                                style={{
+                                                    fontSize: '18px',
+                                                    padding: '3px 7px',
+                                                }}
+                                                color="volcano"
+                                                closable
+                                                onClose={() =>
+                                                    handleFilterParamsChange1(
+                                                        'categoies',
+                                                        category,
+                                                    )
+                                                }
+                                            >
+                                                {category}
+                                            </Tag>
+                                        </p>
+                                    ))}
+                                {filterParams.brand &&
+                                    filterParams.brand.map((brand) => (
+                                        <p>
+                                            <Tag
+                                                style={{
+                                                    fontSize: '18px',
+                                                    padding: '3px 7px',
+                                                }}
+                                                color="volcano"
+                                                closable
+                                                onClose={() =>
+                                                    handleFilterParamsChange1(
+                                                        'brand',
+                                                        brand,
+                                                    )
+                                                }
+                                            >
+                                                {brand}
+                                            </Tag>
+                                        </p>
+                                    ))}
                             </div>
                         </div>
                         <div className="shop-products__main">

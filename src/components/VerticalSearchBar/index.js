@@ -17,14 +17,18 @@ function VerticalSearchBar(props) {
         selectedCategories,
         selectedTags,
     );
+
     function handleBrandChange(event) {
+        const {filterParams} = props;
         const brand = event.target.value;
         const isChecked = event.target.checked;
         if (isChecked) {
             setSelectedBrand([...selectedBrand, brand]);
         } else {
             setSelectedBrand(
-                selectedBrand.filter((selectedBrand) => selectedBrand !== brand),
+                selectedBrand && selectedBrand.filter(
+                    (selectedBrand) => selectedBrand !== brand,
+                ),
             );
         }
     }
@@ -47,20 +51,32 @@ function VerticalSearchBar(props) {
         setSelectedCategories((prevSelected) =>
             checked
                 ? [...prevSelected, categoryName]
-                : prevSelected.filter((name) => name !== categoryName),
+                : prevSelected && prevSelected.filter((name) => name !== categoryName),
         );
     }
 
     const handleTagChange = (event) => {
-         const tags = event.target.value;
-         const isChecked = event.target.checked;
-         if (isChecked) {
-             setSelectedTags([...selectedTags, tags]);
-         } else {
-             setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tags));
-         }
+        const tags = event.target.value;
+        const isChecked = event.target.checked;
+        if (isChecked) {
+            setSelectedTags([...selectedTags, tags]);
+        } else {
+            setSelectedTags(
+                selectedTags && selectedTags.filter((selectedTag) => selectedTag !== tags),
+            );
+        }
     };
-
+    // useEffect(() => {
+    //     const handleFilterChange = () => {
+    //         props.onFilterParamsChange({
+    //             brand: selectedBrand,
+    //             priceRange: selectedPriceRange,
+    //             categories: selectedCategories,
+    //             tags: selectedTags,
+    //         });
+    //     };
+    //     handleFilterChange();
+    // }, [props.filterParams]);
     const handleFilterButtonClick = () => {
         props.onFilterParamsChange({
             brand: selectedBrand,
@@ -69,7 +85,18 @@ function VerticalSearchBar(props) {
             tags: selectedTags,
         });
     };
-
+    const handleClearFilters = () => {
+        props.onClearFilters({
+            brand: [],
+            priceRange: [20000, 1000000],
+            categories: [],
+            tags: [],
+        });
+        setSelectedBrand([]);
+        setSelectedPriceRange([20000,1000000]);
+        setSelectedCategories([]);
+        setSelectedTags([]);
+    };
     //
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
@@ -100,17 +127,16 @@ function VerticalSearchBar(props) {
     };
 
     const ProductCategories = categories.map((category, index) => {
-        const children = categories
-            .filter((product) => product.category_id === category.category_id)
-            .map((product) => ({
-                title: category.name,
-                key: `0-${index}-${category._id.$oid}`,
-            }));
+        // const children = categories
+        //     .filter((product) => product.category_id === category.category_id)
+        //     .map((product) => ({
+        //         title: category.name,
+        //         key: `0-${index}-${category._id.$oid}`,
+        //     }));
 
         return {
             title: `${category.name}`,
             key: `0-${index}`,
-            children: children.length > 1 ? children : undefined,
         };
     });
     useEffect(() => {
@@ -216,8 +242,11 @@ function VerticalSearchBar(props) {
                     {status.map((status) => {
                         return (
                             <div key={status.id}>
-                                <Checkbox value={status.type} onChange={handleTagChange}
-                                checked = {selectedTags.includes(status.type)}>
+                                <Checkbox
+                                    value={status.type}
+                                    onChange={handleTagChange}
+                                    checked={selectedTags.includes(status.type)}
+                                >
                                     {status.type}
                                 </Checkbox>
                             </div>
@@ -245,6 +274,13 @@ function VerticalSearchBar(props) {
                 </div>
             </div>
             <div className="search-container__action">
+                <Button
+                    onClick={handleClearFilters}
+                    type="primary"
+                    style={{ backgroundColor: 'red' }}
+                >
+                    Loại bỏ các filter
+                </Button>
                 <Button type="primary" onClick={handleFilterButtonClick}>
                     Filter
                 </Button>

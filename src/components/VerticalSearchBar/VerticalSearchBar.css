@@ -59,4 +59,7 @@
 }
 .search-container__action{
     text-align: center;
+    display: flex;
+    justify-content: space-between;
 }
+

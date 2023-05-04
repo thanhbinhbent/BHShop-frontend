@@ -1,13 +1,18 @@
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { updateQuantity, updateTotalPrice, removeFromCart } from '@/actions/cartActions';
 import { Row, Empty, Button, InputNumber } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import './CartModal.css';
 import { handleMoney } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 // import demo data
 function CartModal(props) {
     const { cartItems, updateQuantity } = props;
-
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const navigate = useNavigate();
+    const handleCartClick = () => {
+        navigate('/cart');
+    };
     const handleQuantityChange = (productId, quantity) => {
         updateQuantity(productId, quantity);
     };
@@ -15,7 +20,16 @@ function CartModal(props) {
     const handleRemoveItem = (productId) => {
         props.removeFromCart(productId);
     };
-
+    
+    const handlePaymentClick = () =>{
+        if (isLoggedIn){
+            navigate('/checkout');
+        }
+        else{
+            navigate('/account');
+            alert("Vui lòng đăng nhập trước khi thực hiện thanh toán!!!")
+        }
+    }
     return cartItems.length !== 0 ? (
         <div className="cart-modal">
             <Row className="cart-modal__container">
@@ -65,12 +79,16 @@ function CartModal(props) {
                     );
                 })}
                 <Row className="cart-modal__action">
-                    <Button className="cart-modal__button cart-modal__review">
+                    <Button
+                        onClick={handleCartClick}
+                        className="cart-modal__button cart-modal__review"
+                    >
                         Xem giỏ hàng
                     </Button>
                     <Button
                         type="primary"
                         className="cart-modal__button cart-modal__checkout"
+                        onClick={handlePaymentClick}
                     >
                         Thanh toán
                     </Button>
