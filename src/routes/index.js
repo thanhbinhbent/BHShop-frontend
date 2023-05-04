@@ -13,11 +13,10 @@ import CheckOut from '@/pages/CheckOut';
 import OrderReceive from '@/pages/OrderReceive';
 import ProductItemDetail from '@/components/ProductItemDetail';
 const publicRoutes = [
-    { path: '/', component: HomePage},
-    { path: '/products/*', component: ProductItemDetail,},
-    { path: '/products/:product_id', component: ProductItemDetail},
+    { path: '/', component: HomePage },
+    { path: '/products/*', component: ProductItemDetail },
+    { path: '/products/:product_id', component: ProductItemDetail },
     {
-        
         path: '/profile/*',
         component: Profile,
         children: [
@@ -32,7 +31,7 @@ const publicRoutes = [
     { path: '/shop', component: Shop },
     { path: '/cart', component: Cart },
     { path: '/checkout/*', component: CheckOut },
-    { path: '/order-received', component: OrderReceive },
+    { path: '/checkout/order-received/:id', component: OrderReceive },
     { path: '/item-detail', component: ProductItemDetail },
     { path: '*', component: Page404 },
     {
