@@ -13,6 +13,8 @@ function OrderReceive(props) {
         quantity: item.quantity,
         totalPrice: item.price * item.quantity,
         id: item.id,
+        ship_fee:item.ship,
+
     }));
     const leng_data = cartData.length;
     const allTotalPrice = cartItems.reduce((acc, item) => {
@@ -28,9 +30,22 @@ function OrderReceive(props) {
             quantity: data1.quantity,
             total: data1.price * data1.quantity,
             id: data1.id,
-            name: <>{data1.title} <b>x{data1.quantity}</b> </>
+            name: (
+                <>
+                    {data1.title} <b>x{data1.quantity}</b>{' '}
+                </>
+            ),
+            address: '21 đường Nguyễn Văn Cừ, Quận 5, Thành phố Hồ Chí Minh', 
+            shipping_fee: 50000,
         });
     }
+    const order = {
+        orderid: 123,
+        date: '22/5/2000',
+        total: 1500000,
+        payment_method: 'Tiền mặt',
+        
+    };
     const columns = [
         {
             title: 'Sản phẩm',
@@ -43,33 +58,28 @@ function OrderReceive(props) {
     ];
     const orderData = [
         {
-            key: 'subtotal',
-            name: <b>Subtotal:</b>,
+            key: 'Subtotal',
+            name: <b>Giá trị giỏ hàng:</b>,
             total: handleMoney(allTotalPrice),
         },
         {
             key: 'shipping',
-            name: <b>Shipping:</b>,
+            name: <b>Phí giao hàng:</b>,
             total: '', // phí ship
         },
         {
-            key: 'payment',
-            name: <b>Payment Method: </b>,
-            total: '', //Chuyển khoản hay thanh toán khi nhận hàng
-        },
-        {
-            key: 'total',
-            name: <b>Total: </b>,
+            key: 'Total',
+            name: <b>Tổng giá trị của đơn hàng: </b>,
             total: '', // tổng phí khi đã tính thuế
         },
         {
             key: 'shipping-address',
-            name: <b>Shipping address:</b>,
+            name: <b>Địa chỉ giao hàng</b>,
             total: '', // địa chỉ giao hàng
         },
         {
             key: 'notes',
-            name: <b>Notes: </b>,
+            name: <b>Ghi chú: </b>,
             total: '', // notes thêm của khách hàng
         },
     ];
@@ -91,19 +101,19 @@ function OrderReceive(props) {
                     <div className="content-brief--info">
                         <div className="brief-order--number">
                             <p>Mã đơn hàng:</p>
-                            <p></p>
+                            <p>{order.orderid}</p>
                         </div>
                         <div className="brief-order--date">
                             <p>Ngày đặt hàng:</p>
-                            <p></p>
+                            <p>{order.date}</p>
                         </div>
                         <div className="brief-order--total">
                             <p>Tổng giá trị:</p>
-                            <p></p>
+                            <p>{handleMoney(order.total + data.shipping_fee)}</p>
                         </div>
                         <div className="brief-order--payment">
                             <p>Phương thức thanh toán:</p>
-                            <p></p>
+                            <p>{order.payment_method}</p>
                         </div>
                     </div>
                     <div className="content-detail--info">

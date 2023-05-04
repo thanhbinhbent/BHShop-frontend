@@ -22,12 +22,19 @@ import {
     Table,
 } from 'antd';
 import { handleMoney } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 function CheckOut(props) {
     const [showShippingForm, setShowShippingForm] = useState(false);
     const { cartItems, updateQuantity  } = props;
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const customer = useSelector((state) => state.customer);
-
+    const nevigate = useNavigate();
+    const finishOrder = (id) => {
+        nevigate(`/checkout/order-received/${orderCreated.order_id}`);
+    };
+    const orderCreated = {
+        order_id: 123,
+    }
     const data = cartItems.map((item, index) => ({
         key: index,
         thumbnail: item.thumbnail,
@@ -160,7 +167,7 @@ function CheckOut(props) {
         {
             key: '7',
             name: (
-                <Button type="primary" danger>
+                <Button type="primary" danger onClick={finishOrder}>
                     Hoàn tất thanh toán
                 </Button>
             ),

@@ -12,3 +12,7 @@
     display: flex;
     justify-content: space-between;
 }
+.content-brief--info div p:nth-child(2){
+    margin-top: 10px;
+    font-weight: bold;
+}
