@@ -1,7 +1,8 @@
 import './CheckOut.css';
 import { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { updateQuantity, updateTotalPrice, removeFromCart } from '@/actions/cartActions';
+import { setCustomerAddresses } from '@/actions/customerActions';
 import { SmileOutlined, GiftOutlined } from '@ant-design/icons';
 import {
     Cascader,
@@ -23,7 +24,10 @@ import {
 import { handleMoney } from '@/utils';
 function CheckOut(props) {
     const [showShippingForm, setShowShippingForm] = useState(false);
-    const { cartItems, updateQuantity } = props;
+    const { cartItems, updateQuantity  } = props;
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const customer = useSelector((state) => state.customer);
+
     const data = cartItems.map((item, index) => ({
         key: index,
         thumbnail: item.thumbnail,
@@ -33,6 +37,7 @@ function CheckOut(props) {
         totalPrice: item.price * item.quantity,
         id: item.id,
     }));
+    console.log('customer nè', customer);
     const allTotalPrice = cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
     }, 0);
@@ -351,13 +356,6 @@ function CheckOut(props) {
                                     <Input />
                                 </Form.Item>
                                 <Form.Item
-                                    wrapperCol={{ offset: 9, span: 16 }}
-                                    name="createAccount"
-                                    valuePropName="checked"
-                                >
-                                    <Checkbox>Tạo tài khoản mới</Checkbox>
-                                </Form.Item>
-                                <Form.Item
                                     name="shipToDifferentAddress"
                                     valuePropName="checked"
                                     wrapperCol={{ offset: 9, span: 16 }}
@@ -463,8 +461,12 @@ function CheckOut(props) {
 function mapStateToProps(state) {
     return {
         cartItems: state.cart.cartItems,
+        customer: state.customer,
+        adresses: state.customer.addresses
     };
 }
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    setCustomerAddresses,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckOut);
