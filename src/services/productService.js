@@ -19,10 +19,6 @@ const productService = {
         const response = await axios.post(`${serverUrl}/products/allWithOnlyName`).catch(errorHandler);
         return response;
     },
-    getCategoryNameByProductId: async (id) => {
-        const response = await axios.post(`${serverUrl}/categories/name`,id).catch(errorHandler);
-        return response;
-    },
 };
 
 export default productService;

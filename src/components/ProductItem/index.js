@@ -13,25 +13,16 @@ import PreviewModal from '@/components/Widgets/PreviewModal';
 import './ProductItem.css';
 import productService from '@/services/productService';
 import { Link, useNavigate } from 'react-router-dom';
-let GetCategoryNameById = async (id) => {
-    const body = { category_id: id };
-    try {
-        const response = await productService.getCategoryNameByProductId(body);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
+
 function ProductItem(props) {
     const { product } = props;
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [categoryName, setCategoryName] = useState('');
-    const nevigate = useNavigate();
+    const navigate = useNavigate();
     const viewDetail = (id) => {
-        nevigate(`/products/${product._id}`);
-      }
+        navigate(`/products/${product._id}`);
+    };
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -42,56 +33,79 @@ function ProductItem(props) {
         setIsModalOpen(false);
     };
     const handleAddToCart = (product) => dispatch(addToCart(product));
-
-    useEffect(() => {
-        GetCategoryNameById(product.category_id).then((res) => {
-            setCategoryName(res);
+    const displayDiscount = (product) => {
+        if (product?.campaign?.active) {
+            return (
+                <span className="product-item__discount">
+                    {`- ${product.campaign.amount} ${changeType(
+                        product.campaign.sale_type,
+                    )}`}
+                </span>
+            );
+        }
+        return <></>;
+    };
+    const changeType = (type) => {
+        if (type === 'percent') {
+            return '%';
+        }
+        return 'đ';
+    };
+    const displayNewPrice = (price) => {
+        if (product?.campaign?.active) {
+            if (product.campaign.sale_type === 'percent') {
+                return price - (price * product.campaign.amount) / 100;
+            }
+            return price - product.campaign.amount;
+        }
+        return price;
+    };
+    const displayRating = (product) => {
+        let rating = 0;
+        if (!product?.reviews) {
+            return rating;
+        }
+        product?.reviews.forEach((review) => {
+            rating += review.rating;
         });
-    }, [product.category_id]);
+        return rating / product?.reviews.length;
+    };
     return (
         <div className="product-item">
             <div className="product-item__container">
-                <button onClick={viewDetail} key={product.product_id} className="product-item__link">
+                <button
+                    onClick={viewDetail}
+                    key={product.product_id}
+                    className="product-item__link"
+                >
                     <div className="product-item__img">
-                        {product.thumbnail !== undefined ? (
-                            <img src={product?.thumbnail} alt="" />
-                        ) : (
-                            <img src={product?.image_url[0]} alt="" />
-                        )}
+                        <img src={product?.image[0]} alt="" />
                     </div>
                     <h3 className="product-item__name">{product?.name}</h3>
                     <div className="product-item__rating">
                         <Rate
                             class="product-item__star"
                             disabled
-                            defaultValue={product?.rating}
+                            defaultValue={displayRating(product)}
                         />
                     </div>
                     <div className="product-item__price">
-                        <span className="product-item__price--old">
-                            {product?.oldPrice
-                                ? handleMoney(product?.oldPrice)
-                                : handleMoney('20000')}
-                        </span>
+                        {product?.campaign?.active && 
+                            <span className="product-item__price--old">
+                                {handleMoney(product?.price)}
+                            </span>
+                        }
                         <span className="product-item__price--sale">
-                            {handleMoney(product?.price)}
+                            {handleMoney(displayNewPrice(product?.price))}
                         </span>
                     </div>
                 </button>
                 <div className="product-item__more">
                     <div className="product-item__col">
-                        <span className="product-item__discount">
-                            {'-' + product?.discountPercentage + ' %'}
+                        {displayDiscount(product)}
+                        <span className="product-item__category ">
+                            {product?.category_lst[0].name}
                         </span>
-                        {product.category !== undefined ? (
-                            <span className="product-item__category ">
-                                {product.category}
-                            </span>
-                        ) : (
-                            <span className="product-item__category ">
-                                {categoryName}
-                            </span>
-                        )}
                     </div>
                     <div className="product-item__col">
                         <div

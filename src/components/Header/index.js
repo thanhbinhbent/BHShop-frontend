@@ -1,5 +1,5 @@
 import React from 'react';
-import SpeechRecognition from 'react-speech-recognition';
+// import SpeechRecognition from 'react-speech-recognition';
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useHistory } from 'react-router-dom';
@@ -52,7 +52,7 @@ function Header() {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-    recognition.continous = true;
+    recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'vi-VN';
     const toggleListening = () => {

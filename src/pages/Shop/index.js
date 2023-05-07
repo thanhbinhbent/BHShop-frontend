@@ -7,11 +7,9 @@ import React, { useState, useEffect } from 'react';
 import SpinLoading from '@/components/SpinLoading';
 import ProductItem from '@/components/ProductItem';
 import RecentlyViewProduct from '@/components/RecentlyViewProduct';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import axios from 'axios';
 import { Breadcrumb } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, message, Space, Tag, Pagination, Button } from 'antd';
+import { Dropdown, Space, Tag, Pagination } from 'antd';
 import productService from '@/services/productService';
 
 function Shop() {

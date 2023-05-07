@@ -1,4 +1,4 @@
-import { connect, useSelector } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import { updateQuantity, updateTotalPrice, removeFromCart } from '@/actions/cartActions';
 import { Row, Empty, Button, InputNumber } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -7,6 +7,7 @@ import { handleMoney } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 // import demo data
 function CartModal(props) {
+    const dispatch = useDispatch();
     const { cartItems, updateQuantity } = props;
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const navigate = useNavigate();

@@ -84,14 +84,8 @@ function ProductItemDetail() {
         };
         getProductID(product_id).then((res) => {
             setproduct(res);
-            console.log('res', res);
+            // console.log('res', res);
         });
-
-        // await productService.getProduct(product_id).then((res) => {
-        //         setproduct(res);
-        //         console.log("res", res)
-        //     })
-        //     .catch((err)=>{console.log(err)})
     }, []);
 
     return product ? (
@@ -140,7 +134,7 @@ function ProductItemDetail() {
                                 aria-label="My Favorite Images"
                             >
                                 {product &&
-                                    product.image_url.map((image, index) => {
+                                    product.image.map((image, index) => {
                                         return (
                                             <SplideSlide
                                                 key={index}
@@ -151,7 +145,7 @@ function ProductItemDetail() {
                                                 <img
                                                     src={
                                                         product &&
-                                                        product.image_url[activeIndex]
+                                                        product.image[activeIndex]
                                                     }
                                                     alt={product && product.title}
                                                 />
@@ -161,7 +155,7 @@ function ProductItemDetail() {
                             </Splide>
                             <div className="product-detail__thumb--mini">
                                 {product &&
-                                    product.image_url.map((image, index) => (
+                                    product.image.map((image, index) => (
                                         <img
                                             key={index}
                                             src={image}
