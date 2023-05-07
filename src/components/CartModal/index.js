@@ -14,11 +14,10 @@ function CartModal(props) {
         navigate('/cart');
     };
     const handleQuantityChange = (productId, quantity) => {
-        updateQuantity(productId, quantity);
+        dispatch(updateQuantity(productId, quantity));
     };
-    // Remove  item
     const handleRemoveItem = (productId) => {
-        props.removeFromCart(productId);
+        dispatch(removeFromCart(productId));
     };
     
     const handlePaymentClick = () =>{
@@ -102,15 +101,4 @@ function CartModal(props) {
     );
 }
 
-function mapStateToProps(state) {
-    return {
-        cartItems: state.cart.cartItems,
-    };
-}
-
-const mapDispatchToProps = {
-    updateQuantity,
-    updateTotalPrice,
-    removeFromCart,
-};
-export default connect(mapStateToProps, mapDispatchToProps)(CartModal);
+export default CartModal;

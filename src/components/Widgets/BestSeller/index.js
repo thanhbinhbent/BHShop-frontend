@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Carousel } from 'antd';
+import { Button } from 'antd';
 import SpinLoading from '@/components/SpinLoading';
 import ProductItem from '@/components/ProductItem';
 import { Splide, SplideSlide } from '@splidejs/react-splide';

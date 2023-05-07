@@ -250,7 +250,7 @@ const ChangePasswordForm = () => {
 
     const handleSave = () => {
         passform.validateFields().then(async (values) => {
-            values.user_id = currentUser.user_id;
+            values.phone_number = currentUser.phone_number;
             await userService
                 .changePassword(values)
                 .then((res) => {
