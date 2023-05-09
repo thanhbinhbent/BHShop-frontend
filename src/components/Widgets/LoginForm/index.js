@@ -6,19 +6,24 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { setLoggedIn, setUser } from '@/actions/userActions';
 import { setCustomer } from '@/actions/customerActions';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import userService from '@/services/userService';
+import customerService from '@/services/customerService';
 function LoginForm(props) {
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.user);
     const { isLoggedIn } = props;
     const navigate = useNavigate();
     const onFinish = async (values) => {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
         await userService
             .login(values)
-            .then((res) => {
+            .then(async (res) => {
                 if (res.status === 200) {
-                    props.setLoggedIn(true);
                     props.setUser(res.data);
+                    setTimeout(() => {
+                        props.setLoggedIn(true);
+                    }, 1000);
                 } else if (res.status === 404) {
                     throw new Response('Not Found', { status: 404 });
                 }
@@ -32,6 +37,17 @@ function LoginForm(props) {
             return navigate('/');
         }
     }, [isLoggedIn, navigate]);
+    useEffect(() => {
+        if (user) {
+            getCustomerInfo(user.user_id);
+        }
+    }, [user]);
+    const getCustomerInfo = async (user_id) => {
+        await customerService.getCustomer(user_id).then((res) => {
+            console.log(res.data);
+            dispatch(setCustomer(res.data));
+        });
+    };
     return (
         <Form
             name="normal_login"
@@ -123,13 +139,11 @@ function mapStateToProps(state) {
     return {
         isLoggedIn: state.user.isLoggedIn,
         user: state.user.user,
-        customer:state.customer.customer
     };
 }
 
 const mapDispatchToProps = {
     setLoggedIn,
     setUser,
-    setCustomer
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

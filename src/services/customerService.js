@@ -7,6 +7,12 @@ const errorHandler = (err) => {
 };
 
 const customerService = {
+    getCustomer: async (user_id) => {
+        const response = await axios.post(`${serverUrl}/customers/user_id`, {
+            user_id: user_id,
+        }).catch(errorHandler);
+        return response;
+    },
     getWishlist: async (id) => {
         const response = await axios
             .post(`${serverUrl}/customers/wishlist`, { user_id: id })
@@ -30,7 +36,7 @@ const customerService = {
             })
             .catch(errorHandler);
         return response;
-    }
+    },
 };
 
 export default customerService;

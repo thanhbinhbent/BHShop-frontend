@@ -7,41 +7,41 @@ import orderService from '@/services/orderService';
 function OrderTracking(props) {
     const shipFee = 30000;
     const { order_id } = props;
-    const address = '669 QL 1A, phường Linh Xuân, TP. Thủ Đức, TP. HCM';
     const columns = [
         {
             title: 'Tên sản phẩm',
-            dataIndex: 'product_id',
+            dataIndex: 'product_name',
         },
         {
             title: 'SL',
-            dataIndex: 'product_quantity',
+            dataIndex: 'quantity',
         },
         {
             title: 'Đơn giá',
-            dataIndex: 'product_price',
+            dataIndex: 'price',
             render: (price) => {
                 return handleMoney(price);
             },
         },
     ];
-
+    const [order , setOrder] = useState({});
     const [productsInOrder, setProductsInOrder] = useState([]);
     const currentUser = useSelector((state) => state.user.user);
-    const getOrdersDetail = async () => {
+    const getOrderDetail = async (order_id) => {
         const response = await orderService.getOrderById({
             order_id: order_id,
         });
         return response;
     };
-    const sumOrder = productsInOrder.reduce((sum, item) => {
-        return sum + item.quantity * item.unit;
+    const sumOrder = productsInOrder?.reduce((sum, item) => {
+        return sum + item.quantity * item.price;
     }, 0);
     useEffect(() => {
-        getOrdersDetail().then((res) => {
-            setProductsInOrder(res.data);
+        getOrderDetail(order_id).then((res) => {
+            setProductsInOrder(res.data.products);
+            setOrder(res.data);
         });
-    }, []);
+    }, [order_id]);
     return (
         <div className="order-tracking__container">
             <h2>Chi tiết đơn hàng</h2>
@@ -49,7 +49,7 @@ function OrderTracking(props) {
                 <p>
                     Mã đơn hàng: &nbsp;
                     <span>
-                        #<b>{'BH0001'}</b>
+                        #<b>{order?._id}</b>
                     </span>
                 </p>
                 <p>
@@ -65,7 +65,7 @@ function OrderTracking(props) {
                 <p>
                     Địa chỉ: &nbsp;
                     <span>
-                        <b>{address.slice(-39).padStart(address.length, '*')}</b>
+                        <b>{order?.shipping_address?.slice(-39).padStart(order?.shipping_address?.length, '*')}</b>
                     </span>
                 </p>
             </div>
@@ -90,6 +90,7 @@ function OrderTracking(props) {
                     pagination={false}
                     columns={columns}
                     dataSource={productsInOrder}
+                    rowKey={(product) => product.product_id}
                 />
             </div>
             <div className="order-tracking__total">

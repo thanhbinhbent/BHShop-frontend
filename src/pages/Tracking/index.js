@@ -5,14 +5,11 @@ import OrderTracking from '@/components/OrderTracking';
 import orderService from '@/services/orderService.js';
 import './Tracking.css';
 function Tracking() {
-    const { Search } = Input;
-    const [search, setSearch] = useState(true);
-    const [order, setOrder] = useState([]);
-    const onSearchChange = () => {
-        setSearch(true);
+    const onSearchChange = (e) => {
+        setSearchInput(e.target.value);
     };
+    const [searchInput, setSearchInput] = useState('');
     const hasOrder = true;
-    const orders = orderService;
     return (
         <div className="tracking-container container">
             <div className="tracking-row">
@@ -29,32 +26,36 @@ function Tracking() {
                             <i>Mã đơn hàng bắt đầu bằng 3 ký tự *BHH (Ví dụ: BHH12644)</i>
                         </span>
                     </p>
-                    <Search allowClear placeholder="Nhập mã đơn hàng..." enterButton />
+                    <Input
+                        allowClear
+                        placeholder="Nhập mã đơn hàng..."
+                        enterbutton="true"
+                        onChange={onSearchChange}
+                    />
                 </div>
-                {search ? (
-                    <div className="tracking-col tracking-result">
-                        {hasOrder ? (
-                            <div className="tracking-infor__detailed">
-                                <OrderTracking order={orders}></OrderTracking>
-                            </div>
-                        ) : (
-                            <Result
-                                status="404"
-                                title="Không tìm thấy đơn hàng"
-                                subTitle="Xin lỗi chúng tôi không tìm thấy đơn hàng này."
-                                extra={
-                                    <Link to="/">
-                                        <Button type="primary">Về trang chủ</Button>
-                                    </Link>
-                                }
-                            />
-                        )}
-                    </div>
-                ) : (
-                    <div className="tracking-illustration">
-                        <img src="/img/illustrations/tracking.svg" alt="" />
-                    </div>
-                )}
+
+                <div className="tracking-col tracking-result">
+                    {hasOrder ? (
+                        <div className="tracking-infor__detailed">
+                            <OrderTracking order_id={searchInput}></OrderTracking>
+                        </div>
+                    ) : (
+                        <Result
+                            status="404"
+                            title="Không tìm thấy đơn hàng"
+                            subTitle="Xin lỗi chúng tôi không tìm thấy đơn hàng này."
+                            extra={
+                                <Link to="/">
+                                    <Button type="primary">Về trang chủ</Button>
+                                </Link>
+                            }
+                        />
+                    )}
+                </div>
+
+                <div className="tracking-illustration">
+                    <img src="/img/illustrations/tracking.svg" alt="" />
+                </div>
             </div>
         </div>
     );

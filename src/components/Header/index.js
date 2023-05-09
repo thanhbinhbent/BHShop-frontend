@@ -123,17 +123,29 @@ function Header() {
     // const navLeft: MenuProps['items'] = [
     const navLeft = [
         {
-            label: 'Giới thiệu',
+            label: (
+                <span>
+                    <Link to="/">Giới thiệu</Link>
+                </span>
+            ),
             key: '0',
             icon: '',
         },
         {
-            label: 'Tài khoản',
+            label: (
+                <span>
+                    <Link to="/profile">Tài khoản</Link>
+                </span>
+            ),
             key: '1',
             icon: '',
         },
         {
-            label: 'Sản phẩm yêu thích',
+            label: (
+                <span>
+                    <Link to="/profile/love">Sản phẩm yêu thích</Link>
+                </span>
+            ),
             key: '2',
             icon: '',
         },
