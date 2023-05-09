@@ -16,6 +16,10 @@ const orderService = {
         const response = await axios.post(`${serverUrl}/orders/detail`,orderId).catch(errorHandler);
         return response;
     },
+    postOrder: async (order) => {
+        const response = await axios.post(`${serverUrl}/orders/add`,order).catch(errorHandler);
+        return response;
+    }
 };
 
 export default orderService;

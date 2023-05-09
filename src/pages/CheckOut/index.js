@@ -1,19 +1,14 @@
 import './CheckOut.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { updateQuantity, updateTotalPrice, removeFromCart } from '@/actions/cartActions';
 import { setCustomerAddresses } from '@/actions/customerActions';
 import { SmileOutlined, GiftOutlined } from '@ant-design/icons';
 import {
-    Cascader,
-    DatePicker,
     Form,
     Input,
-    InputNumber,
     Mentions,
     Select,
-    TimePicker,
-    TreeSelect,
     Progress,
     Divider,
     Checkbox,
@@ -23,15 +18,14 @@ import {
 } from 'antd';
 import { handleMoney } from '@/utils';
 import { useNavigate } from 'react-router-dom';
+import orderService from '@/services/orderService';
 function CheckOut(props) {
     const [showShippingForm, setShowShippingForm] = useState(false);
     const { cartItems, updateQuantity } = props;
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    const customer = useSelector((state) => state.customer);
+    const customer = useSelector((state) => state.customer.customer);
+    const user = useSelector((state) => state.user.user);
+    const cart = useSelector((state) => state.cart.cartItems);
     const navigate = useNavigate();
-    const finishOrder = (id) => {
-        navigate(`/checkout/order-received/${orderCreated.order_id}`);
-    };
     const orderCreated = {
         order_id: 123,
     };
@@ -44,7 +38,6 @@ function CheckOut(props) {
         totalPrice: item.price * item.quantity,
         id: item.id,
     }));
-    console.log('customer nè', customer);
     const allTotalPrice = cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
     }, 0);
@@ -52,7 +45,26 @@ function CheckOut(props) {
     const { TextArea } = Input;
     const [form] = Form.useForm();
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        let shippingAddress = `${values.billingAddress.streetAddressLine1}  ${values.billingAddress.streetAddressLine2} huyện ${values.billingAddress.district} tỉnh ${values.billingAddress.province} `;
+        let products = []
+        cart.forEach((item) => {
+            products.push({
+                product_id: item._id,
+                product_name:item.name,
+                quantity: item.quantity,
+                price: item.price
+            })
+        })
+        let newOrder = {
+            customer_id: customer._id,
+            products: products,
+            status:"processing",
+            shipping_address: shippingAddress,
+        }
+        orderService.postOrder(newOrder).then((res) => {
+            console.log(res);
+            // navigate(`/checkout/order-received/${res.data.order_id}`);
+        })
     };
     const onCheckboxChange = (e) => {
         setShowShippingForm(e.target.checked);
@@ -165,7 +177,7 @@ function CheckOut(props) {
         {
             key: '7',
             name: (
-                <Button type="primary" danger onClick={finishOrder}>
+                <Button type="primary" htmlType="submit" danger>
                     Hoàn tất thanh toán
                 </Button>
             ),
@@ -200,8 +212,24 @@ function CheckOut(props) {
                 </div>
             );
         }
-        return(<></>)
+        return <></>;
     };
+    useEffect(() => {
+        form.setFieldsValue({
+            billingAddress: {
+                firstName: user.first_name,
+                lastName: user.last_name,
+                companyName: '',
+                streetAddressLine1: customer.addresses[0].address_line_1,
+                streetAddressLine2: customer.addresses[0].address_line_2,
+                district: '',
+                province: '',
+                city: '',
+                phone: user.phone_number,
+                email: user.email,
+            },
+        });
+    }, []);
     return (
         <>
             <div className="container">
@@ -449,6 +477,11 @@ function CheckOut(props) {
                                 )}
                                 <Form.Item name="orderNotes" label="Order Notes">
                                     <Mentions rows={3} placeholder="Leave a message" />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button danger type="primary" htmlType="submit">
+                                        Đăng nhập
+                                    </Button>
                                 </Form.Item>
                             </Form>
                         </div>

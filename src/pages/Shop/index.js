@@ -107,10 +107,10 @@ function Shop() {
             ...newParams,
         });
     };
-    // console.log(
-    //     '11111111111111111',
-    //     filterParams['brand'].filter((param) => param === 'Pepperidge Farm'),
-    // );
+    console.log(
+        '11111111111111111',
+        filterParams['brand'].filter((param) => param === 'Pepperidge Farm'),
+    );
     const handleFilterParamsChange1 = (type, newParams) => {
         let updatedParams = {};
         if (type === 'priceRange') {
@@ -123,7 +123,7 @@ function Shop() {
                     filterParams[type].filter((param) => param !== newParams),
             };
         }
-        // console.log('11111111111111111', filterParams, 'kkkk', updatedParams);
+        console.log('22222', filterParams, 'kkkk', updatedParams);
         setFilterParams(updatedParams);
     };
 
