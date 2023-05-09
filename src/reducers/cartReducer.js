@@ -13,8 +13,8 @@ const initialState = {
 export default function cartReducer(state = initialState, action) {
     switch (action.type) {
         case ADD_TO_CART:
-            const item = action.payload;
-            const product = state.cartItems.find((x) => x._id === item._id);
+            let item = action.payload;
+            let product = state.cartItems.find((x) => x._id === item._id);
             if (product) {
                 return {
                     cartItems: state.cartItems.map((x) =>
@@ -23,7 +23,6 @@ export default function cartReducer(state = initialState, action) {
                             : x,
                     ),
                 };
-            
             } else {
                 return {
                     cartItems: [...state.cartItems, { ...item, quantity: 1 }],

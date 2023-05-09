@@ -5,6 +5,7 @@ function PreviewModal(props) {
     const { product, open, close, oK } = props;
     return (
         <Modal
+            key={'modal' + product._id}
             wrapClassName="product-item__modal"
             className="product-item__preview-modal"
             open={open}
@@ -19,7 +20,7 @@ function PreviewModal(props) {
                 </button>,
             ]}
         >
-            <ProductView product={product}></ProductView>
+            <ProductView product={product} key={"productview" + product._id}></ProductView>
         </Modal>
     );
 }

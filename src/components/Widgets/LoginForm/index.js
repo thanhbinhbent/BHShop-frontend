@@ -5,12 +5,14 @@ import './LoginForm.css';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { setLoggedIn, setUser } from '@/actions/userActions';
+import { setCustomer } from '@/actions/customerActions';
 import { connect } from 'react-redux';
 import userService from '@/services/userService';
 function LoginForm(props) {
     const { isLoggedIn } = props;
     const navigate = useNavigate();
     const onFinish = async (values) => {
+        console.log('Received values of form: ', values);
         await userService
             .login(values)
             .then((res) => {
@@ -121,11 +123,13 @@ function mapStateToProps(state) {
     return {
         isLoggedIn: state.user.isLoggedIn,
         user: state.user.user,
+        customer:state.customer.customer
     };
 }
 
 const mapDispatchToProps = {
     setLoggedIn,
     setUser,
+    setCustomer
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

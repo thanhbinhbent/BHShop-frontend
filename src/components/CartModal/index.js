@@ -1,5 +1,5 @@
-import { connect, useSelector, useDispatch } from 'react-redux';
-import { updateQuantity, updateTotalPrice, removeFromCart } from '@/actions/cartActions';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateQuantity, removeFromCart } from '@/actions/cartActions';
 import { Row, Empty, Button, InputNumber } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import './CartModal.css';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 // import demo data
 function CartModal(props) {
     const dispatch = useDispatch();
-    const { cartItems, updateQuantity } = props;
+    const { cartItems } = props;
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const navigate = useNavigate();
     const handleCartClick = () => {
@@ -42,7 +42,7 @@ function CartModal(props) {
                             <div className="cart-img__container">
                                 <img
                                     className="cart-item__img"
-                                    src={item.thumbnail}
+                                    src={item.image[0]}
                                     alt=""
                                 />
                             </div>

@@ -4,23 +4,25 @@ import ProductItem from '../ProductItem';
 import SpinLoading from '../SpinLoading';
 import './RecentlyViewProduct.css';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
+import productService from '@/services/productService';
 function RecentlyViewProduct(props) {
     const { viewedProducts, updateQuantity } = props;
     const [state, setState] = useState([]);
     const [hasError, setHasError] = useState(false);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        axios
-            .get('/data/products.json')
+        productService
+            .getAllProduct()
             .then((res) => {
+                setState(res.data);
                 setLoading(false);
-                return setState(res.data);
             })
             .catch((err) => {
                 setHasError(true);
                 setLoading(false);
             });
     }, []);
+
     const optionsCarousel = {
         type: 'slide',
         rewind: true,
@@ -49,7 +51,7 @@ function RecentlyViewProduct(props) {
                 <div>
                     <Splide options={optionsCarousel} className="best-seller__list ">
                         {state.slice(0, 10).map((product) => (
-                            <SplideSlide key={product.id}>
+                            <SplideSlide key={product._id}>
                                 <ProductItem
                                     product={product}
                                     className="product-carousel__item"

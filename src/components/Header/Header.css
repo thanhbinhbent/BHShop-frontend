@@ -3,7 +3,6 @@
     border-bottom: 1px solid var(--color-border);
     min-height: 42px;
     font-size: 1.3rem;
-
 }
 
 .header-top .container {
@@ -24,21 +23,20 @@
     flex-wrap: wrap;
 }
 
-.header-top .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
+.header-top .ant-menu-light.ant-menu-horizontal > .ant-menu-item-selected::after {
     border-bottom-color: transparent;
 }
 
-.header-top .ant-menu-light.ant-menu-horizontal>.ant-menu-submenu-open::after {
+.header-top .ant-menu-light.ant-menu-horizontal > .ant-menu-submenu-open::after {
     border-bottom-color: transparent;
 }
 
-.header-top .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+.header-top .ant-menu-light.ant-menu-horizontal > .ant-menu-item:hover::after {
     border-bottom-color: transparent;
 }
 
 .header-top__menu {
     display: flex;
-
 }
 
 .header-top__container .col-right {
@@ -120,7 +118,6 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-
 }
 
 .header-cart__tooltip {
@@ -129,7 +126,6 @@
 }
 
 /* Custom Tooltip */
-
 
 .header-nav__list {
     width: 100%;
@@ -140,13 +136,14 @@
 
 /* Các đoạn code CSS cho máy tính màn hình nhỏ ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 992px nhỏ hơn 1200 */
-@media screen and (max-width: 1200px) {}
+@media screen and (max-width: 1200px) {
+}
 
 /* Các đoạn code CSS cho máy tính bảng ở đây */
 /* Độ rộng màn hình lớn hơn hoặc bằng 768px và nhỏ hơn 992px */
 @media screen and (max-width: 992px) {
     .header-location {
-        display: none
+        display: none;
     }
 
     .header-logo__site a img {
@@ -162,7 +159,7 @@
     }
 
     .home-banner--vertical {
-        display: none
+        display: none;
     }
 
     .header-container .container {
@@ -193,5 +190,4 @@
     .header-logo__site a img {
         height: 50px;
     }
-
 }

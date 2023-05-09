@@ -1,5 +1,5 @@
-import { Button, Popover, Rate, message } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Popover, Rate } from 'antd';
+import { useState } from 'react';
 import {
     ShoppingCartOutlined,
     FullscreenOutlined,
@@ -9,15 +9,16 @@ import {
 import { handleMoney } from '@/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/actions/cartActions';
+import { addToWishlist, removeFromWishlist } from '@/actions/userActions';
 import PreviewModal from '@/components/Widgets/PreviewModal';
 import './ProductItem.css';
-import productService from '@/services/productService';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import customerService from '@/services/customerService';
 
 function ProductItem(props) {
     const { product } = props;
+    const user = useSelector((state) => state.user.user);
     const dispatch = useDispatch();
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const viewDetail = (id) => {
@@ -51,14 +52,14 @@ function ProductItem(props) {
         }
         return 'đ';
     };
-    const displayNewPrice = (price) => {
+    const displayNewPrice = (product) => {
         if (product?.campaign?.active) {
             if (product.campaign.sale_type === 'percent') {
-                return price - (price * product.campaign.amount) / 100;
+                return product.price - (product.price * product.campaign.amount) / 100;
             }
-            return price - product.campaign.amount;
+            return product.price - product.campaign.amount;
         }
-        return price;
+        return product.price;
     };
     const displayRating = (product) => {
         let rating = 0;
@@ -69,6 +70,22 @@ function ProductItem(props) {
             rating += review.rating;
         });
         return rating / product?.reviews.length;
+    };
+    const addProductToWishList = (product) => {
+        if (!user) return;
+        customerService.addToWishlist(user.user_id, product).then((res) => {
+            if(res.status === 200) {
+                dispatch(addToWishlist(product));
+            }
+        });
+    };
+    const removeProductFromWishList = (product) => {
+        if (!user) return;
+        customerService.removeFromWishlist(user.user_id, product).then((res) => {
+            if(res.status === 200) {
+                dispatch(removeFromWishlist(product._id));
+            }
+        });
     };
     return (
         <div className="product-item">
@@ -90,13 +107,13 @@ function ProductItem(props) {
                         />
                     </div>
                     <div className="product-item__price">
-                        {product?.campaign?.active && 
+                        {product?.campaign?.active && (
                             <span className="product-item__price--old">
                                 {handleMoney(product?.price)}
                             </span>
-                        }
+                        )}
                         <span className="product-item__price--sale">
-                            {handleMoney(displayNewPrice(product?.price))}
+                            {handleMoney(displayNewPrice(product))}
                         </span>
                     </div>
                 </button>
@@ -120,7 +137,10 @@ function ProductItem(props) {
                             close={handleCancel}
                             oK={handleOk}
                         />
-                        <div className="product-item__wishlist  product-item__tag">
+                        <div
+                            className="product-item__wishlist  product-item__tag"
+                            onClick={() => addProductToWishList(product)}
+                        >
                             <HeartOutlined />
                         </div>
                     </div>
@@ -144,6 +164,7 @@ function ProductItem(props) {
                         className="product-item__btn product-item__btn-love-clear"
                         danger
                         ghost
+                        onClick={() => removeProductFromWishList(product)}
                     >
                         <CloseOutlined />
                     </Button>

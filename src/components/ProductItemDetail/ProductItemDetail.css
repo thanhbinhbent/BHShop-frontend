@@ -36,6 +36,32 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .product-detail__thumb .splide {
+    height: 80%;
+}
+
+.product-detail__thumb .splide__track {
+    height: 100%;
+}
+
+.product-detail__thumb .splide__list {
+    height: 100%;
+}
+
+.product-detail__thumb .splide__slide {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    border-radius: 7px;
+}
+
+  .product-detail__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
   .product-detail__thumb--mini {
     margin-top: 1rem;
     display: flex;

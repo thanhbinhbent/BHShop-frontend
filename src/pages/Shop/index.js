@@ -11,8 +11,11 @@ import { Breadcrumb } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Tag, Pagination } from 'antd';
 import productService from '@/services/productService';
+import { useLocation} from 'react-router-dom';
 
 function Shop() {
+    const {state} = useLocation();
+     // Read values passed on state
     const [products, setProducts] = useState([]);
     const [hasError, setHasError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -87,8 +90,8 @@ function Shop() {
         if (filterParams.priceRange) {
             filtered = filtered.filter(
                 (product) =>
-                    product.price >= filterParams.priceRange[0] &&
-                    product.price <= filterParams.priceRange[1],
+                    product.price >= filterParams?.priceRange[0] &&
+                    product.price <= filterParams?.priceRange[1],
             );
         }
         if (filterParams.tags.length) {
@@ -104,10 +107,10 @@ function Shop() {
             ...newParams,
         });
     };
-    console.log(
-        '11111111111111111',
-        filterParams['brand'].filter((param) => param === 'Pepperidge Farm'),
-    );
+    // console.log(
+    //     '11111111111111111',
+    //     filterParams['brand'].filter((param) => param === 'Pepperidge Farm'),
+    // );
     const handleFilterParamsChange1 = (type, newParams) => {
         let updatedParams = {};
         if (type === 'priceRange') {
@@ -120,7 +123,7 @@ function Shop() {
                     filterParams[type].filter((param) => param !== newParams),
             };
         }
-        console.log('11111111111111111', filterParams, 'kkkk', updatedParams);
+        // console.log('11111111111111111', filterParams, 'kkkk', updatedParams);
         setFilterParams(updatedParams);
     };
 
@@ -243,12 +246,12 @@ function Shop() {
                                                 )
                                             }
                                         >
-                                            {`$${filterParams.priceRange[0]} - $${filterParams.priceRange[1]}`}
+                                            {`$${filterParams?.priceRange[0]} - $${filterParams?.priceRange[1]}`}
                                         </Tag>
                                     </p>
                                 )}
-                                {filterParams.tags &&
-                                    filterParams.tags.map((tag) => (
+                                {filterParams?.tags &&
+                                    filterParams?.tags.map((tag) => (
                                         <p key={tag}>
                                             <Tag
                                                 style={{
@@ -333,7 +336,7 @@ function Shop() {
                             ) : (
                                 <div className="new-products__list products-list__items">
                                     {currentItems.map((product) => (
-                                        <ProductItem key={product.id} product={product} />
+                                        <ProductItem key={product._id} product={product} />
                                     ))}
                                 </div>
                             )}

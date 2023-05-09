@@ -8,8 +8,6 @@ import {
     Input,
     Progress,
     Table,
-    Space,
-    Switch,
     Radio,
 } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
@@ -21,9 +19,6 @@ function Cart(props) {
     const { cartItems, updateQuantity } = props;
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const navigate = useNavigate();
-    const handleCartClick = () => {
-        navigate('/cart');
-    };
     const handlePaymentClick = () => {
         if (isLoggedIn) {
             navigate('/checkout');
@@ -41,12 +36,12 @@ function Cart(props) {
     };
     const columns = [
         {
-            title: '',
-            dataIndex: 'thumbnail',
-            key: 'thumbnail',
-            render: (thumbnail) => (
+            title: 'Ảnh sản phẩm',
+            dataIndex: 'image',
+            key: 'image',
+            render: (image) => (
                 <div className="cart-img__container">
-                    <img className="cart-item__img" src={thumbnail} alt="" />
+                    <img className="cart-item__img" src={image} alt="" />
                 </div>
             ),
         },
@@ -99,30 +94,32 @@ function Cart(props) {
 
     const data = cartItems.map((item, index) => ({
         key: index,
-        thumbnail: item.thumbnail,
-        title: item.name || item.title,
+        image: item.image[0],
+        title: item.name,
         price: item.price,
         quantity: item.quantity,
         totalPrice: item.price * item.quantity,
-        id: item.id,
+        id: item._id,
     }));
     const allTotalPrice = cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
     }, 0);
     const footer = () => (
-        <tr>
-            <td colSpan={2}>
-                <Input placeholder="Nhập mã giảm giá tại đây" />
-            </td>
-
-            <td>
-                <Button type="primary">Sử dụng mã</Button>
-            </td>
-            <td></td>
-            <td colSpan={2}>
-                <Button type="primary">Xóa hết</Button>
-            </td>
-        </tr>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <Input placeholder="Nhập mã giảm giá tại đây" />
+                    </td>
+                    <td>
+                        <Button type="primary">Sử dụng mã</Button>
+                    </td>
+                    <td>
+                        <Button type="primary">Xóa hết</Button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     );
     const [value, setValue] = useState(1);
     const onChange = (e) => {

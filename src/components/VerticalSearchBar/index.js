@@ -10,13 +10,13 @@ function VerticalSearchBar(props) {
     const [selectedPriceRange, setSelectedPriceRange] = useState(defaultRange);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
-    console.log(
-        'nhung cai da chọn:',
-        selectedBrand,
-        selectedPriceRange,
-        selectedCategories,
-        selectedTags,
-    );
+    // console.log(
+    //     'nhung cai da chọn:',
+    //     selectedBrand,
+    //     selectedPriceRange,
+    //     selectedCategories,
+    //     selectedTags,
+    // );
 
     function handleBrandChange(event) {
         const {filterParams} = props;
@@ -111,18 +111,18 @@ function VerticalSearchBar(props) {
     };
 
     const onExpand = (expandedKeysValue) => {
-        console.log('onExpand', expandedKeysValue);
+        // console.log('onExpand', expandedKeysValue);
         // if not set autoExpandParent to false, if children expanded, parent can not collapse.
         // or, you can remove all expanded children keys.
         setExpandedKeys(expandedKeysValue);
         setAutoExpandParent(false);
     };
     const onCheck = (checkedKeysValue) => {
-        console.log('onCheck', checkedKeysValue);
+        // console.log('onCheck', checkedKeysValue);
         setCheckedKeys(checkedKeysValue);
     };
     const onSelect = (selectedKeysValue, info) => {
-        console.log('onSelect', info);
+        // console.log('onSelect', info);
         setSelectedKeys(selectedKeysValue);
     };
 
@@ -146,7 +146,7 @@ function VerticalSearchBar(props) {
         };
         getAllCategories().then((res) => {
             setCategories(res);
-            console.log('Categories', res);
+            // console.log('Categories', res);
         });
     }, []);
 
@@ -159,7 +159,7 @@ function VerticalSearchBar(props) {
         productService
             .getAllProduct()
             .then((res) => {
-                console.log('data ne', res);
+                // console.log('data ne', res);
                 return setProducts(res.data);
             })
             .catch((err) => {
@@ -183,7 +183,7 @@ function VerticalSearchBar(props) {
         .slice(0, 5)
         .map((brandObj) => brandObj.brand);
 
-    console.log('brand ne', brands);
+    // console.log('brand ne', brands);
     return (
         <div className="search-container--vertical">
             <div className="search-container__type">

@@ -3,6 +3,8 @@ import {
     UPDATE_CART_ITEM,
     UPDATE_TOTAL_PRICE,
     REMOVE_FROM_CART,
+    ADD_TO_WISHLIST,
+    REMOVE_FROM_WISHLIST
 } from './types';
 
 export const addToCart = (item) => {

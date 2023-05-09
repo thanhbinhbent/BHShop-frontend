@@ -34,3 +34,8 @@
     font-weight: bold;
     text-decoration: underline;
 }
+
+.checkout-discount--coupon {
+    text-decoration: underline;
+    color: blue;
+}

@@ -7,7 +7,6 @@ import { AppstoreOutlined } from '@ant-design/icons';
 
 import './BestSeller.css';
 import '@splidejs/react-splide/css';
-import ProductItemDetail from '@/components/ProductItemDetail';
 import productService from '@/services/productService';
 
 function BestSeller() {
@@ -72,7 +71,7 @@ function BestSeller() {
                         className="best-seller__list products-list__items"
                     >
                         {state.slice(0, 10).map((product) => (
-                            <SplideSlide key={product._id}>
+                            <SplideSlide key={"bestseller" + product._id}>
                                 <ProductItem
                                     product={product}
                                     className="product-carousel__item"

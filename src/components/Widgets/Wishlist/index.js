@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Row, Empty, Button, InputNumber } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Empty } from 'antd';
 import SpinLoading from '@/components/SpinLoading';
-import { handleMoney } from '@/utils';
 import ProductItem from '@/components/ProductItem';
 import SourceImg from '@/assets/images';
 import './Wishlist.css';
+import customerService from '@/services/customerService';
+import { useDispatch, useSelector } from 'react-redux';
+import { setWishlist } from '@/actions/userActions';
 function Wishlist() {
-    const [state, setState] = useState([]);
+    const dispatch = useDispatch();
+    const wishlist = useSelector((state) => state.user.wishListItems);
+    const user = useSelector((state) => state.user.user);
     const [hasError, setHasError] = useState(false);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        axios
-            .get('/data/wishlist.json')
+        customerService
+            .getWishlist(user.user_id)
             .then((res) => {
                 setLoading(false);
-                console.log(res.data);
-                return setState(res.data);
+                dispatch(setWishlist(res.data.wishlist));
             })
             .catch((err) => {
                 setHasError(true);
@@ -35,11 +36,11 @@ function Wishlist() {
                 'Lỗi tải dữ liệu!'
             ) : (
                 <div className="wishlist__list products-list__items">
-                    {state.length == 0 ? (
+                    {wishlist.length == 0 ? (
                         <Empty description="Chưa có sản phẩm yêu thích nào!" />
                     ) : (
-                        state.map((wishItem) => (
-                            <ProductItem key={wishItem.id} product={wishItem} />
+                        wishlist.map((wishItem) => (
+                            <ProductItem key={wishItem._id} product={wishItem} />
                         ))
                     )}
                 </div>

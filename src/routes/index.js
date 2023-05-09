@@ -32,7 +32,6 @@ const publicRoutes = [
     { path: '/cart', component: Cart },
     { path: '/checkout/*', component: CheckOut },
     { path: '/checkout/order-received/:id', component: OrderReceive },
-    { path: '/item-detail', component: ProductItemDetail },
     { path: '*', component: Page404 },
     {
         path: '/tracking',

@@ -44,10 +44,10 @@ function NewProducts() {
                 'Lỗi tải dữ liệu!'
             ) : (
                 <div className="new-products__list products-list__items">
-                    {state.slice(0, 8).map((products) => (
+                    {state.slice(0, 8).map((product) => (
                         <ProductItem
-                            key={products.product_id}
-                            product={products}
+                            key={"newproducts" + product._id}
+                            product={product}
                         ></ProductItem>
                     ))}
                 </div>

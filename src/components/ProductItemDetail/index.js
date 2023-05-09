@@ -72,7 +72,21 @@ function ProductItemDetail() {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
+    const displayNewPrice = (price) => {
+        if (product?.campaign?.active) {
+            if (product.campaign.sale_type === 'percent') {
+                return price - (price * product.campaign.amount) / 100;
+            }
+            return price - product.campaign.amount;
+        }
+        return price;
+    };
+    const changeType = (type) => {
+        if (type === 'percent') {
+            return '%';
+        }
+        return 'đ';
+    };
     useEffect(() => {
         const getProductID = async (id) => {
             try {
@@ -98,9 +112,9 @@ function ProductItemDetail() {
                                 title: <a href="/">Trang chủ</a>,
                             },
                             {
-                                title:  <a href="/shop">Mua sắm</a>,
+                                title: <a href="/shop">Mua sắm</a>,
                             },
-                            
+
                             {
                                 title: <>{product.name}</>,
                             },
@@ -127,7 +141,10 @@ function ProductItemDetail() {
                     <div className="product-detail__content">
                         <div className="product-detail__thumb product-detail__main-col-1">
                             <div className="product-detail__col">
-                                {product && '-' + product.discountPercentage + ' %'}
+                                {product.campaign.active &&
+                                    `- ${product.campaign.amount}${changeType(
+                                        product.campaign.sale_type,
+                                    )}`}
                             </div>
                             <Splide
                                 options={splideOptions}
@@ -170,8 +187,11 @@ function ProductItemDetail() {
                         </div>
                         <div className="product-detail__info  product-detail__main-col-2">
                             <div className="product-detail__price">
-                                <span> {handleMoney(product && product.price)} </span>
-                                <span> {product && product.new_price} </span>
+                                <span>
+                                    {' '}
+                                    {handleMoney(displayNewPrice(product.price))}{' '}
+                                </span>
+                                <span> {handleMoney(product.price)} </span>
                             </div>
                             <div className="product-detail__status">
                                 {product && product.inventory_qty > 0 ? (

@@ -21,7 +21,6 @@ const userService = {
             .catch(errorHandler);
         return response;
     },
-
     update: async (user) => {
         const response = await axios.put(`${serverUrl}/users`, user).catch(errorHandler);
         return response;
@@ -30,6 +29,10 @@ const userService = {
         const response = await axios
             .put(`${serverUrl}/users/changePassword`, user)
             .catch(errorHandler);
+        return response;
+    },
+    delete: async (user) => {
+        const response = await axios.delete(`${serverUrl}/users`, user).catch(errorHandler);
         return response;
     },
 };

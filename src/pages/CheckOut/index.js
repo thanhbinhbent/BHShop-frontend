@@ -25,7 +25,7 @@ import { handleMoney } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 function CheckOut(props) {
     const [showShippingForm, setShowShippingForm] = useState(false);
-    const { cartItems, updateQuantity  } = props;
+    const { cartItems, updateQuantity } = props;
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const customer = useSelector((state) => state.customer);
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ function CheckOut(props) {
     };
     const orderCreated = {
         order_id: 123,
-    }
+    };
     const data = cartItems.map((item, index) => ({
         key: index,
         thumbnail: item.thumbnail,
@@ -51,11 +51,9 @@ function CheckOut(props) {
     const { Option } = Select;
     const { TextArea } = Input;
     const [form] = Form.useForm();
-
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
     };
-
     const onCheckboxChange = (e) => {
         setShowShippingForm(e.target.checked);
         if (!e.target.checked) {
@@ -189,28 +187,33 @@ function CheckOut(props) {
             key: 'value',
         },
     ];
+    const checkFreeShip = () => {
+        let conditionPrice = 1000000 - allTotalPrice;
+        if (conditionPrice > 0) {
+            return (
+                <div className="checkout-progress--bar">
+                    <p>
+                        Thêm <span>{handleMoney(conditionPrice)}</span> vào giỏ hàng để
+                        được miễn phí giao hàng!
+                    </p>
+                    <Progress percent={(allTotalPrice / 1000000) * 100} />
+                </div>
+            );
+        }
+        return(<></>)
+    };
     return (
         <>
             <div className="container">
                 <div className="checkout-container">
                     <div className="question-header checkout-progress--bar">
-                        <a href="#">
-                            <GiftOutlined /> Bạn có mã giảm giá không? Nếu có thì nhấn vào
+                        <GiftOutlined /> Bạn có mã giảm giá không? Nếu có thì nhấn vào{' '}
+                        <a className="checkout-discount--coupon" href="#">
+                            {' '}
                             đây.
                         </a>
                     </div>
-                    <div className="checkout-progress--bar">
-                        <p>
-                            Thêm{' '}
-                            <span>
-                                {1000000 - allTotalPrice > 0
-                                    ? handleMoney(1000000 - allTotalPrice)
-                                    : handleMoney(0)}
-                            </span>{' '}
-                            vào giỏ hàng để được miễn phí giao hàng!
-                        </p>
-                        <Progress percent={(allTotalPrice / 1000000) * 100} />
-                    </div>
+                    {checkFreeShip()}
                     <div className="checkout-content">
                         <div className="checkout-content--left">
                             <Form form={form} name="billing-address" onFinish={onFinish}>
@@ -469,7 +472,7 @@ function mapStateToProps(state) {
     return {
         cartItems: state.cart.cartItems,
         customer: state.customer,
-        adresses: state.customer.addresses
+        adresses: state.customer.addresses,
     };
 }
 const mapDispatchToProps = {

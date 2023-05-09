@@ -2,7 +2,7 @@ import { Menu, Col } from 'antd';
 import { MenuProps } from 'antd/es/menu';
 import './Sidebar.css';
 function Sidebar() {
-    const items: MenuProps['items'] = [
+    const items = [
         {
             label: (
                 <a
@@ -12,7 +12,7 @@ function Sidebar() {
                     className="sidebar__category--ranking"
                 >
                     <img src="/img/icon/top-icon.png" alt="" />
-                    <span> Thực phẩm cho trẻ</span>
+                    <span>Bánh mì</span>
                 </a>
             ),
             key: 'food1',
@@ -26,7 +26,7 @@ function Sidebar() {
                     className="sidebar__category--ranking"
                 >
                     <img src="/img/icon/top-icon.png" alt="" />
-                    <span>Thực phẩm dinh dưỡng</span>
+                    <span>Nước giải khát</span>
                 </a>
             ),
             key: 'food2',
@@ -40,7 +40,7 @@ function Sidebar() {
                     className="sidebar__category--ranking"
                 >
                     <img src="/img/icon/top-icon.png" alt="" />
-                    <span>Nước uống tăng lực</span>
+                    <span>Trái cây và rau quả</span>
                 </a>
             ),
             key: 'gift',
@@ -54,7 +54,7 @@ function Sidebar() {
                     className="sidebar__category--ranking"
                 >
                     <img src="/img/icon/top-icon.png" alt="" />
-                    <span>Bánh dinh dưỡng</span>
+                    <span>Đồ ăn nhẹ</span>
                 </a>
             ),
             key: 'blog',

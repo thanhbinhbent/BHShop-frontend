@@ -79,7 +79,7 @@ function Header() {
             };
             recognition.onresult = (event) => {
                 setTempSearchInput(event.results[0][0].transcript); // lưu giá trị nói vào biến tạm thời
-                console.log(tempSearchInput);
+                console.log(`tạm thời${tempSearchInput}`);
             };
         } else {
         }
@@ -90,7 +90,6 @@ function Header() {
     const onSearch = (value) => {
         setSearchInput(value);
         setTempSearchInput(''); // đặt lại giá trị biến tạm thời khi người dùng nhấn tìm kiếm
-        console.log(searchInput);
     };
     const onChange = (e) => {
         setSearchInput(e.target.value);
@@ -166,7 +165,6 @@ function Header() {
         dispatch(setLoggedIn(false));
     };
     const [productData, setProductData] = useState([]);
-    const [filterInput, setFilterInput] = useState('');
     const getProvince = async () => {
         const response = await residenceService.getProvinces();
         return response.data;
@@ -177,13 +175,11 @@ function Header() {
     };
 
     const filterData = (value) => {
-        return (
-            productData &&
-            productData.filter(
-                (item) => item && item.name,
-                // item && item.name.toLowerCase().includes(value.toLowerCase())
-            )
+        if (!value || !productData) return;
+        let result = productData.filter(
+            (item) => item && item.name.toLowerCase().includes(value.toLowerCase()),
         );
+        return result;
     };
     useEffect(() => {
         getAllProductWithName().then((res) => {
@@ -240,7 +236,10 @@ function Header() {
                             <Table
                                 className="search-table"
                                 columns={columns}
-                                dataSource={filterData(filterInput)}
+                                rowKey={(record) => {
+                                    return record.name;
+                                }}
+                                dataSource={filterData(searchInput)}
                             />
                         </Col>
                     </Row>
