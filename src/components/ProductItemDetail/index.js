@@ -163,12 +163,6 @@ function ProductItemDetail() {
                     </div>
                     <div className="product-detail__content">
                         <div className="product-detail__thumb product-detail__main-col-1">
-                            <div className="product-detail__col">
-                                {product.campaign.active &&
-                                    `- ${product.campaign.amount}${changeType(
-                                        product.campaign.sale_type,
-                                    )}`}
-                            </div>
                             <Splide
                                 options={splideOptions}
                                 aria-label="My Favorite Images"
@@ -207,107 +201,120 @@ function ProductItemDetail() {
                                         />
                                     ))}
                             </div>
+                            <div className="product-detail__col">
+                                <Tag color="#f50">
+                                    {product.campaign.active &&
+                                        `- ${product.campaign.amount}${changeType(
+                                            product.campaign.sale_type,
+                                        )}`}
+                                </Tag>
+                            </div>
                         </div>
                         <div className="product-detail__info  product-detail__main-col-2">
-                            <div className="product-detail__price">
-                                <span>
-                                    {' '}
-                                    {handleMoney(displayNewPrice(product.price))}{' '}
-                                </span>
-                                <span> {handleMoney(product.price)} </span>
-                            </div>
-                            <div className="product-detail__status">
-                                {product && product.inventory_qty > 0 ? (
-                                    <Tag color="success">Còn hàng</Tag>
-                                ) : (
-                                    <Tag color="error">Hết hàng</Tag>
-                                )}
-                            </div>
-                            <div className="product-detail__describe">
-                                {product && product.description}
-                            </div>
-                            <div className="product-detail__cart-update">
-                                <Button
-                                    block
-                                    type="primary"
-                                    className="product-item__btn product-view__addcart"
-                                    onClick={() => handleAddToCart(product)}
-                                >
-                                    <ShoppingCartOutlined />
-                                    Thêm vào giỏ
-                                </Button>
-                            </div>
-                            <div className="product-detail__wishlist product-detail__tag"
-                            onClick={() => addProductToWishList(product)}>
-                                <HeartOutlined />
-                                &nbsp;&nbsp;Thêm vào ưa thích
-                            </div>
-                            <>
-                                <ul className="product-detail__category">
-                                    <h4 className="product-detail__category-heading">
-                                        Danh mục:
-                                    </h4>
-                                    <li className="product-detail__category-item">
-                                        <Tag>Nước năng lực</Tag>
-                                    </li>
-                                    <li className="product-detail__category-item">
-                                        <Tag>Nước uống</Tag>
-                                    </li>
-                                    <li className="product-detail__category-item">
-                                        <Tag>Chăm sóc da</Tag>
-                                    </li>
-                                </ul>
-                            </>
-                            <Divider></Divider>
-                        </div>
-                        <div className="product-detail__info  product-detail__main-col-3">
-                            <div className="product-detail__warning">
-                                <span>
-                                    Thông tin Covid-19: Chúng tôi vẫn tiếp tục giao hàng
-                                </span>
-                            </div>
-                            <div className="product-detail__bonus">
-                                <p>
-                                    <span>
-                                        <CarOutlined
-                                            style={{
-                                                fontSize: '25px',
-                                            }}
-                                        />{' '}
-                                    </span>
-
-                                    <span>
-                                        Miễn phí giao hàng cho tất cả hóa đơn trên
-                                        200.000VND
-                                    </span>
-                                </p>
-                                <p>
-                                    <span>
-                                        <FileDoneOutlined
-                                            style={{
-                                                fontSize: '25px',
-                                            }}
-                                        />{' '}
-                                    </span>
-
-                                    <span>
-                                        Đảm bảo 100% Organic từ trang trại tự nhiên
-                                    </span>
-                                </p>
-                                <p>
-                                    <span>
-                                        <DollarOutlined
-                                            style={{
-                                                fontSize: '25px',
-                                            }}
-                                        />{' '}
-                                    </span>
+                            <div className="product-detail__info  product-detail__mini-col-1">
+                                <div className="product-detail__price">
                                     <span>
                                         {' '}
-                                        Được hoàn trả hàng trong 1 ngày nếu bạn có nhu cầu
-                                        thay đổi.
+                                        {handleMoney(displayNewPrice(product.price))}{' '}
                                     </span>
-                                </p>
+                                    <span> {handleMoney(product.price)} </span>
+                                </div>
+                                <div className="product-detail__status">
+                                    {product && product.inventory_qty > 0 ? (
+                                        <Tag color="success">Còn hàng</Tag>
+                                    ) : (
+                                        <Tag color="error">Hết hàng</Tag>
+                                    )}
+                                </div>
+                                <div className="product-detail__describe">
+                                    {product && product.description}
+                                </div>
+                                <div className="product-detail__cart-update">
+                                    <Button
+                                        block
+                                        type="primary"
+                                        className="product-item__btn product-view__addcart"
+                                        onClick={() => handleAddToCart(product)}
+                                    >
+                                        <ShoppingCartOutlined />
+                                        Thêm vào giỏ
+                                    </Button>
+                                </div>
+                                <div
+                                    className="product-detail__wishlist product-detail__tag"
+                                    onClick={() => addProductToWishList(product)}
+                                >
+                                    <HeartOutlined />
+                                    &nbsp;&nbsp;Thêm vào ưa thích
+                                </div>
+                                <>
+                                    <ul className="product-detail__category">
+                                        <h4 className="product-detail__category-heading">
+                                            Danh mục:
+                                        </h4>
+                                        <li className="product-detail__category-item">
+                                            <Tag>Nước năng lực</Tag>
+                                        </li>
+                                        <li className="product-detail__category-item">
+                                            <Tag>Nước uống</Tag>
+                                        </li>
+                                        <li className="product-detail__category-item">
+                                            <Tag>Chăm sóc da</Tag>
+                                        </li>
+                                    </ul>
+                                </>
+                                <Divider></Divider>
+                            </div>
+                            <div className="product-detail__info  product-detail__mini-col-2">
+                                <div className="product-detail__warning">
+                                    <span>
+                                        Thông tin Covid-19: Chúng tôi vẫn tiếp tục giao
+                                        hàng
+                                    </span>
+                                </div>
+                                <div className="product-detail__bonus">
+                                    <p>
+                                        <span>
+                                            <CarOutlined
+                                                style={{
+                                                    fontSize: '25px',
+                                                }}
+                                            />{' '}
+                                        </span>
+
+                                        <span>
+                                            Miễn phí giao hàng cho tất cả hóa đơn trên
+                                            200.000VND
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span>
+                                            <FileDoneOutlined
+                                                style={{
+                                                    fontSize: '25px',
+                                                }}
+                                            />{' '}
+                                        </span>
+
+                                        <span>
+                                            Đảm bảo 100% Organic từ trang trại tự nhiên
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span>
+                                            <DollarOutlined
+                                                style={{
+                                                    fontSize: '25px',
+                                                }}
+                                            />{' '}
+                                        </span>
+                                        <span>
+                                            {' '}
+                                            Được hoàn trả hàng trong 1 ngày nếu bạn có nhu
+                                            cầu thay đổi.
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

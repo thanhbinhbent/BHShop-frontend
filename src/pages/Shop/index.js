@@ -98,7 +98,7 @@ function Shop() {
             let filtered = products.filter((product) => {
                 let host = toUnicode(product.name.toLowerCase());
                 let client = toUnicode(searchString.toLowerCase());
-                return host.includes(client);
+                return host?.includes(client);
             });
             setFilteredProducts(filtered);
         }
@@ -109,12 +109,12 @@ function Shop() {
         let filtered = products;
         if (filterParams.brand.length) {
             filtered = filtered.filter((product) =>
-                product.brand.includes(filterParams.brand),
+                product.brand?.includes(filterParams.brand),
             );
         }
         if (filterParams.categories.length) {
             filtered = filtered.filter((product) => {
-                return product.category_lst[0].name.includes(filterParams.categories);
+                return product.category_lst[0]?.name?.includes(filterParams.categories);
             });
         }
         if (filterParams.priceRange) {
