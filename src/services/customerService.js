@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serverUrl = 'http://127.0.0.1:3100';
+const serverUrl = process.env.SERVER_URL || 'http://127.0.0.1:3100';
 
 const errorHandler = (err) => {
     console.log(err);
@@ -8,9 +8,11 @@ const errorHandler = (err) => {
 
 const customerService = {
     getCustomer: async (user_id) => {
-        const response = await axios.post(`${serverUrl}/customers/user_id`, {
-            user_id: user_id,
-        }).catch(errorHandler);
+        const response = await axios
+            .post(`${serverUrl}/customers/user_id`, {
+                user_id: user_id,
+            })
+            .catch(errorHandler);
         return response;
     },
     getWishlist: async (id) => {

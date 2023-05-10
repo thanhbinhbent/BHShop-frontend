@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serverUrl = 'http://127.0.0.1:3100';
+const serverUrl = process.env.SERVER_URL || 'http://127.0.0.1:3100';
 
 const errorHandler = (err) => {
     console.log(err);
@@ -32,7 +32,9 @@ const userService = {
         return response;
     },
     delete: async (user) => {
-        const response = await axios.delete(`${serverUrl}/users`, user).catch(errorHandler);
+        const response = await axios
+            .delete(`${serverUrl}/users`, user)
+            .catch(errorHandler);
         return response;
     },
 };
