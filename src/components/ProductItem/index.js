@@ -137,7 +137,7 @@ function ProductItem(props) {
                     <div className="product-item__col">
                         {displayDiscount(product)}
                         <span className="product-item__category ">
-                            {product?.category_lst[0].name}
+                            {product?.category_lst[0]?.name}
                         </span>
                     </div>
                     <div className="product-item__col">
