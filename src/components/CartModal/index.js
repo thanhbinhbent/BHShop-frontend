@@ -47,7 +47,7 @@ function CartModal(props) {
                                 />
                             </div>
                             <div className="cart-modal__col cart-product__detail">
-                                <p className="product-title">{item.title}</p>
+                                <p className="product-title">{item.name}</p>
                                 <Row className="cart-modal__row">
                                     <div>
                                         <span className="product-quantity">

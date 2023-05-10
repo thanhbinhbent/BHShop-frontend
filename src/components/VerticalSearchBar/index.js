@@ -10,42 +10,21 @@ function VerticalSearchBar(props) {
     const [selectedPriceRange, setSelectedPriceRange] = useState(defaultRange);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
-    // console.log(
-    //     'nhung cai da chọn:',
-    //     selectedBrand,
-    //     selectedPriceRange,
-    //     selectedCategories,
-    //     selectedTags,
-    // );
-
-    function handleBrandChange(event) {
-        const {filterParams} = props;
+    const handleBrandChange = (event) => {
+        const { filterParams } = props;
         const brand = event.target.value;
         const isChecked = event.target.checked;
         if (isChecked) {
             setSelectedBrand([...selectedBrand, brand]);
         } else {
             setSelectedBrand(
-                selectedBrand && selectedBrand.filter(
-                    (selectedBrand) => selectedBrand !== brand,
-                ),
+                selectedBrand &&
+                    selectedBrand.filter((selectedBrand) => selectedBrand !== brand),
             );
         }
-    }
+    };
 
-    // const handlePriceRangeChange = (value) => {
-    //     setSelectedPriceRange(value);
-    // };
-
-    // function handleCategoryChange(checkedKeys, { checked, node }) {
-    //     const categoryTitle = node.title;
-    //     setSelectedCategories((prevSelected) =>
-    //         checked
-    //             ? [...prevSelected, categoryTitle]
-    //             : prevSelected.filter((title) => title !== categoryTitle),
-    //     );
-    // }
-    function handleCategoryChange(checkedKeys, { checked, node }) {
+    const handleCategoryChange = (checkedKeys, { checked, node }) => {
         const categoryId = node.key;
         const categoryName = node.title;
         setSelectedCategories((prevSelected) =>
@@ -53,7 +32,7 @@ function VerticalSearchBar(props) {
                 ? [...prevSelected, categoryName]
                 : prevSelected && prevSelected.filter((name) => name !== categoryName),
         );
-    }
+    };
 
     const handleTagChange = (event) => {
         const tags = event.target.value;
@@ -62,21 +41,11 @@ function VerticalSearchBar(props) {
             setSelectedTags([...selectedTags, tags]);
         } else {
             setSelectedTags(
-                selectedTags && selectedTags.filter((selectedTag) => selectedTag !== tags),
+                selectedTags &&
+                    selectedTags.filter((selectedTag) => selectedTag !== tags),
             );
         }
     };
-    // useEffect(() => {
-    //     const handleFilterChange = () => {
-    //         props.onFilterParamsChange({
-    //             brand: selectedBrand,
-    //             priceRange: selectedPriceRange,
-    //             categories: selectedCategories,
-    //             tags: selectedTags,
-    //         });
-    //     };
-    //     handleFilterChange();
-    // }, [props.filterParams]);
     const handleFilterButtonClick = () => {
         props.onFilterParamsChange({
             brand: selectedBrand,
@@ -93,60 +62,31 @@ function VerticalSearchBar(props) {
             tags: [],
         });
         setSelectedBrand([]);
-        setSelectedPriceRange([20000,1000000]);
+        setSelectedPriceRange([20000, 1000000]);
         setSelectedCategories([]);
         setSelectedTags([]);
     };
     //
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
-    const [expandedKeys, setExpandedKeys] = useState([]);
-    const [checkedKeys, setCheckedKeys] = useState([]);
-    const [selectedKeys, setSelectedKeys] = useState([]);
-    const [autoExpandParent, setAutoExpandParent] = useState(true);
-
     // function to display range value
     const handleSliderChange = (value) => {
         setSelectedPriceRange(value);
     };
 
-    const onExpand = (expandedKeysValue) => {
-        // console.log('onExpand', expandedKeysValue);
-        // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-        // or, you can remove all expanded children keys.
-        setExpandedKeys(expandedKeysValue);
-        setAutoExpandParent(false);
-    };
-    const onCheck = (checkedKeysValue) => {
-        // console.log('onCheck', checkedKeysValue);
-        setCheckedKeys(checkedKeysValue);
-    };
-    const onSelect = (selectedKeysValue, info) => {
-        // console.log('onSelect', info);
-        setSelectedKeys(selectedKeysValue);
-    };
-
     const ProductCategories = categories.map((category, index) => {
-        // const children = categories
-        //     .filter((product) => product.category_id === category.category_id)
-        //     .map((product) => ({
-        //         title: category.name,
-        //         key: `0-${index}-${category._id.$oid}`,
-        //     }));
-
         return {
             title: `${category.name}`,
             key: `0-${index}`,
         };
     });
+    const getAllCategories = async () => {
+        const response = await categoryService.getAllCategory();
+        return response.data;
+    };
     useEffect(() => {
-        const getAllCategories = async () => {
-            const response = await categoryService.getAllCategory();
-            return response.data;
-        };
         getAllCategories().then((res) => {
             setCategories(res);
-            // console.log('Categories', res);
         });
     }, []);
 
@@ -182,26 +122,10 @@ function VerticalSearchBar(props) {
         .sort((a, b) => b.frequency - a.frequency)
         .slice(0, 5)
         .map((brandObj) => brandObj.brand);
-
-    // console.log('brand ne', brands);
     return (
         <div className="search-container--vertical">
             <div className="search-container__type">
                 <h4>Loại thực phẩm</h4>
-                {/* <Tree
-                    checkable
-                    onExpand={onExpand}
-                    expandedKeys={expandedKeys}
-                    autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
-                    treeData={ProductCategories}
-                    className="search-container__type-tree"
-                    onChange={handleCategoryChange}
-                    value={selectedCategories}
-                /> */}
                 <Tree
                     checkable
                     onCheck={handleCategoryChange}

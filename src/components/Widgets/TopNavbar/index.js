@@ -33,27 +33,46 @@ function TopNavbar() {
                     children: [
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: '64114ce137a2db2927a2aa74', name: 'Bánh mì' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', { state: { name: 'Bánh mì' } })
+                                    }
+                                    target="_self"
+                                >
                                     Bánh mì
                                 </a>
                             ),
-                            key: 'setting:1',
+                            key: 'Bánh mì',
                         },
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Sản phẩm bơ sữa' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Sản phẩm bơ sữa
                                 </a>
                             ),
-                            key: 'setting:2',
+                            key: 'Sản phẩm bơ sữa',
                         },
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Đồ ăn nhẹ' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Đồ ăn nhẹ
                                 </a>
                             ),
-                            key: 'setting:3',
+                            key: 'Đồ ăn nhẹ',
                         },
                     ],
                 },
@@ -63,35 +82,65 @@ function TopNavbar() {
                     children: [
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Trái cây và rau quả' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Trái cây và rau quả
                                 </a>
                             ),
-                            key: 'setting:4',
+                            key: 'Trái cây và rau quả',
                         },
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Thịt và hải sản' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Thịt và hải sản
                                 </a>
                             ),
-                            key: 'setting:5',
+                            key: 'Thịt và hải sản',
                         },
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: {
+                                                name: 'Thực phẩm đóng hộp và đóng gói',
+                                            },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Thực phẩm đóng hộp và đóng gói
                                 </a>
                             ),
-                            key: 'setting:6',
+                            key: 'Thực phẩm đóng hộp và đóng gói',
                         },
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Thực phẩm đông lạnh' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Thực phẩm đông lạnh
                                 </a>
                             ),
-                            key: 'setting:7',
+                            key: 'Thực phẩm đông lạnh',
                         },
                     ],
                 },
@@ -108,11 +157,18 @@ function TopNavbar() {
                     children: [
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Nước giải khát' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Nước giải khát
                                 </a>
                             ),
-                            key: 'setting:8',
+                            key: 'Nước giải khát',
                         },
                     ],
                 },
@@ -122,19 +178,33 @@ function TopNavbar() {
                     children: [
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Đồ làm bánh' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Đồ làm bánh
                                 </a>
                             ),
-                            key: 'setting:9',
+                            key: 'Đồ làm bánh',
                         },
                         {
                             label: (
-                                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_parent">
+                                <a
+                                    onClick={() =>
+                                        navigate('/shop', {
+                                            state: { name: 'Gia vị và nước sốt' },
+                                        })
+                                    }
+                                    target="_self"
+                                >
                                     Gia vị và nước sốt
                                 </a>
                             ),
-                            key: 'setting:10',
+                            key: 'Gia vị và nước sốt',
                         },
                     ],
                 },
@@ -142,7 +212,11 @@ function TopNavbar() {
         },
         {
             label: (
-                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_blank" rel="noopener noreferrer">
+                <a
+                    onClick={() => navigate('/shop', { state: { name: 'green' } })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     Chương trình ưu đãi
                 </a>
             ),
@@ -152,7 +226,11 @@ function TopNavbar() {
         },
         {
             label: (
-                <a onClick={() => navigate('/shop',{state: { id: 7, name: 'green' }})} target="_blank" rel="noopener noreferrer">
+                <a
+                    onClick={() => navigate('/shop', { state: { name: 'green' } })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     Blog
                 </a>
             ),

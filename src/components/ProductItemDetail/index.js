@@ -25,29 +25,51 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { handleMoney } from '@/utils';
+import customerService from '@/services/customerService';
+import { addToWishlist } from '@/actions/userActions';
 
 function ProductItemDetail() {
+    const dispatch = useDispatch();
     const { product_id } = useParams();
+    const [messageApi, contextHolder] = message.useMessage();
     const [product, setproduct] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    const dispatch = useDispatch();
-
+    const user = useSelector((state) => state.user.user);
     const handleAddToCart = (product) => {
         if (!isLoggedIn) {
-            message.error('Bạn cần đăng nhập để thực hiện chức năng này');
+            messageApi.open({
+                type: 'error',
+                content: 'Bạn cần đăng nhập để thực hiện chức năng này',
+              });
             return;
         }
         dispatch(addToCart(product));
+        messageApi.open({
+            type: 'success',
+            content: 'Thêm vào giỏ hàng thành công!',
+          });
+    };
+    const addProductToWishList = (product) => {
+        if (!user) return;
+        customerService.addToWishlist(user.user_id, product).then((res) => {
+            if (res.status === 200) {
+                dispatch(addToWishlist(product));
+                messageApi.open({
+                    type: 'success',
+                    content: 'Thêm vào wishlist thành công!',
+                });
+            }
+        });
     };
 
     let averageRating = 0;
     if (product && product.reviews) {
         let customerReview = 0;
-        for (let i = 0; i < product.reviews.length; i++) {
+        for (let i = 0; i < product?.reviews?.length; i++) {
             customerReview += product.reviews[i].rating;
         }
-        averageRating = customerReview / product.reviews.length;
+        averageRating = customerReview / product?.reviews?.length;
     }
     const splideOptions = {
         autoWidth: true,
@@ -67,7 +89,7 @@ function ProductItemDetail() {
 
     const reviewsToDisplay =
         product &&
-        product.reviews.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        product?.reviews?.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -104,6 +126,7 @@ function ProductItemDetail() {
 
     return product ? (
         <div className="container">
+            {contextHolder}
             <div className="product-detail">
                 <div className="bread-crumb">
                     <Breadcrumb
@@ -214,7 +237,8 @@ function ProductItemDetail() {
                                     Thêm vào giỏ
                                 </Button>
                             </div>
-                            <div className="product-detail__wishlist product-detail__tag">
+                            <div className="product-detail__wishlist product-detail__tag"
+                            onClick={() => addProductToWishList(product)}>
                                 <HeartOutlined />
                                 &nbsp;&nbsp;Thêm vào ưa thích
                             </div>
@@ -349,7 +373,7 @@ function ProductItemDetail() {
                             showSizeChanger
                             defaultCurrent={1}
                             pageSize={pageSize}
-                            total={product && product.reviews.length}
+                            total={product && product?.reviews?.length}
                             onChange={handlePageChange}
                         />
                     </div>

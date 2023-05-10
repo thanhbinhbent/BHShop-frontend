@@ -8,13 +8,27 @@ import {
     WhatsAppOutlined,
 } from '@ant-design/icons';
 
-import { Input, Row, Col, Form, Button } from 'antd';
+import { Input, Row, Col, Form, Button, message } from 'antd';
 import './Footer.css';
 import PayMethod from '@/components/Widgets/PayMethod';
 import SourceImg from '../../assets/images';
+import { emailValidator } from '@/utils';
+import newsLetterService from '@/services/newsLetterService';
 function Footer() {
+    const [messageApi, contextHolder] = message.useMessage();
+    const onSubmit = (values) => {
+        newsLetterService.postEmail(values).then((res) => {
+            if (res) {
+                messageApi.open({
+                    type: 'success',
+                    content: 'Đăng ký thành công!',
+                  });
+            }
+        });
+    };
     return (
         <Row>
+            {contextHolder}
             <div className="footer-letter">
                 <Row className="container" justify="space-between">
                     <Col className="footer-letter__form">
@@ -33,6 +47,7 @@ function Footer() {
                                 name="normal_letter"
                                 className="email-form"
                                 initialValues={{ remember: true }}
+                                onFinish={onSubmit}
                             >
                                 <Form.Item
                                     name="email"
@@ -40,6 +55,9 @@ function Footer() {
                                         {
                                             required: true,
                                             message: 'Vui lòng không bỏ trống Email!',
+                                        },
+                                        {
+                                            validator: emailValidator,
                                         },
                                     ]}
                                 >

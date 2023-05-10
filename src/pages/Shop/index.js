@@ -11,11 +11,9 @@ import { Breadcrumb } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Tag, Pagination } from 'antd';
 import productService from '@/services/productService';
-import { useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function Shop() {
-    const {state} = useLocation();
-     // Read values passed on state
     const [products, setProducts] = useState([]);
     const [hasError, setHasError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -73,7 +71,18 @@ function Shop() {
     const onClick = ({ key }) => {
         sortProducts(key);
     };
-
+    const { state } = useLocation();
+    const { name } = state || {};
+    useEffect(() => {
+        // Read values passed on state
+        console.log(name);
+        if (name !== {}) {
+            setFilterParams({
+                ...filterParams,
+                categories: [name],
+            });
+        }
+    }, [name]);
     useEffect(() => {
         // Update filtered products based on filter parameters
         let filtered = products;
@@ -83,21 +92,31 @@ function Shop() {
             );
         }
         if (filterParams.categories.length) {
-            filtered = filtered.filter((product) =>
-                product.brand.includes(filterParams.categories),
-            );
+            filtered = filtered.filter((product) => {
+                return product.category_lst[0].name.includes(filterParams.categories);
+            });
         }
         if (filterParams.priceRange) {
-            filtered = filtered.filter(
-                (product) =>
+            filtered = filtered.filter((product) => {
+                return (
                     product.price >= filterParams?.priceRange[0] &&
-                    product.price <= filterParams?.priceRange[1],
-            );
+                    product.price <= filterParams?.priceRange[1]
+                );
+            });
         }
         if (filterParams.tags.length) {
-            filtered = filtered.filter((product) =>
-                filterParams.tags.every((tag) => product.tags.includes(tag)),
-            );
+            filterParams.tags.forEach((tag) => {
+                if (tag == 'Đang giảm giá') {
+                    filtered = filtered.filter((product) => {
+                        return product?.campaign?.active == true;
+                    });
+                }
+                if (tag == 'Còn hàng') {
+                    filtered = filtered.filter((product) => {
+                        return product.inventory_qty > 0;
+                    });
+                }
+            });
         }
         setFilteredProducts(filtered);
     }, [filterParams, products]);
@@ -107,10 +126,6 @@ function Shop() {
             ...newParams,
         });
     };
-    console.log(
-        '11111111111111111',
-        filterParams['brand'].filter((param) => param === 'Pepperidge Farm'),
-    );
     const handleFilterParamsChange1 = (type, newParams) => {
         let updatedParams = {};
         if (type === 'priceRange') {
@@ -123,7 +138,6 @@ function Shop() {
                     filterParams[type].filter((param) => param !== newParams),
             };
         }
-        console.log('22222', filterParams, 'kkkk', updatedParams);
         setFilterParams(updatedParams);
     };
 
@@ -336,7 +350,10 @@ function Shop() {
                             ) : (
                                 <div className="new-products__list products-list__items">
                                     {currentItems.map((product) => (
-                                        <ProductItem key={product._id} product={product} />
+                                        <ProductItem
+                                            key={product._id}
+                                            product={product}
+                                        />
                                     ))}
                                 </div>
                             )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     nameValidator,
     emailValidator,
@@ -7,7 +7,6 @@ import {
 } from '@/utils';
 import { Form, Input, Button, message, Card, Popover, Select, Statistic } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-
 import {
     EditOutlined,
     SaveOutlined,
@@ -20,15 +19,16 @@ import './MyAccount.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserFirstName } from '@/actions/userActions';
 import userService from '@/services/userService';
+import addressService from '@/services/addressService';
 const FormBasic = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.user);
-
+    const customer = useSelector((state) => state.customer.customer);
     const { Meta } = Card;
     const { Option } = Select;
     const [form] = useForm();
     const ordersSum = 51;
-    const userAddressDefault = '669 QL1A, Khu phố 3, P. Linh Xuân, Tp. Thủ Đức, Tp. HCM';
+    const [userAddressDefault, setUserAddressDefault] = useState('');
     const accountVerified = true;
     const [isEditingBasic, setIsEditingBasic] = useState(false);
     const handleSave = () => {
@@ -49,6 +49,32 @@ const FormBasic = () => {
             return { rankName: 'Hạng Đồng', rankLogo: SourceImg.copperRank };
         }
     };
+    const setAddress = async () => {
+        let ward = '';
+        await addressService.getWardName(customer.addresses[0].ward_id).then((res) => {
+            ward = res.data;
+        });
+        let district = '';
+        await addressService
+            .getDistrictName(customer.addresses[0].district_id)
+            .then((res) => {
+                district = res.data;
+            });
+        let province = '';
+        await addressService
+            .getProvinceName(customer.addresses[0].province_id)
+            .then((res) => {
+                province = res.data;
+            });
+        setUserAddressDefault(
+            `${customer.addresses[0].address_line_1}, ${customer.addresses[0].address_line_2}, ${ward}, ${district}, ${province} `,
+        );
+    };
+    useEffect(() => {
+        if (customer) {
+            setAddress();
+        }
+    }, []);
     return (
         <div className="my-account__basic">
             {/* <h2 className="my-account__section">
@@ -61,10 +87,10 @@ const FormBasic = () => {
                     form={form}
                     layout="vertical"
                     initialValues={{
-                        'name': `${currentUser.last_name} ${currentUser.first_name}`,
-                        'email': currentUser.email,
-                        'phone': currentUser.phone_number,
-                        'gender': currentUser.gender,
+                        name: `${currentUser.last_name} ${currentUser.first_name}`,
+                        email: currentUser.email,
+                        phone: currentUser.phone_number,
+                        gender: currentUser.gender,
                     }}
                 >
                     <Form.Item
@@ -154,7 +180,7 @@ const FormBasic = () => {
 
                         <div className="my-account__rank">
                             <p className="my-account__rank-title">Hạng</p>
-                            <img src={handleRank(ordersSum).rankLogo} alt=''/>
+                            <img src={handleRank(ordersSum).rankLogo} alt="" />
                         </div>,
                     ]}
                 >

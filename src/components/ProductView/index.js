@@ -9,8 +9,9 @@ import { addToCart } from '@/actions/cartActions';
 import './ProductView.css';
 function ProductView(props) {
     const dispatch = useDispatch();
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const { product } = props;
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const [messageApi, contextHolder] = message.useMessage();
     const [activeIndex, setActiveIndex] = useState(0);
 
     const handleSlideClick = (index) => {
@@ -18,10 +19,17 @@ function ProductView(props) {
     };
     const handleAddToCart = () => {
         if (!isLoggedIn) {
-            message.error('Bạn cần đăng nhập để thực hiện chức năng này');
+            messageApi.open({
+                type: 'error',
+                content: 'Bạn cần đăng nhập để thực hiện chức năng này',
+              });
             return;
         }
         dispatch(addToCart(product));
+        messageApi.open({
+            type: 'success',
+            content: 'Thêm vào giỏ hàng thành công!',
+          });
     };
     const splideOptions = {
         autoWidth: true,
@@ -64,6 +72,7 @@ function ProductView(props) {
     };
     return (
         <div>
+            {contextHolder}
             <div className="product-view__container">
                 <div className="product-view__heading">
                     <h2 className="product-view__name">{product.name}</h2>

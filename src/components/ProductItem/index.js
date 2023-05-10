@@ -1,4 +1,4 @@
-import { Button, Popover, Rate } from 'antd';
+import { Button, Popover, Rate, message } from 'antd';
 import { useState } from 'react';
 import {
     ShoppingCartOutlined,
@@ -16,11 +16,12 @@ import { useNavigate } from 'react-router-dom';
 import customerService from '@/services/customerService';
 
 function ProductItem(props) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { product } = props;
     const user = useSelector((state) => state.user.user);
-    const dispatch = useDispatch();
+    const [messageApi, contextHolder] = message.useMessage();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const navigate = useNavigate();
     const viewDetail = (id) => {
         navigate(`/products/${product._id}`);
     };
@@ -33,7 +34,13 @@ function ProductItem(props) {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const handleAddToCart = (product) => dispatch(addToCart(product));
+    const handleAddToCart = (product) => {
+        dispatch(addToCart(product));
+        messageApi.open({
+            type: 'success',
+            content: 'Thêm vào giỏ hàng thành công!',
+          });
+    };
     const displayDiscount = (product) => {
         if (product?.campaign?.active) {
             return (
@@ -74,21 +81,30 @@ function ProductItem(props) {
     const addProductToWishList = (product) => {
         if (!user) return;
         customerService.addToWishlist(user.user_id, product).then((res) => {
-            if(res.status === 200) {
+            if (res.status === 200) {
                 dispatch(addToWishlist(product));
+                messageApi.open({
+                    type: 'success',
+                    content: 'Thêm vào wishlist thành công!',
+                });
             }
         });
     };
     const removeProductFromWishList = (product) => {
         if (!user) return;
         customerService.removeFromWishlist(user.user_id, product).then((res) => {
-            if(res.status === 200) {
+            if (res.status === 200) {
+                messageApi.open({
+                    type: 'success',
+                    content: 'Xóa khỏi wishlist thành công!',
+                });
                 dispatch(removeFromWishlist(product._id));
             }
         });
     };
     return (
         <div className="product-item">
+            {contextHolder}
             <div className="product-item__container">
                 <button
                     onClick={viewDetail}

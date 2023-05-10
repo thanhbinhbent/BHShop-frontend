@@ -40,14 +40,18 @@ export default function userReducer(state = initialState, action) {
             };
         case ADD_TO_WISHLIST:
             let payload = action.payload;
-            let existed = state.wishListItems.find((x) => x._id === payload._id);
-            if (!existed) {
+            let index = state.wishListItems.findIndex(
+                (x) => x._id === payload._id,
+            );
+            console.log(index);
+            if (index == -1) {
                 return {
                     ...state,
                     wishListItems: [...state.wishListItems, { ...payload }],
                 };
+            } else {
+                return state;
             }
-            return { ...state };
         case REMOVE_FROM_WISHLIST:
             const productIndex = action.payload;
             const changedWishListItems = state.wishListItems.filter(
