@@ -1,96 +1,63 @@
 import './OrderReceive.css';
 import { connect } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { handleMoney } from '@/utils';
 import { Divider, Table } from 'antd';
+import orderService from '@/services/orderService';
+import { useParams } from 'react-router-dom';
 function OrderReceive(props) {
-    const { cartItems, updateQuantity } = props;
-    const cartData = cartItems.map((item, index) => ({
-        key: index,
-        thumbnail: item.thumbnail,
-        title: item.title,
-        price: item.price,
-        quantity: item.quantity,
-        totalPrice: item.price * item.quantity,
-        id: item.id,
-        ship_fee:item.ship,
-
-    }));
-    const leng_data = cartData.length;
-    const allTotalPrice = cartItems.reduce((acc, item) => {
-        return acc + item.price * item.quantity;
-    }, 0);
-    const data = [];
-    for (let data1 of cartData) {
-        data.push({
-            key: data1.key,
-            thumbnail: data1.thumbnail,
-            title: data1.title,
-            price: data1.price,
-            quantity: data1.quantity,
-            total: data1.price * data1.quantity,
-            id: data1.id,
-            name: (
-                <>
-                    {data1.title} <b>x{data1.quantity}</b>{' '}
-                </>
-            ),
-            address: '21 đường Nguyễn Văn Cừ, Quận 5, Thành phố Hồ Chí Minh', 
-            shipping_fee: 50000,
-        });
-    }
-    const order = {
-        orderid: 123,
-        date: '22/5/2000',
-        total: 1500000,
-        payment_method: 'Tiền mặt',
-        
-    };
+    // const { cartItems, updateQuantity } = props;
+    // const allTotalPrice = cartItems.reduce((acc, item) => {
+    //     return acc + item.price * item.quantity;
+    // }, 0);
     const columns = [
         {
             title: 'Sản phẩm',
-            dataIndex: 'name',
+            dataIndex: 'product_name',
         },
         {
             title: 'Tổng',
-            dataIndex: 'total',
+            dataIndex: 'totalPrice',
         },
     ];
-    const orderData = [
-        {
-            key: 'Subtotal',
-            name: <b>Giá trị giỏ hàng:</b>,
-            total: handleMoney(allTotalPrice),
-        },
-        {
-            key: 'shipping',
-            name: <b>Phí giao hàng:</b>,
-            total: '', // phí ship
-        },
-        {
-            key: 'Total',
-            name: <b>Tổng giá trị của đơn hàng: </b>,
-            total: '', // tổng phí khi đã tính thuế
-        },
-        {
-            key: 'shipping-address',
-            name: <b>Địa chỉ giao hàng</b>,
-            total: '', // địa chỉ giao hàng
-        },
-        {
-            key: 'notes',
-            name: <b>Ghi chú: </b>,
-            total: '', // notes thêm của khách hàng
-        },
-    ];
-    for (let data1 of orderData) {
-        data.push({
-            key: data1.key,
-            name: data1.name,
-            total: data1.total
+    const { order_id } = useParams();
+    const [order, setOrder] = useState({});
+    const changePaymentMethodToText = (e) => {
+        switch (e) {
+            case 'cash_on_delivery':
+                return 'Thanh toán khi nhận hàng';
+            case 'momo':
+                return 'Thanh toán qua Momo';
+            case 'zalopay':
+                return 'Thanh toán qua ZaloPay';
+            case 'credit_card':
+                return 'Thanh toán bằng thẻ tín dụng';
+            default:
+                return 'Thanh toán khi nhận hàng';
+        }
+    };
+    const changeDateFormat = (date) => {
+        let newDate = new Date(date);
+        return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
+    };
+    useEffect(() => {
+        orderService.getOrderById(order_id).then((res) => {
+            let newOrder = res.data;
+            newOrder.totalPrice = 0;
+            newOrder.products.forEach((item) => {
+                item.totalPrice = 0;
+                item.totalPrice += item.price * item.quantity;
+                newOrder.totalPrice += item.totalPrice;
+            });
+            newOrder.products.push({
+                key: 'shipping-address',
+                product_name: <b>Địa chỉ giao hàng</b>,
+                totalPrice: newOrder.shipping_address, // địa chỉ giao hàng
+            });
+            setOrder(newOrder);
+            console.log(res.data);
         });
-    }
-    
+    }, []);
     return (
         <>
             <div className="container">
@@ -101,24 +68,28 @@ function OrderReceive(props) {
                     <div className="content-brief--info">
                         <div className="brief-order--number">
                             <p>Mã đơn hàng:</p>
-                            <p>{order.orderid}</p>
+                            <p>{order._id}</p>
                         </div>
                         <div className="brief-order--date">
                             <p>Ngày đặt hàng:</p>
-                            <p>{order.date}</p>
+                            <p>{changeDateFormat(order.order_date)}</p>
                         </div>
                         <div className="brief-order--total">
                             <p>Tổng giá trị:</p>
-                            <p>{handleMoney(order.total + data.shipping_fee)}</p>
+                            <p>{handleMoney(order.totalPrice)}</p>
                         </div>
                         <div className="brief-order--payment">
                             <p>Phương thức thanh toán:</p>
-                            <p>{order.payment_method}</p>
+                            <p>{changePaymentMethodToText(order.payment_method)}</p>
                         </div>
                     </div>
                     <div className="content-detail--info">
                         <h1>Chi tiết đơn hàng:</h1>
-                        <Table columns={columns} dataSource={data} pagination={false} />
+                        <Table
+                            columns={columns}
+                            dataSource={order.products}
+                            pagination={false}
+                        />
                     </div>
                 </div>
                 <Divider></Divider>

@@ -1,13 +1,15 @@
 import { Menu, Col } from 'antd';
 import { MenuProps } from 'antd/es/menu';
 import './Sidebar.css';
+import { useNavigate } from 'react-router-dom';
 function Sidebar() {
+    const navigate = useNavigate();
     const items = [
         {
             label: (
                 <a
-                    href="/"
-                    target="_blank"
+                    onClick={() => navigate('/shop', { state: { name: 'Bánh mì' } })}
+                    target="_self"
                     rel="noopener noreferrer"
                     className="sidebar__category--ranking"
                 >
@@ -15,13 +17,17 @@ function Sidebar() {
                     <span>Bánh mì</span>
                 </a>
             ),
-            key: 'food1',
+            key: 'Bánh mì',
         },
         {
             label: (
                 <a
-                    href="/"
-                    target="_blank"
+                    onClick={() =>
+                        navigate('/shop', {
+                            state: { name: 'Nước giải khát' },
+                        })
+                    }
+                    target="_self"
                     rel="noopener noreferrer"
                     className="sidebar__category--ranking"
                 >
@@ -29,13 +35,17 @@ function Sidebar() {
                     <span>Nước giải khát</span>
                 </a>
             ),
-            key: 'food2',
+            key: 'Nước giải khát',
         },
         {
             label: (
                 <a
-                    href="/"
-                    target="_blank"
+                    onClick={() =>
+                        navigate('/shop', {
+                            state: { name: 'Trái cây và rau quả' },
+                        })
+                    }
+                    target="_self"
                     rel="noopener noreferrer"
                     className="sidebar__category--ranking"
                 >
@@ -43,13 +53,17 @@ function Sidebar() {
                     <span>Trái cây và rau quả</span>
                 </a>
             ),
-            key: 'gift',
+            key: 'Trái cây và rau quả',
         },
         {
             label: (
                 <a
-                    href="/"
-                    target="_blank"
+                    onClick={() =>
+                        navigate('/shop', {
+                            state: { name: 'Đồ ăn nhẹ' },
+                        })
+                    }
+                    target="_self"
                     rel="noopener noreferrer"
                     className="sidebar__category--ranking"
                 >
@@ -57,7 +71,7 @@ function Sidebar() {
                     <span>Đồ ăn nhẹ</span>
                 </a>
             ),
-            key: 'blog',
+            key: 'Đồ ăn nhẹ',
         },
     ];
 

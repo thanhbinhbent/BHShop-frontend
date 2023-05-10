@@ -19,52 +19,45 @@ import {
 import { handleMoney } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import orderService from '@/services/orderService';
+import addressService from '@/services/addressService';
 function CheckOut(props) {
+    const navigate = useNavigate();
     const [showShippingForm, setShowShippingForm] = useState(false);
     const { cartItems, updateQuantity } = props;
     const customer = useSelector((state) => state.customer.customer);
     const user = useSelector((state) => state.user.user);
     const cart = useSelector((state) => state.cart.cartItems);
-    const navigate = useNavigate();
-    const orderCreated = {
-        order_id: 123,
-    };
-    const data = cartItems.map((item, index) => ({
-        key: index,
-        thumbnail: item.thumbnail,
-        title: item.title,
-        price: item.price,
-        quantity: item.quantity,
-        totalPrice: item.price * item.quantity,
-        id: item.id,
-    }));
     const allTotalPrice = cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
     }, 0);
     const { Option } = Select;
-    const { TextArea } = Input;
     const [form] = Form.useForm();
+    const [agree, setAgree] = useState(false);
+    const onAgreeChange = (e) => {
+        setAgree(e.target.checked);
+    };
     const onFinish = (values) => {
-        let shippingAddress = `${values.billingAddress.streetAddressLine1}  ${values.billingAddress.streetAddressLine2} huyện ${values.billingAddress.district} tỉnh ${values.billingAddress.province} `;
-        let products = []
+        let shippingAddress = `${values.billingAddress.streetAddressLine1}, ${values.billingAddress.streetAddressLine2}, ${values.billingAddress.district}, ${values.billingAddress.city} `;
+        let products = [];
         cart.forEach((item) => {
             products.push({
                 product_id: item._id,
-                product_name:item.name,
+                product_name: item.name,
                 quantity: item.quantity,
-                price: item.price
-            })
-        })
+                price: item.price,
+            });
+        });
         let newOrder = {
             customer_id: customer._id,
             products: products,
-            status:"processing",
+            status: 'processing',
             shipping_address: shippingAddress,
-        }
+            payment_method: radPayValue,
+        };
         orderService.postOrder(newOrder).then((res) => {
             console.log(res);
-            // navigate(`/checkout/order-received/${res.data.order_id}`);
-        })
+            navigate(`/checkout/order-received/${res.data._id}`);
+        });
     };
     const onCheckboxChange = (e) => {
         setShowShippingForm(e.target.checked);
@@ -74,7 +67,7 @@ function CheckOut(props) {
                     streetAddressLine1: '',
                     streetAddressLine2: '',
                     district: '',
-                    province: '',
+                    // province: '',
                     city: '',
                 },
             });
@@ -91,10 +84,10 @@ function CheckOut(props) {
         }
         console.log('radio checked', e.target.value);
     };
-    const [radPayValue, setradPayValue] = useState(1);
+    const [radPayValue, setradPayValue] = useState('cash_on_delivery');
     const onRadPayChange = (e) => {
         setradPayValue(e.target.value);
-        console.log('radio checked', e.target.value);
+        console.log(e.target.value);
     };
 
     const data1 = [
@@ -140,9 +133,9 @@ function CheckOut(props) {
 
             value: (
                 <Radio.Group onChange={onRadPayChange} value={radPayValue}>
-                    <Radio value={1}>Chuyển khoản qua ngân hàng</Radio>
+                    <Radio value={'credit_card'}>Chuyển khoản qua ngân hàng</Radio>
                     <br />
-                    <Radio value={2}>Thanh toán khi nhận hàng</Radio>
+                    <Radio value={'cash_on_delivery'}>Thanh toán khi nhận hàng</Radio>
                 </Radio.Group>
             ),
         },
@@ -164,7 +157,7 @@ function CheckOut(props) {
             key: '6',
             name: (
                 <>
-                    <Checkbox>
+                    <Checkbox onChange={onAgreeChange}>
                         Tôi đã đọc và chấp nhận các{' '}
                         <span className="policy">
                             <a href="#">chính sách và điều kiện </a>
@@ -177,7 +170,13 @@ function CheckOut(props) {
         {
             key: '7',
             name: (
-                <Button type="primary" htmlType="submit" danger>
+                <Button
+                    form="checkout-form"
+                    type="primary"
+                    htmlType="submit"
+                    danger
+                    disabled={!agree}
+                >
                     Hoàn tất thanh toán
                 </Button>
             ),
@@ -214,7 +213,14 @@ function CheckOut(props) {
         }
         return <></>;
     };
-    useEffect(() => {
+    const takeAddress = async () => {
+        let ward = await addressService.getWardName(customer.addresses[0].ward_id);
+        let district = await addressService.getDistrictName(
+            customer.addresses[0].district_id,
+        );
+        let province = await addressService.getProvinceName(
+            customer.addresses[0].province_id,
+        );
         form.setFieldsValue({
             billingAddress: {
                 firstName: user.first_name,
@@ -222,13 +228,16 @@ function CheckOut(props) {
                 companyName: '',
                 streetAddressLine1: customer.addresses[0].address_line_1,
                 streetAddressLine2: customer.addresses[0].address_line_2,
-                district: '',
-                province: '',
-                city: '',
+                district: district.data,
+                // province: '',
+                city: province.data,
                 phone: user.phone_number,
                 email: user.email,
             },
         });
+    };
+    useEffect(() => {
+        takeAddress();
     }, []);
     return (
         <>
@@ -244,7 +253,12 @@ function CheckOut(props) {
                     {checkFreeShip()}
                     <div className="checkout-content">
                         <div className="checkout-content--left">
-                            <Form form={form} name="billing-address" onFinish={onFinish}>
+                            <Form
+                                form={form}
+                                name="billing-address"
+                                onFinish={onFinish}
+                                id="checkout-form"
+                            >
                                 <Divider orientation="left" plain>
                                     <h1>Địa chỉ thanh toán</h1>
                                 </Divider>
@@ -317,7 +331,7 @@ function CheckOut(props) {
                                 >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item
+                                {/* <Form.Item
                                     name={['billingAddress', 'province']}
                                     label="Tỉnh"
                                     rules={[
@@ -352,7 +366,7 @@ function CheckOut(props) {
                                         <Option value="Yukon">Yukon</Option>
                                         <Option value="Nunavut">Nunavut</Option>
                                     </Select>
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item
                                     name={['billingAddress', 'city']}
                                     label="Thành phố"
@@ -477,11 +491,6 @@ function CheckOut(props) {
                                 )}
                                 <Form.Item name="orderNotes" label="Order Notes">
                                     <Mentions rows={3} placeholder="Leave a message" />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button danger type="primary" htmlType="submit">
-                                        Đăng nhập
-                                    </Button>
                                 </Form.Item>
                             </Form>
                         </div>

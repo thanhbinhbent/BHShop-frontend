@@ -19,7 +19,25 @@ function MyOrders() {
         return order?.products.reduce((sum, item) => {
             return sum + item.quantity * item.price;
         }, 0);
-    }
+    };
+    const changePaymentMethodToText = (e) => {
+        switch (e) {
+            case 'cash_on_delivery':
+                return 'Thanh toán khi nhận hàng';
+            case 'momo':
+                return 'Thanh toán qua Momo';
+            case 'zalopay':
+                return 'Thanh toán qua ZaloPay';
+            case'credit_card':
+                return 'Thanh toán bằng thẻ tín dụng';
+            default:
+                return 'Thanh toán khi nhận hàng';
+        }
+    };
+    const changeDateFormat = (date) => {
+        let newDate = new Date(date);
+        return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
+    };
     useEffect(() => {
         orderService.getOrdersOfUser({ customer_id: customer._id }).then((res) => {
             setInitLoading(false);
@@ -89,10 +107,10 @@ function MyOrders() {
                         <Skeleton avatar title={false} loading={item.loading} active>
                             <List.Item.Meta
                                 title={<span>{item._id}</span>}
-                                description={item?.payment_method}
+                                description={changePaymentMethodToText(item?.payment_method)}
                             />
                             <div>
-                                <p>Đặt ngày: {item.order_date}</p>
+                                <p>Đặt ngày: {changeDateFormat(item.order_date)}</p>
                                 <p className="my-order__price-total">
                                     Tổng tiền: {sumTotal(item)} đồng
                                 </p>

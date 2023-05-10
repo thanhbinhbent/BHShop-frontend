@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 // import SpeechRecognition from 'react-speech-recognition';
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -43,7 +43,8 @@ function Header() {
     const totalCart = cartItems.reduce((sum, object) => {
         return sum + object.price * object.quantity;
     }, 0);
-
+    const [visibility, setVisibility] = useState(false);
+    const searchInputComponent = useRef(null);
     // Custom Voice search
     const [isListening, setIsListening] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -193,11 +194,25 @@ function Header() {
         );
         return result;
     };
+    const handleInputBlur = (event) => {
+        setVisibility(false);
+    };
     useEffect(() => {
         getAllProductWithName().then((res) => {
             setProductData(res);
         });
     }, []);
+    // useEffect(() => {
+    //     if (searchInputComponent.current) {
+    //         let text = searchInputComponent.current.input.value;
+    //         if (text == '') {
+    //             setVisibility(false);
+    //         } else {
+    //             searchInputComponent.current.focus();
+    //             setVisibility(true);
+    //         }
+    //     }
+    // }, [searchInputComponent?.current?.input?.value]);
     const columns = [
         {
             title: 'Name',
@@ -244,15 +259,20 @@ function Header() {
                                 onChange={onChange}
                                 allowClear
                                 value={tempSearchInput || searchInput}
+                                ref={searchInputComponent}
+                                onBlur={handleInputBlur}
+                                onFocus={() => setVisibility(true)}
                             />
-                            <Table
-                                className="search-table"
-                                columns={columns}
-                                rowKey={(record) => {
-                                    return record.name;
-                                }}
-                                dataSource={filterData(searchInput)}
-                            />
+                            {visibility && (
+                                <Table
+                                    className="search-table"
+                                    columns={columns}
+                                    rowKey={(record) => {
+                                        return record.name;
+                                    }}
+                                    dataSource={filterData(searchInput)}
+                                />
+                            )}
                         </Col>
                     </Row>
                     <Col className="col col-right">

@@ -13,7 +13,9 @@ const orderService = {
         return response;
     },
     getOrderById: async (orderId) => {
-        const response = await axios.post(`${serverUrl}/orders/detail`,orderId).catch(errorHandler);
+        const response = await axios.post(`${serverUrl}/orders/detail`,{
+            order_id: orderId
+        }).catch(errorHandler);
         return response;
     },
     postOrder: async (order) => {
