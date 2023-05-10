@@ -28,15 +28,14 @@ function OrderTracking(props) {
     const [productsInOrder, setProductsInOrder] = useState([]);
     const currentUser = useSelector((state) => state.user.user);
     const getOrderDetail = async (order_id) => {
-        const response = await orderService.getOrderById({
-            order_id: order_id,
-        });
+        const response = await orderService.getOrderById(order_id);
         return response;
     };
     const sumOrder = productsInOrder?.reduce((sum, item) => {
         return sum + item.quantity * item.price;
     }, 0);
     useEffect(() => {
+        if (!order_id) return;
         getOrderDetail(order_id).then((res) => {
             setProductsInOrder(res.data.products);
             setOrder(res.data);

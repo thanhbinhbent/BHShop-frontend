@@ -18,11 +18,16 @@ function Footer() {
     const [messageApi, contextHolder] = message.useMessage();
     const onSubmit = (values) => {
         newsLetterService.postEmail(values).then((res) => {
-            if (res) {
+            if (res.status === 400) {
+                messageApi.open({
+                    type: 'error',
+                    content: 'Email này đã được đăng ký!',
+                });
+            } else {
                 messageApi.open({
                     type: 'success',
                     content: 'Đăng ký thành công!',
-                  });
+                });
             }
         });
     };

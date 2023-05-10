@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 // import SpeechRecognition from 'react-speech-recognition';
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     AudioOutlined,
     UserOutlined,
@@ -11,7 +11,6 @@ import {
     AudioFilled,
 } from '@ant-design/icons';
 import {
-    Select,
     Input,
     Row,
     Col,
@@ -32,7 +31,6 @@ import SourceImg from '@/assets/images';
 import { useEffect, useState } from 'react';
 import { setUser, setLoggedIn } from '@/actions/userActions';
 import { useDispatch } from 'react-redux';
-import residenceService from '@/services/residenceService';
 import productService from '@/services/productService';
 // import demo data
 
@@ -91,6 +89,8 @@ function Header() {
     const onSearch = (value) => {
         setSearchInput(value);
         setTempSearchInput(''); // đặt lại giá trị biến tạm thời khi người dùng nhấn tìm kiếm
+        navigate(`/shop?search=${value}`);
+        setVisibility(false);
     };
     const onChange = (e) => {
         setSearchInput(e.target.value);
@@ -178,10 +178,6 @@ function Header() {
         dispatch(setLoggedIn(false));
     };
     const [productData, setProductData] = useState([]);
-    const getProvince = async () => {
-        const response = await residenceService.getProvinces();
-        return response.data;
-    };
     const getAllProductWithName = async () => {
         const response = await productService.getAllProductWithOnlyName();
         return response.data;
@@ -195,7 +191,7 @@ function Header() {
         return result;
     };
     const handleInputBlur = (event) => {
-        setVisibility(false);
+        // setVisibility(false);
     };
     useEffect(() => {
         getAllProductWithName().then((res) => {
@@ -218,7 +214,16 @@ function Header() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text) => <a href="/">{text}</a>,
+            render: (text) => (
+                <a
+                    href={void 0}
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
+                    {text}
+                </a>
+            ),
         },
     ];
     return (
@@ -271,6 +276,12 @@ function Header() {
                                         return record.name;
                                     }}
                                     dataSource={filterData(searchInput)}
+                                    onRow={(r) => ({
+                                        onClick: (event) => {
+                                            navigate(`/products/${r._id}`)
+                                            setVisibility(false);
+                                        },
+                                    })}
                                 />
                             )}
                         </Col>

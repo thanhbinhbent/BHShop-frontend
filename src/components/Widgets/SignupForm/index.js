@@ -1,4 +1,4 @@
-import { Button, Cascader, Checkbox, Form, Input, Select } from 'antd';
+import { Button, Cascader, Checkbox, Form, Input, Select, message } from 'antd';
 import {
     nameValidator,
     emailValidator,
@@ -43,14 +43,30 @@ function SignupForm() {
         },
     };
     const [form] = Form.useForm();
-
+    const [messageApi, contextHolder] = message.useMessage();
     const [success, setSuccess] = useState(false);
     const onFinish = async (values) => {
         let full_name = values.name.trim().split(' ');
         values.first_name = full_name.pop();
         values.last_name = full_name.join(' ');
+        values.addresses = [{
+            address_line_2: values.address2,
+            province_id: values.residence[0],
+            district_id: values.residence[1],
+            ward_id: values.residence[2],
+            is_default:true
+        }]
         await userService.register(values).then((res) => {
-            setSuccess(true);
+            if (res) {
+                console.log(res);
+                messageApi.open({
+                    type: 'success',
+                    content: 'Đăng ký thành công!',
+                });
+                setTimeout(() => {
+                    setSuccess(true);
+                }, 500);
+            }
         });
     };
     let navigate = useNavigate();
@@ -74,141 +90,142 @@ function SignupForm() {
         }
     }, [isLoading]);
     return (
-        <Form
-            {...formItemLayout}
-            form={form}
-            name="register"
-            onFinish={onFinish}
-            initialValues={{
-                residence: ['TP. Hồ Chí Minh', 'TP. Thủ Đức', 'P.Linh Xuân'],
-                prefix: '84',
-            }}
-            scrollToFirstError
-        >
-            <Form.Item
-                name="name"
-                label="Họ và tên"
-                rules={[
-                    {
-                        validator: nameValidator,
-                    },
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập Họ và tên!',
-                    },
-                ]}
+        <div>
+            {contextHolder}
+            <Form
+                {...formItemLayout}
+                form={form}
+                name="register"
+                onFinish={onFinish}
+                initialValues={{
+                    residence: ['TP. Hồ Chí Minh', 'TP. Thủ Đức', 'P.Linh Xuân'],
+                    prefix: '84',
+                }}
+                scrollToFirstError
             >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                name="phone"
-                label="Số điện thoại"
-                rules={[
-                    { required: true, message: 'Vui lòng nhập số điện thoại!' },
-                    { validator: phoneValidator },
-                ]}
-            >
-                <Input addonBefore={'+84'} style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item
-                name="email"
-                label="E-mail"
-                rules={[{ validator: emailValidator }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name="password"
-                label="Mật khẩu"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập mật khẩu!',
-                    },
-                    { validator: passwordValidator },
-                ]}
-                hasFeedback
-            >
-                <Input.Password />
-            </Form.Item>
-
-            <Form.Item
-                name="confirm"
-                label="Nhập lại mật khẩu"
-                dependencies={['password']}
-                hasFeedback
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng xác nhận mật khẩu!',
-                    },
-                    ({ getFieldValue }) => ({
-                        validator(_, value) {
-                            if (!value || getFieldValue('password') === value) {
-                                return Promise.resolve();
-                            }
-                            return Promise.reject(
-                                new Error(
-                                    'Mật khẩu vào không khớp với mật khẩu đã nhập!',
-                                ),
-                            );
+                <Form.Item
+                    name="name"
+                    label="Họ và tên"
+                    rules={[
+                        {
+                            validator: nameValidator,
                         },
-                    }),
-                    { validator: passwordValidator },
-                ]}
-            >
-                <Input.Password />
-            </Form.Item>
-            <Form.Item
-                name="gender"
-                label="Giới tính"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng chọn giới tính!',
-                    },
-                ]}
-            >
-                <Select placeholder="Chọn giới tính">
-                    <Option value="male">Nam</Option>
-                    <Option value="female">Nữ</Option>
-                    <Option value="other">Khác</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item name="residence" label="Địa chỉ">
-                <Cascader options={residences} />
-            </Form.Item>
-            <Form.Item name="address2" label="Địa chỉ chi tiết">
-                <Input placeholder="Ví dụ: 669, QL1A, Khu phố 3" />
-            </Form.Item>
-
-            <Form.Item
-                name="agreement"
-                valuePropName="checked"
-                rules={[
-                    {
-                        validator: (_, value) =>
-                            value
-                                ? Promise.resolve()
-                                : Promise.reject(
-                                      new Error('Bạn phải đọc, và đồng ý chính sách!'),
-                                  ),
-                    },
-                ]}
-                {...tailFormItemLayout}
-            >
-                <Checkbox>
-                    Tôi đồng ý với chính sách của <a href="/"> BHShop.</a>
-                </Checkbox>
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit">
-                    Đăng ký
-                </Button>
-            </Form.Item>
-        </Form>
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập Họ và tên!',
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    name="phone"
+                    label="Số điện thoại"
+                    rules={[
+                        { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                        { validator: phoneValidator },
+                    ]}
+                >
+                    <Input addonBefore={'+84'} style={{ width: '100%' }} />
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    label="E-mail"
+                    rules={[{ validator: emailValidator }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label="Mật khẩu"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập mật khẩu!',
+                        },
+                        { validator: passwordValidator },
+                    ]}
+                    hasFeedback
+                >
+                    <Input.Password />
+                </Form.Item>
+                <Form.Item
+                    name="confirm"
+                    label="Nhập lại mật khẩu"
+                    dependencies={['password']}
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng xác nhận mật khẩu!',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(
+                                    new Error(
+                                        'Mật khẩu vào không khớp với mật khẩu đã nhập!',
+                                    ),
+                                );
+                            },
+                        }),
+                        { validator: passwordValidator },
+                    ]}
+                >
+                    <Input.Password />
+                </Form.Item>
+                <Form.Item
+                    name="gender"
+                    label="Giới tính"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng chọn giới tính!',
+                        },
+                    ]}
+                >
+                    <Select placeholder="Chọn giới tính">
+                        <Option value="Nam">Nam</Option>
+                        <Option value="Nữ">Nữ</Option>
+                        <Option value="Other">Khác</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item name="residence" label="Địa chỉ">
+                    <Cascader options={residences} />
+                </Form.Item>
+                <Form.Item name="address2" label="Địa chỉ chi tiết">
+                    <Input placeholder="Ví dụ: 669, QL1A, Khu phố 3" />
+                </Form.Item>
+                <Form.Item
+                    name="agreement"
+                    valuePropName="checked"
+                    rules={[
+                        {
+                            validator: (_, value) =>
+                                value
+                                    ? Promise.resolve()
+                                    : Promise.reject(
+                                          new Error(
+                                              'Bạn phải đọc, và đồng ý chính sách!',
+                                          ),
+                                      ),
+                        },
+                    ]}
+                    {...tailFormItemLayout}
+                >
+                    <Checkbox>
+                        Tôi đồng ý với chính sách của <a href="/"> BHShop.</a>
+                    </Checkbox>
+                </Form.Item>
+                <Form.Item {...tailFormItemLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Đăng ký
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
     );
 }
 

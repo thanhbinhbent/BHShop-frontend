@@ -11,7 +11,7 @@ import { Breadcrumb } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Tag, Pagination } from 'antd';
 import productService from '@/services/productService';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 function Shop() {
     const [products, setProducts] = useState([]);
@@ -71,11 +71,20 @@ function Shop() {
     const onClick = ({ key }) => {
         sortProducts(key);
     };
+    const toUnicode = (str) => {
+        return str.split('').map(function (value, index, array) {
+            var temp = value.charCodeAt(0).toString(16).toUpperCase();
+            if (temp.length > 2) {
+                return '\\u' + temp;
+            }
+            return value;
+        }).join('');
+    }
     const { state } = useLocation();
+    let [searchParams, setSearchParams] = useSearchParams();
     const { name } = state || {};
-    useEffect(() => {
+    useEffect(() => {     
         // Read values passed on state
-        console.log(name);
         if (name !== {}) {
             setFilterParams({
                 ...filterParams,
@@ -83,6 +92,18 @@ function Shop() {
             });
         }
     }, [name]);
+    useEffect(() => {
+        let searchString = searchParams.get("search");
+        if(searchString !== null){ 
+            let filtered = products.filter((product) => {
+                let host = toUnicode(product.name.toLowerCase());
+                let client = toUnicode(searchString.toLowerCase());
+                return host.includes(client);
+            });
+            setFilteredProducts(filtered);
+        }
+        
+    },[searchParams])
     useEffect(() => {
         // Update filtered products based on filter parameters
         let filtered = products;

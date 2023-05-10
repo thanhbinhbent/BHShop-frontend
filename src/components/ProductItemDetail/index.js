@@ -109,20 +109,20 @@ function ProductItemDetail() {
         }
         return 'đ';
     };
+    const getProductID = async (id) => {
+        try {
+            const response = await productService.getProduct(id);
+            return response.data;
+        } catch (err) {
+            console.log('Error', err);
+        }
+    };
     useEffect(() => {
-        const getProductID = async (id) => {
-            try {
-                const response = await productService.getProduct(id);
-                return response.data;
-            } catch (err) {
-                console.log('Error', err);
-            }
-        };
         getProductID(product_id).then((res) => {
             setproduct(res);
             // console.log('res', res);
         });
-    }, []);
+    }, [product_id]);
 
     return product ? (
         <div className="container">
