@@ -213,7 +213,7 @@ function TopNavbar() {
         {
             label: (
                 <a
-                    onClick={() => navigate('/shop', { state: { name: 'green' } })}
+                    onClick={() => navigate('/shop', )}
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -227,7 +227,7 @@ function TopNavbar() {
         {
             label: (
                 <a
-                    onClick={() => navigate('/shop', { state: { name: 'green' } })}
+                    onClick={() => navigate('/shop', )}
                     target="_blank"
                     rel="noopener noreferrer"
                 >

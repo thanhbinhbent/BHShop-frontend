@@ -26,7 +26,6 @@ function Shop() {
     });
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [sort, setSort] = useState();
     const [itemsPerPage, setItemsPerPage] = useState(15);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -46,7 +45,6 @@ function Shop() {
                 b.name.localeCompare(a.name, undefined, { sensitivity: 'base' }),
             );
         }
-        setSort(sortedProducts);
         setFilteredProducts(sortedProducts);
     };
     const items = [
@@ -72,18 +70,21 @@ function Shop() {
         sortProducts(key);
     };
     const toUnicode = (str) => {
-        return str.split('').map(function (value, index, array) {
-            var temp = value.charCodeAt(0).toString(16).toUpperCase();
-            if (temp.length > 2) {
-                return '\\u' + temp;
-            }
-            return value;
-        }).join('');
-    }
+        return str
+            .split('')
+            .map(function (value, index, array) {
+                var temp = value.charCodeAt(0).toString(16).toUpperCase();
+                if (temp.length > 2) {
+                    return '\\u' + temp;
+                }
+                return value;
+            })
+            .join('');
+    };
     const { state } = useLocation();
     let [searchParams, setSearchParams] = useSearchParams();
     const { name } = state || {};
-    useEffect(() => {     
+    useEffect(() => {
         // Read values passed on state
         if (name !== {}) {
             setFilterParams({
@@ -93,8 +94,8 @@ function Shop() {
         }
     }, [name]);
     useEffect(() => {
-        let searchString = searchParams.get("search");
-        if(searchString !== null){ 
+        let searchString = searchParams.get('search');
+        if (searchString !== null) {
             let filtered = products.filter((product) => {
                 let host = toUnicode(product.name.toLowerCase());
                 let client = toUnicode(searchString.toLowerCase());
@@ -102,8 +103,7 @@ function Shop() {
             });
             setFilteredProducts(filtered);
         }
-        
-    },[searchParams])
+    }, [searchParams]);
     useEffect(() => {
         // Update filtered products based on filter parameters
         let filtered = products;
@@ -127,12 +127,12 @@ function Shop() {
         }
         if (filterParams.tags.length) {
             filterParams.tags.forEach((tag) => {
-                if (tag == 'Đang giảm giá') {
+                if (tag === 'Đang giảm giá') {
                     filtered = filtered.filter((product) => {
-                        return product?.campaign?.active == true;
+                        return product?.campaign?.active === true;
                     });
                 }
-                if (tag == 'Còn hàng') {
+                if (tag === 'Còn hàng') {
                     filtered = filtered.filter((product) => {
                         return product.inventory_qty > 0;
                     });
@@ -229,7 +229,7 @@ function Shop() {
                     </div>
                     <div className="home-col home-col--right">
                         <div className="right-header_img">
-                            <a href="#">
+                            <a href={`${void 0}`}>
                                 <img
                                     src="https://klbtheme.com/bacola/wp-content/uploads/2021/08/bacola-banner-18.jpg"
                                     alt="Organic Meals Prepared"
@@ -238,10 +238,10 @@ function Shop() {
                         </div>
                         <div className="right-filter--view">
                             <div className="view-selector">
-                                <a href="#">
+                                <a href={`${void 0}`}>
                                     <MenuOutlined />
                                 </a>
-                                <a href="#">
+                                <a href={`${void 0}`}>
                                     <HolderOutlined />
                                 </a>
                             </div>
@@ -254,7 +254,10 @@ function Shop() {
                                             onClick,
                                         }}
                                     >
-                                        <a onClick={(e) => e.preventDefault()}>
+                                        <a
+                                            href={`${void 0}`}
+                                            onClick={(e) => e.preventDefault()}
+                                        >
                                             <Space>
                                                 Sắp xếp theo <DownOutlined />
                                             </Space>
@@ -287,7 +290,7 @@ function Shop() {
                                 )}
                                 {filterParams?.tags &&
                                     filterParams?.tags.map((tag) => (
-                                        <p key={tag}>
+                                        <p key={"tag" + tag}>
                                             <Tag
                                                 style={{
                                                     fontSize: '18px',
@@ -303,64 +306,54 @@ function Shop() {
                                             </Tag>
                                         </p>
                                     ))}
-                                {'' && (
-                                    <p>
-                                        <Tag
-                                            style={{
-                                                fontSize: '18px',
-                                                padding: '3px 7px',
-                                            }}
-                                            color="geekblue"
-                                            closable
-                                        >
-                                            {sort}
-                                        </Tag>
-                                    </p>
-                                )}
                             </div>
                             <div>
                                 {filterParams.categories &&
-                                    filterParams.categories.map((category) => (
-                                        <p>
-                                            <Tag
-                                                style={{
-                                                    fontSize: '18px',
-                                                    padding: '3px 7px',
-                                                }}
-                                                color="volcano"
-                                                closable
-                                                onClose={() =>
-                                                    handleFilterParamsChange1(
-                                                        'categoies',
-                                                        category,
-                                                    )
-                                                }
-                                            >
-                                                {category}
-                                            </Tag>
-                                        </p>
-                                    ))}
+                                    filterParams.categories.map((category) => {
+                                        return (
+                                            <p key={"category" + category}>
+                                                <Tag
+                                                    style={{
+                                                        fontSize: '18px',
+                                                        padding: '3px 7px',
+                                                    }}
+                                                    color="volcano"
+                                                    closable
+                                                    onClose={() =>
+                                                        handleFilterParamsChange1(
+                                                            'categoies',
+                                                            category,
+                                                        )
+                                                    }
+                                                >
+                                                    {category}
+                                                </Tag>
+                                            </p>
+                                        );
+                                    })}
                                 {filterParams.brand &&
-                                    filterParams.brand.map((brand) => (
-                                        <p>
-                                            <Tag
-                                                style={{
-                                                    fontSize: '18px',
-                                                    padding: '3px 7px',
-                                                }}
-                                                color="volcano"
-                                                closable
-                                                onClose={() =>
-                                                    handleFilterParamsChange1(
-                                                        'brand',
-                                                        brand,
-                                                    )
-                                                }
-                                            >
-                                                {brand}
-                                            </Tag>
-                                        </p>
-                                    ))}
+                                    filterParams.brand.map((brand) => {
+                                        return (
+                                            <p key={"brand" + brand}>
+                                                <Tag
+                                                    style={{
+                                                        fontSize: '18px',
+                                                        padding: '3px 7px',
+                                                    }}
+                                                    color="volcano"
+                                                    closable
+                                                    onClose={() =>
+                                                        handleFilterParamsChange1(
+                                                            'brand',
+                                                            brand,
+                                                        )
+                                                    }
+                                                >
+                                                    {brand}
+                                                </Tag>
+                                            </p>
+                                        );
+                                    })}
                             </div>
                         </div>
                         <div className="shop-products__main">
@@ -372,7 +365,7 @@ function Shop() {
                                 <div className="new-products__list products-list__items">
                                     {currentItems.map((product) => (
                                         <ProductItem
-                                            key={product._id}
+                                            key={"product" + product._id}
                                             product={product}
                                         />
                                     ))}

@@ -41,6 +41,18 @@ function OrderTracking(props) {
             setOrder(res.data);
         });
     }, [order_id]);
+    const changeStatusToNumber = (status) => {
+        switch (status) {
+            case 'Đang chuẩn bị hàng':
+                return 0;
+            case 'processing':
+                return 1;
+            case 'completed':
+                return 2;
+            default:
+                return 0;
+        }
+    };
     return (
         <div className="order-tracking__container">
             <h2>Chi tiết đơn hàng</h2>
@@ -71,7 +83,7 @@ function OrderTracking(props) {
             <Steps
                 className="tracking-detail__container"
                 size="small"
-                current={1}
+                current={changeStatusToNumber(order?.status)}
                 items={[
                     {
                         title: 'Chuẩn bị hàng',

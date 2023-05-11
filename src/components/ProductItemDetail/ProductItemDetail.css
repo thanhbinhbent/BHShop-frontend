@@ -291,6 +291,9 @@ h1{
   .ant-rate+.ant-rate-text{
     font-size: 1.5rem;
   }
+  .ant-rate-text {
+    text-align: center;
+  }
   .comment-respond{
     display: flex;
     flex-wrap: wrap;

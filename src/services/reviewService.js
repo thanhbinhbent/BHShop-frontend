@@ -15,6 +15,14 @@ const reviewService = {
   getReviewById: async (id) => {
     const response = await axios.get(`${serverUrl}/reviews/${id}`).catch(errorHandler);
     return response;
+  },
+  postReview: async (review) => {
+    const response = await axios.post(`${serverUrl}/reviews`, review).catch((error) => {
+      if (error.response) {
+        return error.response;
+      }
+    });
+    return response;
   }
 };
 

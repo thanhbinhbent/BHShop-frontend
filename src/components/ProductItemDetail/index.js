@@ -8,7 +8,9 @@ import {
     message,
     Pagination,
     Breadcrumb,
-    Form, Input,Checkbox
+    Form,
+    Input,
+    Checkbox,
 } from 'antd';
 import {
     ShoppingCartOutlined,
@@ -115,10 +117,11 @@ function ProductItemDetail() {
         }
         return product.category_lst.map((category) => {
             return (
-            <li className="product-detail__category-item" key={category._id}>
-                <Tag>{category.name}</Tag>
-            </li>
-        )});
+                <li className="product-detail__category-item" key={category._id}>
+                    <Tag>{category.name}</Tag>
+                </li>
+            );
+        });
     };
     const getProductID = async (id) => {
         try {
@@ -133,13 +136,16 @@ function ProductItemDetail() {
         return newDate.toLocaleDateString('en-GB');
     };
     const getReviewById = async (id) => {
-        let userInfo = []
+        let userInfo = [];
         await reviewService.getReviewById(id).then((res) => {
             userInfo = res?.data[0].user;
         });
         return userInfo;
     };
-    useEffect(() => {
+    const onRatingChange = (value) => {
+        setValue(value);
+    };
+    const getProductDetail = () => {
         getProductID(product_id).then(async (res) => {
             setproduct(res);
             res.reviews = res.reviews.slice(
@@ -149,13 +155,36 @@ function ProductItemDetail() {
             for (let review of res.reviews) {
                 review.created_at = changeDateFormat(review.created_at);
                 review.ownerInfor = await getReviewById(review._id);
-                review.ownerFullName = review.ownerInfor[0].last_name + ' ' + review.ownerInfor[0].first_name;
+                review.ownerFullName =
+                    review.ownerInfor[0].last_name +
+                    ' ' +
+                    review.ownerInfor[0].first_name;
             }
             setReviews(res.reviews);
         });
+    };
+    useEffect(() => {
+        getProductDetail();
     }, [product_id]);
-    const onFinish = () =>{
-    }
+    const onFinish = (values) => {
+        let review = values.review;
+        review.product_id = product_id;
+        review.user_id = user.user_id;
+        reviewService.postReview(review).then((res) => {
+            if (res.status === 200) {
+                messageApi.open({
+                    type: 'success',
+                    content: 'Đánh giá thành công!',
+                });
+                getProductDetail();
+            } else {
+                messageApi.open({
+                    type: 'error',
+                    content: 'Đánh giá thất bại!',
+                });
+            }
+        });
+    };
     return product ? (
         <div className="container">
             {contextHolder}
@@ -184,7 +213,7 @@ function ProductItemDetail() {
                             Sản xuất bởi: {product && product.brand}{' '}
                             &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                             <Rate
-                                class="product-item__star"
+                                className="product-item__star"
                                 disabled
                                 defaultValue={product && averageRating}
                             />
@@ -362,7 +391,7 @@ function ProductItemDetail() {
                                             </h3>
                                             <div className="product-detail__reviewer-star">
                                                 <Rate
-                                                    class="product-item__star"
+                                                    className="product-item__star"
                                                     disabled
                                                     defaultValue={rating.rating}
                                                 />
@@ -390,15 +419,15 @@ function ProductItemDetail() {
                     </div>
                     <div id="review_form_wrapper">
                         <div id="review_form">
-                            <div id="respond" class="comment-respond">
+                            <div id="respond" className="comment-respond">
                                 <Form
                                     onFinish={onFinish}
                                     form={form}
-                                    name="reviews"
+                                    name="review"
                                     id="comment-respond"
-                                    class="comment-form"
+                                    className="comment-form"
                                 >
-                                    <h1 id="reply-title" class="comment-reply-title">
+                                    <h1 id="reply-title" className="comment-reply-title">
                                         Thêm đánh giá <Divider />
                                         <p>
                                             <a
@@ -411,45 +440,48 @@ function ProductItemDetail() {
                                             </a>
                                         </p>
                                     </h1>
-                                    <p class="comment-notes">
+                                    <p className="comment-notes">
                                         <span id="email-notes">
                                             Số điện thoại của bạn sẽ không bị công khai.
                                         </span>{' '}
-                                        <span class="required-field-message">
+                                        <span className="required-field-message">
                                             Điền vào các ô bắt buộc.{' '}
                                         </span>
                                     </p>
                                     <Form.Item
-                                        for="rating"
+                                        htmlFor="rating"
                                         label="Đánh giá&nbsp;"
-                                        name={['reviews', 'rating']}
+                                        name={['review', 'rating']}
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lòng nhập Họ và tên!',
+                                                message: 'Vui lòng chọn Rating!',
                                             },
                                         ]}
                                     >
                                         <Rate
                                             tooltips={desc}
-                                            onChange={setValue}
+                                            onChange={onRatingChange}
                                             value={value}
                                         />
+                                    </Form.Item>
+                                    {/* <div className="ant-rate-text">
                                         {value ? (
-                                            <span className="ant-rate-text">
+                                            <span>
                                                 {desc[value - 1]}
                                             </span>
                                         ) : (
                                             ''
                                         )}
-                                    </Form.Item>
+                                    </div> */}
                                     <Form.Item
                                         label="Bình luận của bạn:"
-                                        name={['reviews', 'comment']}
+                                        name={['review', 'comment']}
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lòng nhập Họ và tên!',
+                                                message:
+                                                    'Vui lòng nhập nội dung đánh giá!',
                                             },
                                         ]}
                                     >
@@ -458,40 +490,6 @@ function ProductItemDetail() {
                                             cols="45"
                                             rows="8"
                                         ></Input.TextArea>
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Name&nbsp;"
-                                        name={['reviews', '']}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Vui lòng nhập Họ và tên!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input
-                                            id="author"
-                                            name="author"
-                                            type="text"
-                                            value=""
-                                            size="30"
-                                            required=""
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name={['reviews', '']}
-                                        label="Số điện thoại"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Vui lòng nhập số điện thoại!',
-                                            },
-                                            {
-                                                validator: phoneValidator,
-                                            },
-                                        ]}
-                                    >
-                                        <Input placeholder={user.phone_number} />
                                     </Form.Item>
                                     <Form.Item
                                         name="agreement"
@@ -503,7 +501,7 @@ function ProductItemDetail() {
                                                         ? Promise.resolve()
                                                         : Promise.reject(
                                                               new Error(
-                                                                  'Bạn phải đọc, và đồng ý chính sách!',
+                                                                  'Bạn phải đọc và đồng ý chính sách của chúng tôi!',
                                                               ),
                                                           ),
                                             },
@@ -514,17 +512,18 @@ function ProductItemDetail() {
                                             <a href="/"> BHShop.</a>
                                         </Checkbox>
                                     </Form.Item>
-                                    <p class="comment-form-cookies-consent"></p>
-                                    <div class="form-submit">
-                                        <Input
+                                    <p className="comment-form-cookies-consent"></p>
+                                    <div className="form-submit">
+                                        <Button
                                             name="submit"
-                                            type="submit"
+                                            htmlType="submit"
                                             id="submit"
                                             className="submit"
-                                            value="Gửi phản hồi"
-                                        />{' '}
+                                        >
+                                            Gửi phản hồi
+                                        </Button>
                                     </div>
-                                </Form>{' '}
+                                </Form>
                             </div>
                         </div>
                     </div>
