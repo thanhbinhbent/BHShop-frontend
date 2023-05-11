@@ -26,9 +26,8 @@ import { useParams } from 'react-router-dom';
 import { handleMoney } from '@/utils';
 import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
-const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];
 import reviewService from '@/services/reviewService';
-
+const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];
 function ProductItemDetail() {
     const dispatch = useDispatch();
     const { product_id } = useParams();
@@ -154,8 +153,6 @@ function ProductItemDetail() {
             setReviews(res.reviews);
         });
     }, [product_id]);
-    console.log('user nè', reviewsToDisplay);
-    console.log('Product nè', product);
     const onFinish = () =>{
     }
     return product ? (
