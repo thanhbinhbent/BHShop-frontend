@@ -26,6 +26,7 @@ import { useParams } from 'react-router-dom';
 import { handleMoney } from '@/utils';
 import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
+import { phoneValidator } from '@/utils';
 import reviewService from '@/services/reviewService';
 const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];
 function ProductItemDetail() {
@@ -412,7 +413,7 @@ function ProductItemDetail() {
                                     </h1>
                                     <p class="comment-notes">
                                         <span id="email-notes">
-                                            Địa chỉ email của bạn sẽ không bị công khai.
+                                            Số điện thoại của bạn sẽ không bị công khai.
                                         </span>{' '}
                                         <span class="required-field-message">
                                             Điền vào các ô bắt buộc.{' '}
@@ -478,28 +479,19 @@ function ProductItemDetail() {
                                         />
                                     </Form.Item>
                                     <Form.Item
-                                        label="Email&nbsp;"
                                         name={['reviews', '']}
+                                        label="Số điện thoại"
                                         rules={[
                                             {
-                                                type: 'email',
-                                                message:
-                                                    'Vui lòng nhập đúng địa chỉ email!',
+                                                required: true,
+                                                message: 'Vui lòng nhập số điện thoại!',
                                             },
                                             {
-                                                required: true,
-                                                message: 'Vui lòng nhập email!',
+                                                validator: phoneValidator,
                                             },
                                         ]}
                                     >
-                                        <Input
-                                            id="email"
-                                            name="email"
-                                            type="email"
-                                            value=""
-                                            size="30"
-                                            required=""
-                                        />
+                                        <Input placeholder={user.phone_number} />
                                     </Form.Item>
                                     <Form.Item
                                         name="agreement"
