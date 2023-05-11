@@ -30,7 +30,7 @@ import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
 import { phoneValidator } from '@/utils';
 import reviewService from '@/services/reviewService';
-const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];
+const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];import './ProductItemDetail.css';
 function ProductItemDetail() {
     const dispatch = useDispatch();
     const { product_id } = useParams();
@@ -148,24 +148,32 @@ function ProductItemDetail() {
     const getProductDetail = () => {
         getProductID(product_id).then(async (res) => {
             setproduct(res);
-            res.reviews = res.reviews.slice(
-                (currentPage - 1) * pageSize,
-                currentPage * pageSize,
-            );
-            for (let review of res.reviews) {
-                review.created_at = changeDateFormat(review.created_at);
-                review.ownerInfor = await getReviewById(review._id);
-                review.ownerFullName =
-                    review.ownerInfor[0].last_name +
-                    ' ' +
-                    review.ownerInfor[0].first_name;
+
+            if (res?.reviews) {
+                const slicedReviews = res.reviews.slice(
+                    (currentPage - 1) * pageSize,
+                    currentPage * pageSize,
+                );
+
+                const transformedReviews = await Promise.all(
+                    slicedReviews.map(async (review) => {
+                        review.created_at = changeDateFormat(review.created_at);
+                        review.ownerInfor = await getReviewById(review._id);
+                        review.ownerFullName =
+                            review.ownerInfor[0].last_name +
+                            ' ' +
+                            review.ownerInfor[0].first_name;
+                        return review;
+                    }),
+                );
+
+                setReviews(transformedReviews);
             }
-            setReviews(res.reviews);
         });
     };
     useEffect(() => {
         getProductDetail();
-    }, [product_id]);
+    }, [product_id, currentPage, pageSize]);
     const onFinish = (values) => {
         let review = values.review;
         review.product_id = product_id;
@@ -184,6 +192,23 @@ function ProductItemDetail() {
                 });
             }
         });
+    };
+    const displayDiscount = (product) => {
+        if (product?.campaign?.active) {
+            let discountType = product.campaign.sale_type;
+            let discount = 0;
+            if (discountType === 'percent') {
+                discount = product.campaign.amount * 100;
+            } else {
+                discount = product.campaign.amount;
+            }
+            return (
+                <span className="product-item__discount">
+                    {`- ${discount} ${changeType(discountType)}`}
+                </span>
+            );
+        }
+        return <></>;
     };
     return product ? (
         <div className="container">
@@ -208,7 +233,7 @@ function ProductItemDetail() {
 
                 <div className="product-detail__container">
                     <div className="product-detail__heading">
-                        <h1>{product && product.name}</h1>
+                        <h2>{product && product.name}</h2>
                         <div className="product-detail__subheading">
                             Sản xuất bởi: {product && product.brand}{' '}
                             &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -223,56 +248,53 @@ function ProductItemDetail() {
                         </div>
                     </div>
                     <div className="product-detail__content">
-                        <div className="product-detail__thumb product-detail__main-col-1">
-                            <Splide
-                                options={splideOptions}
-                                aria-label="My Favorite Images"
-                            >
-                                {product &&
-                                    product.image.map((image, index) => {
-                                        return (
-                                            <SplideSlide
+                        <div className="product-detail_content-group">
+                            <div className="product-detail__thumb product-detail__main-col-1">
+                                <Splide
+                                    options={splideOptions}
+                                    aria-label="My Favorite Images"
+                                >
+                                    {product &&
+                                        product.image.map((image, index) => {
+                                            return (
+                                                <SplideSlide
+                                                    key={index}
+                                                    className={
+                                                        index === activeIndex
+                                                            ? 'active'
+                                                            : ''
+                                                    }
+                                                >
+                                                    <img
+                                                        src={
+                                                            product &&
+                                                            product.image[activeIndex]
+                                                        }
+                                                        alt={product && product.title}
+                                                    />
+                                                </SplideSlide>
+                                            );
+                                        })}
+                                </Splide>
+                                <div className="product-detail__thumb--mini">
+                                    {product &&
+                                        product.image.map((image, index) => (
+                                            <img
                                                 key={index}
+                                                src={image}
+                                                alt={image.title}
                                                 className={
                                                     index === activeIndex ? 'active' : ''
                                                 }
-                                            >
-                                                <img
-                                                    src={
-                                                        product &&
-                                                        product.image[activeIndex]
-                                                    }
-                                                    alt={product && product.title}
-                                                />
-                                            </SplideSlide>
-                                        );
-                                    })}
-                            </Splide>
-                            <div className="product-detail__thumb--mini">
-                                {product &&
-                                    product.image.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={image.title}
-                                            className={
-                                                index === activeIndex ? 'active' : ''
-                                            }
-                                            onClick={() => handleSlideClick(index)}
-                                        />
-                                    ))}
+                                                onClick={() => handleSlideClick(index)}
+                                            />
+                                        ))}
+                                </div>
+                                <div className="product-detail__col">
+                                    <Tag color="#f50">{displayDiscount(product)}</Tag>
+                                </div>
                             </div>
-                            <div className="product-detail__col">
-                                <Tag color="#f50">
-                                    {product.campaign.active &&
-                                        `- ${product.campaign.amount}${changeType(
-                                            product.campaign.sale_type,
-                                        )}`}
-                                </Tag>
-                            </div>
-                        </div>
-                        <div className="product-detail__info  product-detail__main-col-2">
-                            <div className="product-detail__info  product-detail__mini-col-1">
+                            <div className="product-detail__info  product-detail__main-col-2">
                                 <div className="product-detail__price">
                                     <span>
                                         {' '}
@@ -318,36 +340,37 @@ function ProductItemDetail() {
                                 </div>
                                 <Divider></Divider>
                             </div>
-                            <div className="product-detail__info  product-detail__mini-col-2">
-                                <div className="product-detail__warning">
-                                    <span>
-                                        Thông tin Covid-19: Chúng tôi vẫn tiếp tục giao
-                                        hàng
-                                    </span>
-                                </div>
-                                <div className="product-detail__bonus">
-                                    <p>
-                                        <span>
-                                            <CarOutlined
-                                                style={{
-                                                    fontSize: '25px',
-                                                }}
-                                            />{' '}
-                                        </span>
+                        </div>
 
-                                        <span>
-                                            Miễn phí giao hàng cho tất cả hóa đơn trên
-                                            200.000VND
-                                        </span>
-                                    </p>
-                                    <p>
-                                        <span>
-                                            <FileDoneOutlined
-                                                style={{
-                                                    fontSize: '25px',
-                                                }}
-                                            />{' '}
-                                        </span>
+                        <div className="product-detail__info  product-detail__main-col-3">
+                            <div className="product-detail__warning">
+                                <span>
+                                    Thông tin Covid-19: Chúng tôi vẫn tiếp tục giao hàng
+                                </span>
+                            </div>
+                            <div className="product-detail__bonus">
+                                <p>
+                                    <span>
+                                        <CarOutlined
+                                            style={{
+                                                fontSize: '25px',
+                                            }}
+                                        />{' '}
+                                    </span>
+
+                                    <span>
+                                        Miễn phí giao hàng cho tất cả hóa đơn trên
+                                        200.000VND
+                                    </span>
+                                </p>
+                                <p>
+                                    <span>
+                                        <FileDoneOutlined
+                                            style={{
+                                                fontSize: '25px',
+                                            }}
+                                        />{' '}
+                                    </span>
 
                                         <span>
                                             Đảm bảo 100% Organic từ trang trại tự nhiên

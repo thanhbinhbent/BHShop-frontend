@@ -37,8 +37,8 @@ function OrderTracking(props) {
     useEffect(() => {
         if (!order_id) return;
         getOrderDetail(order_id).then((res) => {
-            setProductsInOrder(res.data.products);
-            setOrder(res.data);
+            setProductsInOrder(res?.data.products);
+            setOrder(res?.data);
         });
     }, [order_id]);
     const changeStatusToNumber = (status) => {

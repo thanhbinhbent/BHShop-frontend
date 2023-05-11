@@ -51,19 +51,19 @@ const FormBasic = () => {
     const setAddress = async () => {
         let ward = '';
         await addressService.getWardName(customer.addresses[0].ward_id).then((res) => {
-            ward = res.data;
+            ward = res?.data;
         });
         let district = '';
         await addressService
             .getDistrictName(customer.addresses[0].district_id)
             .then((res) => {
-                district = res.data;
+                district = res?.data;
             });
         let province = '';
         await addressService
             .getProvinceName(customer.addresses[0].province_id)
             .then((res) => {
-                province = res.data;
+                province = res?.data;
             });
         setUserAddressDefault(
             `${customer.addresses[0].address_line_1}, ${customer.addresses[0].address_line_2}, ${ward}, ${district}, ${province} `,

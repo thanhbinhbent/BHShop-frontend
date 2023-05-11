@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let serverUrl = '';
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    serverUrl = 'http://127.0.0.1:3100';
+    serverUrl = 'https://bhshopadminserver.onrender.com';
 } else {
     serverUrl = process.env.REACT_APP_SERVER_URL;
 }

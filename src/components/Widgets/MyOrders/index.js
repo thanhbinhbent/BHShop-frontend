@@ -142,11 +142,9 @@ function MyOrders() {
                             </button>,
                         ]}
                     >
-                        <Card
-                        className='my-order__table'>
+                        <Card className="my-order__table">
                             {' '}
-                            <Table 
-                                
+                            <Table
                                 dataSource={item.products}
                                 pagination={false}
                                 columns={columns}
