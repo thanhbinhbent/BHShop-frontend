@@ -12,7 +12,7 @@ function ProductForWeek() {
     const ONE_MINUTE = 60000;
     const ONE_HOUR = 3600000;
     const ONE_DAY = 86400000;
-    const TIME_TO_DEADLINE = ONE_MINUTE * 2;
+    const TIME_TO_DEADLINE = ONE_MINUTE * 15;
     const [deadline, setDeadline] = useState(Date.now() + TIME_TO_DEADLINE);
     const [percent, setPercent] = useState(0);
     const [state, setState] = useState([]);
