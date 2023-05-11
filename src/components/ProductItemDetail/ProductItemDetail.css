@@ -1,3 +1,6 @@
+h1{
+  text-align: start;
+}
 .ant-tag{
   font-size: 1.5rem;
   line-height: normal;
@@ -275,6 +278,40 @@
   .product-detail__reviewers-pagination{
     text-align: center;
   }
+  .comment-notes{
+    font-size: 1.5rem;
+  }
+    .ant-form{
+      text-align: center;
+    }
+    .ant-form-item .ant-form-item-control-input{
+      text-align: center;
+    }
+  .ant-rate+.ant-rate-text{
+    font-size: 1.5rem;
+  }
+  .comment-respond{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .ant-form-item-control-input-content{
+    align-items: center;
+  }
+    .ant-form{
+      font-size: 1.5rem;
+    }
+    .ant-form-item .ant-form-item-label>label{
+      font-size: 1.5rem;
+    }
+.form-submit{
+width: 100%;
+  text-align: center;
+}
+.submit{
+  width: fit-content;
+  background-color: var(--color-primary);
+  color: #fff;
+}
     @media screen and (max-width: 1200px) {
       .product-detail__content {
           flex-direction: column;

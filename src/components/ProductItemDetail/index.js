@@ -8,6 +8,7 @@ import {
     message,
     Pagination,
     Breadcrumb,
+    Form, Input,Checkbox
 } from 'antd';
 import {
     ShoppingCartOutlined,
@@ -27,6 +28,7 @@ import { useParams } from 'react-router-dom';
 import { handleMoney } from '@/utils';
 import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
+const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];
 
 function ProductItemDetail() {
     const dispatch = useDispatch();
@@ -34,6 +36,9 @@ function ProductItemDetail() {
     const [messageApi, contextHolder] = message.useMessage();
     const [product, setproduct] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [value, setValue] = useState(3);
+    const [form] = Form.useForm();
+
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const user = useSelector((state) => state.user.user);
     const handleAddToCart = (product) => {
@@ -41,14 +46,14 @@ function ProductItemDetail() {
             messageApi.open({
                 type: 'error',
                 content: 'Bạn cần đăng nhập để thực hiện chức năng này',
-              });
+            });
             return;
         }
         dispatch(addToCart(product));
         messageApi.open({
             type: 'success',
             content: 'Thêm vào giỏ hàng thành công!',
-          });
+        });
     };
     const addProductToWishList = (product) => {
         if (!user) return;
@@ -123,7 +128,10 @@ function ProductItemDetail() {
             // console.log('res', res);
         });
     }, [product_id]);
-
+    console.log('user nè', reviewsToDisplay);
+    console.log('Product nè', product);
+    const onFinish = () =>{
+    }
     return product ? (
         <div className="container">
             {contextHolder}
@@ -342,7 +350,7 @@ function ProductItemDetail() {
                     </div>
                 </div> */}
                 <div className="product-detail__reviewers">
-                    <h2>Đánh giá của khách hàng:</h2>
+                    <h1>Đánh giá của khách hàng:</h1>
                     <Divider></Divider>
                     {reviewsToDisplay &&
                         reviewsToDisplay.map((rating) => (
@@ -383,6 +391,155 @@ function ProductItemDetail() {
                             total={product && product?.reviews?.length}
                             onChange={handlePageChange}
                         />
+                    </div>
+                    <div id="review_form_wrapper">
+                        <div id="review_form">
+                            <div id="respond" class="comment-respond">
+                                <Form
+                                    onFinish={onFinish}
+                                    form={form}
+                                    name="reviews"
+                                    id="comment-respond"
+                                    class="comment-form"
+                                >
+                                    <h1 id="reply-title" class="comment-reply-title">
+                                        Thêm đánh giá <Divider />
+                                        <p>
+                                            <a
+                                                rel="nofollow"
+                                                id="cancel-comment-reply-link"
+                                                href="https://klbtheme.com/bacola/product/all-natural-italian-style-chicken-meatballs/#respond"
+                                                style={{ display: 'none' }}
+                                            >
+                                                Hủy phản hồi
+                                            </a>
+                                        </p>
+                                    </h1>
+                                    <p class="comment-notes">
+                                        <span id="email-notes">
+                                            Địa chỉ email của bạn sẽ không bị công khai.
+                                        </span>{' '}
+                                        <span class="required-field-message">
+                                            Điền vào các ô bắt buộc.{' '}
+                                        </span>
+                                    </p>
+                                    <Form.Item
+                                        for="rating"
+                                        label="Đánh giá&nbsp;"
+                                        name={['reviews', 'rating']}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập Họ và tên!',
+                                            },
+                                        ]}
+                                    >
+                                        <Rate
+                                            tooltips={desc}
+                                            onChange={setValue}
+                                            value={value}
+                                        />
+                                        {value ? (
+                                            <span className="ant-rate-text">
+                                                {desc[value - 1]}
+                                            </span>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Bình luận của bạn:"
+                                        name={['reviews', 'comment']}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập Họ và tên!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input.TextArea
+                                            id="comment"
+                                            cols="45"
+                                            rows="8"
+                                        ></Input.TextArea>
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Name&nbsp;"
+                                        name={['reviews', '']}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập Họ và tên!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input
+                                            id="author"
+                                            name="author"
+                                            type="text"
+                                            value=""
+                                            size="30"
+                                            required=""
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Email&nbsp;"
+                                        name={['reviews', '']}
+                                        rules={[
+                                            {
+                                                type: 'email',
+                                                message:
+                                                    'Vui lòng nhập đúng địa chỉ email!',
+                                            },
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập email!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            value=""
+                                            size="30"
+                                            required=""
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="agreement"
+                                        valuePropName="checked"
+                                        rules={[
+                                            {
+                                                validator: (_, value) =>
+                                                    value
+                                                        ? Promise.resolve()
+                                                        : Promise.reject(
+                                                              new Error(
+                                                                  'Bạn phải đọc, và đồng ý chính sách!',
+                                                              ),
+                                                          ),
+                                            },
+                                        ]}
+                                    >
+                                        <Checkbox>
+                                            Tôi đồng ý với chính sách của{' '}
+                                            <a href="/"> BHShop.</a>
+                                        </Checkbox>
+                                    </Form.Item>
+                                    <p class="comment-form-cookies-consent"></p>
+                                    <div class="form-submit">
+                                        <Input
+                                            name="submit"
+                                            type="submit"
+                                            id="submit"
+                                            className="submit"
+                                            value="Gửi phản hồi"
+                                        />{' '}
+                                    </div>
+                                </Form>{' '}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
