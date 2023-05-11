@@ -1,19 +1,8 @@
 import './ProductItemDetail.css';
-import {
-    Rate,
-    InputNumber,
-    Tag,
-    Divider,
-    Button,
-    message,
-    Pagination,
-    Breadcrumb,
-} from 'antd';
+import { Rate, Tag, Divider, Button, message, Pagination, Breadcrumb } from 'antd';
 import {
     ShoppingCartOutlined,
-    FullscreenOutlined,
     HeartOutlined,
-    CloseOutlined,
     DollarOutlined,
     FileDoneOutlined,
     CarOutlined,
@@ -27,6 +16,7 @@ import { useParams } from 'react-router-dom';
 import { handleMoney } from '@/utils';
 import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
+import reviewService from '@/services/reviewService';
 
 function ProductItemDetail() {
     const dispatch = useDispatch();
@@ -41,14 +31,14 @@ function ProductItemDetail() {
             messageApi.open({
                 type: 'error',
                 content: 'Bạn cần đăng nhập để thực hiện chức năng này',
-              });
+            });
             return;
         }
         dispatch(addToCart(product));
         messageApi.open({
             type: 'success',
             content: 'Thêm vào giỏ hàng thành công!',
-          });
+        });
     };
     const addProductToWishList = (product) => {
         if (!user) return;
@@ -86,18 +76,14 @@ function ProductItemDetail() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
-
-    const reviewsToDisplay =
-        product &&
-        product?.reviews?.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
+    const [reviews, setReviews] = useState([]);
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
     const displayNewPrice = (price) => {
         if (product?.campaign?.active) {
             if (product.campaign.sale_type === 'percent') {
-                return price - (price * product.campaign.amount) / 100;
+                return price - price * product.campaign.amount;
             }
             return price - product.campaign.amount;
         }
@@ -109,6 +95,17 @@ function ProductItemDetail() {
         }
         return 'đ';
     };
+    const displayCategory = (product) => {
+        if (!product?.category_lst) {
+            return <></>;
+        }
+        return product.category_lst.map((category) => {
+            return (
+            <li className="product-detail__category-item" key={category._id}>
+                <Tag>{category.name}</Tag>
+            </li>
+        )});
+    };
     const getProductID = async (id) => {
         try {
             const response = await productService.getProduct(id);
@@ -117,13 +114,32 @@ function ProductItemDetail() {
             console.log('Error', err);
         }
     };
+    const changeDateFormat = (date) => {
+        const newDate = new Date(date);
+        return newDate.toLocaleDateString('en-GB');
+    };
+    const getReviewById = async (id) => {
+        let userInfo = []
+        await reviewService.getReviewById(id).then((res) => {
+            userInfo = res.data[0].user;
+        });
+        return userInfo;
+    };
     useEffect(() => {
-        getProductID(product_id).then((res) => {
+        getProductID(product_id).then(async (res) => {
             setproduct(res);
-            // console.log('res', res);
+            res.reviews = res.reviews.slice(
+                (currentPage - 1) * pageSize,
+                currentPage * pageSize,
+            );
+            for (let review of res.reviews) {
+                review.created_at = changeDateFormat(review.created_at);
+                review.ownerInfor = await getReviewById(review._id);
+                review.ownerFullName = review.ownerInfor[0].last_name + ' ' + review.ownerInfor[0].first_name;
+            }
+            setReviews(res.reviews);
         });
     }, [product_id]);
-
     return product ? (
         <div className="container">
             {contextHolder}
@@ -165,9 +181,11 @@ function ProductItemDetail() {
                         <div className="product-detail__thumb product-detail__main-col-1">
                             <div className="product-detail__col">
                                 {product.campaign.active &&
-                                    `- ${product.campaign.amount}${changeType(
-                                        product.campaign.sale_type,
-                                    )}`}
+                                    `- ${
+                                        product.campaign.sale_type === 'percent'
+                                            ? product.campaign.amount * 100
+                                            : product.campaign.amount
+                                    }${changeType(product.campaign.sale_type)}`}
                             </div>
                             <Splide
                                 options={splideOptions}
@@ -237,27 +255,21 @@ function ProductItemDetail() {
                                     Thêm vào giỏ
                                 </Button>
                             </div>
-                            <div className="product-detail__wishlist product-detail__tag"
-                            onClick={() => addProductToWishList(product)}>
+                            <div
+                                className="product-detail__wishlist product-detail__tag"
+                                onClick={() => addProductToWishList(product)}
+                            >
                                 <HeartOutlined />
                                 &nbsp;&nbsp;Thêm vào ưa thích
                             </div>
-                            <>
+                            <div>
                                 <ul className="product-detail__category">
                                     <h4 className="product-detail__category-heading">
                                         Danh mục:
                                     </h4>
-                                    <li className="product-detail__category-item">
-                                        <Tag>Nước năng lực</Tag>
-                                    </li>
-                                    <li className="product-detail__category-item">
-                                        <Tag>Nước uống</Tag>
-                                    </li>
-                                    <li className="product-detail__category-item">
-                                        <Tag>Chăm sóc da</Tag>
-                                    </li>
+                                    {displayCategory(product)}
                                 </ul>
-                            </>
+                            </div>
                             <Divider></Divider>
                         </div>
                         <div className="product-detail__info  product-detail__main-col-3">
@@ -312,62 +324,42 @@ function ProductItemDetail() {
                         </div>
                     </div>
                 </div>
-                {/* <div className="product-detail__information">
-                    <h2>Mô tả sản phẩm: </h2>
-                    <h3>{product.name}</h3>
-                    <a
-                        class="btn btn-link"
-                        data-toggle="collapse"
-                        href="#moreInfo"
-                        role="button"
-                        aria-expanded="false"
-                        aria-controls="moreInfo"
-                    >
-                        Xem thêm
-                    </a>
-                    <div class="collapse" id="moreInfo">
-                        <p>Thông tin chi tiết:</p>
-                        <ul>
-                            <li>Thông tin 1</li>
-                            <li>Thông tin 2</li>
-                            <li>Thông tin 3</li>
-                        </ul>
-                    </div>
-                </div> */}
                 <div className="product-detail__reviewers">
                     <h2>Đánh giá của khách hàng:</h2>
                     <Divider></Divider>
-                    {reviewsToDisplay &&
-                        reviewsToDisplay.map((rating) => (
-                            <div key={rating._id}>
-                                <div className="product-detail__reviewer">
-                                    <img
-                                        src={rating.avatar}
-                                        alt={rating.user_id}
-                                        className="product-detail__reviewer-avatar"
-                                    />
-                                    <div className="product-detail__reviewer-details">
-                                        <h3 className="product-detail__reviewer-username">
-                                            {rating.user_id}
-                                        </h3>
-                                        <p className="product-detail__reviewer-star">
-                                            <Rate
-                                                class="product-item__star"
-                                                disabled
-                                                defaultValue={rating.rating}
-                                            />
-                                        </p>
-                                        <p className="product-detail__reviewer-date">
-                                            {rating.created_at}
-                                        </p>
-                                        <p className="product-detail__reviewer-comment">
-                                            {rating.comment}
-                                        </p>
+                    {reviews &&
+                        reviews.map((rating) => {
+                            return (
+                                <div key={rating._id}>
+                                    <div className="product-detail__reviewer">
+                                        {/* <img
+                                            src={rating.avatar}
+                                            alt={rating.user_id}
+                                            className="product-detail__reviewer-avatar"
+                                        /> */}
+                                        <div className="product-detail__reviewer-details">
+                                            <h3 className="product-detail__reviewer-username">
+                                                {rating.ownerFullName}
+                                            </h3>
+                                            <div className="product-detail__reviewer-star">
+                                                <Rate
+                                                    class="product-item__star"
+                                                    disabled
+                                                    defaultValue={rating.rating}
+                                                />
+                                            </div>
+                                            <p className="product-detail__reviewer-date">
+                                                {rating.created_at}
+                                            </p>
+                                            <p className="product-detail__reviewer-comment">
+                                                {rating.comment}
+                                            </p>
+                                        </div>
                                     </div>
+                                    <Divider></Divider>
                                 </div>
-                                <Divider></Divider>
-                            </div>
-                        ))}
+                            );
+                        })}
                     <div className="product-detail__reviewers-pagination">
                         <Pagination
                             showSizeChanger

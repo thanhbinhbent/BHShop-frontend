@@ -236,6 +236,7 @@
   .product-detail__reviewer-username {
     margin-top: 0;
     margin-bottom: 5px;
+    font-size: 1.5rem;
   }
   
   .product-detail__reviewer-date {
@@ -245,7 +246,7 @@
   }
   .product-detail__reviewer-comment{
     margin-top: 20px;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
   }
   .product-detail__reviewers-pagination{
     text-align: center;

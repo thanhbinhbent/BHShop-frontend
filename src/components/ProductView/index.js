@@ -43,7 +43,7 @@ function ProductView(props) {
     const displayNewPrice = (price) => {
         if (product?.campaign?.active) {
             if (product.campaign.sale_type === 'percent') {
-                return price - (price * product.campaign.amount) / 100;
+                return price - (price * product.campaign.amount);
             }
             return price - product.campaign.amount;
         }
@@ -65,7 +65,7 @@ function ProductView(props) {
         }
         return product.category_lst.map((category) => {
             return (
-            <li className="product-view__category-item">
+            <li className="product-view__category-item" key={category._id}> 
                 <Tag>{category.name}</Tag>
             </li>
         )});

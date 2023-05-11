@@ -43,11 +43,17 @@ function ProductItem(props) {
     };
     const displayDiscount = (product) => {
         if (product?.campaign?.active) {
+            let discountType = product.campaign.sale_type;
+            let discount = 0;
+            if(discountType ==='percent') {
+                discount = product.campaign.amount * 100;
+            }
+            else {
+                discount = product.campaign.amount;
+            }
             return (
                 <span className="product-item__discount">
-                    {`- ${product.campaign.amount} ${changeType(
-                        product.campaign.sale_type,
-                    )}`}
+                    {`- ${discount} ${changeType(discountType)}`}
                 </span>
             );
         }
@@ -62,7 +68,7 @@ function ProductItem(props) {
     const displayNewPrice = (product) => {
         if (product?.campaign?.active) {
             if (product.campaign.sale_type === 'percent') {
-                return product.price - (product.price * product.campaign.amount) / 100;
+                return product.price - (product.price * product.campaign.amount);
             }
             return product.price - product.campaign.amount;
         }

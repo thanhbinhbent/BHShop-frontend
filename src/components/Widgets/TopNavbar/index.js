@@ -231,7 +231,7 @@ function TopNavbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    Blog
+                    Danh mục
                 </a>
             ),
             key: 'blog',

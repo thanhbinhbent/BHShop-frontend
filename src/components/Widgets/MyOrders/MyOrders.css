@@ -30,3 +30,8 @@
     box-sizing: border-box;
     border: none;
 }
+.my-order__table {
+    min-width: 80;
+    width: 50%;
+    border: none;
+}

@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Button, List, Skeleton, Modal, Popconfirm } from 'antd';
+import {
+    Button,
+    List,
+    Skeleton,
+    Modal,
+    Popconfirm,
+    Table,
+    InputNumber,
+    Card,
+} from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import OrderTracking from '@/components/OrderTracking';
 
 import './MyOrders.css';
 import { useSelector } from 'react-redux';
 import orderService from '@/services/orderService';
+import { handleMoney } from '@/utils';
 function MyOrders() {
     const customer = useSelector((state) => state.customer.customer);
     const [initLoading, setInitLoading] = useState(true);
@@ -28,7 +38,7 @@ function MyOrders() {
                 return 'Thanh toán qua Momo';
             case 'zalopay':
                 return 'Thanh toán qua ZaloPay';
-            case'credit_card':
+            case 'credit_card':
                 return 'Thanh toán bằng thẻ tín dụng';
             default:
                 return 'Thanh toán khi nhận hàng';
@@ -74,6 +84,34 @@ function MyOrders() {
     const handleCancelPop = () => {
         setOpenPop(false);
     };
+    const columns = [
+        {
+            title: 'Tên sản phẩm',
+            dataIndex: 'product_name',
+            key: 'name',
+            render: (name) => <p className="product-title">{name}</p>,
+        },
+        {
+            title: 'Giá',
+            dataIndex: 'price',
+            key: 'price',
+            render: (price) => handleMoney(price),
+        },
+        {
+            title: 'Số lượng',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            render: (quantity, record) => (
+                <InputNumber
+                    value={quantity}
+                    defaultValue={quantity}
+                    min={1}
+                    max={100}
+                    bordered={false}
+                />
+            ),
+        },
+    ];
     return (
         <div>
             <List
@@ -104,11 +142,24 @@ function MyOrders() {
                             </button>,
                         ]}
                     >
+                        <Card
+                        className='my-order__table'>
+                            {' '}
+                            <Table 
+                                
+                                dataSource={item.products}
+                                pagination={false}
+                                columns={columns}
+                            />
+                        </Card>
                         <Skeleton avatar title={false} loading={item.loading} active>
                             <List.Item.Meta
                                 title={<span>{item._id}</span>}
-                                description={changePaymentMethodToText(item?.payment_method)}
+                                description={changePaymentMethodToText(
+                                    item?.payment_method,
+                                )}
                             />
+                            <div></div>
                             <div>
                                 <p>Đặt ngày: {changeDateFormat(item.order_date)}</p>
                                 <p className="my-order__price-total">
