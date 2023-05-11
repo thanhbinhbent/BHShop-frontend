@@ -30,7 +30,8 @@ import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
 import { phoneValidator } from '@/utils';
 import reviewService from '@/services/reviewService';
-const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];import './ProductItemDetail.css';
+import './ProductItemDetail.css';
+const desc = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời'];
 function ProductItemDetail() {
     const dispatch = useDispatch();
     const { product_id } = useParams();
@@ -117,7 +118,7 @@ function ProductItemDetail() {
         }
         return product.category_lst.map((category) => {
             return (
-                <li className="product-detail__category-item" key={category._id}>
+                <li className="product-detail__category-item" key={category.name}>
                     <Tag>{category.name}</Tag>
                 </li>
             );
@@ -175,6 +176,13 @@ function ProductItemDetail() {
         getProductDetail();
     }, [product_id, currentPage, pageSize]);
     const onFinish = (values) => {
+        if (!isLoggedIn) {
+            messageApi.open({
+                type: 'error',
+                content: 'Bạn cần đăng nhập để thực hiện chức năng này',
+            });
+            return;
+        }
         let review = values.review;
         review.product_id = product_id;
         review.user_id = user.user_id;
@@ -372,123 +380,123 @@ function ProductItemDetail() {
                                         />{' '}
                                     </span>
 
-                                        <span>
-                                            Đảm bảo 100% Organic từ trang trại tự nhiên
-                                        </span>
-                                    </p>
-                                    <p>
-                                        <span>
-                                            <DollarOutlined
-                                                style={{
-                                                    fontSize: '25px',
-                                                }}
-                                            />{' '}
-                                        </span>
-                                        <span>
-                                            {' '}
-                                            Được hoàn trả hàng trong 1 ngày nếu bạn có nhu
-                                            cầu thay đổi.
-                                        </span>
-                                    </p>
-                                </div>
+                                    <span>
+                                        Đảm bảo 100% Organic từ trang trại tự nhiên
+                                    </span>
+                                </p>
+                                <p>
+                                    <span>
+                                        <DollarOutlined
+                                            style={{
+                                                fontSize: '25px',
+                                            }}
+                                        />{' '}
+                                    </span>
+                                    <span>
+                                        {' '}
+                                        Được hoàn trả hàng trong 1 ngày nếu bạn có nhu cầu
+                                        thay đổi.
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="product-detail__reviewers">
-                    <h1>Đánh giá của khách hàng:</h1>
-                    <Divider></Divider>
-                    {reviews &&
-                        reviews.map((rating) => {
-                            return (
-                                <div key={rating._id}>
-                                    <div className="product-detail__reviewer">
-                                        {/* <img
+            </div>
+            <div className="product-detail__reviewers">
+                <h1>Đánh giá của khách hàng:</h1>
+                <Divider></Divider>
+                {reviews &&
+                    reviews.map((rating) => {
+                        return (
+                            <div key={rating._id}>
+                                <div className="product-detail__reviewer">
+                                    {/* <img
                                             src={rating.avatar}
                                             alt={rating.user_id}
                                             className="product-detail__reviewer-avatar"
                                         /> */}
-                                        <div className="product-detail__reviewer-details">
-                                            <h3 className="product-detail__reviewer-username">
-                                                {rating.ownerFullName}
-                                            </h3>
-                                            <div className="product-detail__reviewer-star">
-                                                <Rate
-                                                    className="product-item__star"
-                                                    disabled
-                                                    defaultValue={rating.rating}
-                                                />
-                                            </div>
-                                            <p className="product-detail__reviewer-date">
-                                                {rating.created_at}
-                                            </p>
-                                            <p className="product-detail__reviewer-comment">
-                                                {rating.comment}
-                                            </p>
+                                    <div className="product-detail__reviewer-details">
+                                        <h3 className="product-detail__reviewer-username">
+                                            {rating.ownerFullName}
+                                        </h3>
+                                        <div className="product-detail__reviewer-star">
+                                            <Rate
+                                                className="product-item__star"
+                                                disabled
+                                                defaultValue={rating.rating}
+                                            />
                                         </div>
-                                    </div>
-                                    <Divider></Divider>
-                                </div>
-                            );
-                        })}
-                    <div className="product-detail__reviewers-pagination">
-                        <Pagination
-                            showSizeChanger
-                            defaultCurrent={1}
-                            pageSize={pageSize}
-                            total={product && product?.reviews?.length}
-                            onChange={handlePageChange}
-                        />
-                    </div>
-                    <div id="review_form_wrapper">
-                        <div id="review_form">
-                            <div id="respond" className="comment-respond">
-                                <Form
-                                    onFinish={onFinish}
-                                    form={form}
-                                    name="review"
-                                    id="comment-respond"
-                                    className="comment-form"
-                                >
-                                    <h1 id="reply-title" className="comment-reply-title">
-                                        Thêm đánh giá <Divider />
-                                        <p>
-                                            <a
-                                                rel="nofollow"
-                                                id="cancel-comment-reply-link"
-                                                href="https://klbtheme.com/bacola/product/all-natural-italian-style-chicken-meatballs/#respond"
-                                                style={{ display: 'none' }}
-                                            >
-                                                Hủy phản hồi
-                                            </a>
+                                        <p className="product-detail__reviewer-date">
+                                            {rating.created_at}
                                         </p>
-                                    </h1>
-                                    <p className="comment-notes">
-                                        <span id="email-notes">
-                                            Số điện thoại của bạn sẽ không bị công khai.
-                                        </span>{' '}
-                                        <span className="required-field-message">
-                                            Điền vào các ô bắt buộc.{' '}
-                                        </span>
+                                        <p className="product-detail__reviewer-comment">
+                                            {rating.comment}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Divider></Divider>
+                            </div>
+                        );
+                    })}
+                <div className="product-detail__reviewers-pagination">
+                    <Pagination
+                        showSizeChanger
+                        defaultCurrent={1}
+                        pageSize={pageSize}
+                        total={product && product?.reviews?.length}
+                        onChange={handlePageChange}
+                    />
+                </div>
+                <div id="review_form_wrapper">
+                    <div id="review_form">
+                        <div id="respond" className="comment-respond">
+                            <Form
+                                onFinish={onFinish}
+                                form={form}
+                                name="review"
+                                id="comment-respond"
+                                className="comment-form"
+                            >
+                                <h1 id="reply-title" className="comment-reply-title">
+                                    Thêm đánh giá <Divider />
+                                    <p>
+                                        <a
+                                            rel="nofollow"
+                                            id="cancel-comment-reply-link"
+                                            href="https://klbtheme.com/bacola/product/all-natural-italian-style-chicken-meatballs/#respond"
+                                            style={{ display: 'none' }}
+                                        >
+                                            Hủy phản hồi
+                                        </a>
                                     </p>
-                                    <Form.Item
-                                        htmlFor="rating"
-                                        label="Đánh giá&nbsp;"
-                                        name={['review', 'rating']}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Vui lòng chọn Rating!',
-                                            },
-                                        ]}
-                                    >
-                                        <Rate
-                                            tooltips={desc}
-                                            onChange={onRatingChange}
-                                            value={value}
-                                        />
-                                    </Form.Item>
-                                    {/* <div className="ant-rate-text">
+                                </h1>
+                                <p className="comment-notes">
+                                    <span id="email-notes">
+                                        Số điện thoại của bạn sẽ không bị công khai.
+                                    </span>{' '}
+                                    <span className="required-field-message">
+                                        Điền vào các ô bắt buộc.{' '}
+                                    </span>
+                                </p>
+                                <Form.Item
+                                    htmlFor="rating"
+                                    label="Đánh giá&nbsp;"
+                                    name={['review', 'rating']}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng chọn Rating!',
+                                        },
+                                    ]}
+                                >
+                                    <Rate
+                                        tooltips={desc}
+                                        onChange={onRatingChange}
+                                        value={value}
+                                    />
+                                </Form.Item>
+                                {/* <div className="ant-rate-text">
                                         {value ? (
                                             <span>
                                                 {desc[value - 1]}
@@ -497,57 +505,55 @@ function ProductItemDetail() {
                                             ''
                                         )}
                                     </div> */}
-                                    <Form.Item
-                                        label="Bình luận của bạn:"
-                                        name={['review', 'comment']}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message:
-                                                    'Vui lòng nhập nội dung đánh giá!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input.TextArea
-                                            id="comment"
-                                            cols="45"
-                                            rows="8"
-                                        ></Input.TextArea>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="agreement"
-                                        valuePropName="checked"
-                                        rules={[
-                                            {
-                                                validator: (_, value) =>
-                                                    value
-                                                        ? Promise.resolve()
-                                                        : Promise.reject(
-                                                              new Error(
-                                                                  'Bạn phải đọc và đồng ý chính sách của chúng tôi!',
-                                                              ),
+                                <Form.Item
+                                    label="Bình luận của bạn:"
+                                    name={['review', 'comment']}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng nhập nội dung đánh giá!',
+                                        },
+                                    ]}
+                                >
+                                    <Input.TextArea
+                                        id="comment"
+                                        cols="45"
+                                        rows="8"
+                                    ></Input.TextArea>
+                                </Form.Item>
+                                <Form.Item
+                                    name="agreement"
+                                    valuePropName="checked"
+                                    rules={[
+                                        {
+                                            validator: (_, value) =>
+                                                value
+                                                    ? Promise.resolve()
+                                                    : Promise.reject(
+                                                          new Error(
+                                                              'Bạn phải đọc và đồng ý chính sách của chúng tôi!',
                                                           ),
-                                            },
-                                        ]}
+                                                      ),
+                                        },
+                                    ]}
+                                >
+                                    <Checkbox>
+                                        Tôi đồng ý với chính sách của{' '}
+                                        <a href="/"> BHShop.</a>
+                                    </Checkbox>
+                                </Form.Item>
+                                <p className="comment-form-cookies-consent"></p>
+                                <div className="form-submit">
+                                    <Button
+                                        name="submit"
+                                        htmlType="submit"
+                                        id="submit"
+                                        className="submit"
                                     >
-                                        <Checkbox>
-                                            Tôi đồng ý với chính sách của{' '}
-                                            <a href="/"> BHShop.</a>
-                                        </Checkbox>
-                                    </Form.Item>
-                                    <p className="comment-form-cookies-consent"></p>
-                                    <div className="form-submit">
-                                        <Button
-                                            name="submit"
-                                            htmlType="submit"
-                                            id="submit"
-                                            className="submit"
-                                        >
-                                            Gửi phản hồi
-                                        </Button>
-                                    </div>
-                                </Form>
-                            </div>
+                                        Gửi phản hồi
+                                    </Button>
+                                </div>
+                            </Form>
                         </div>
                     </div>
                 </div>
