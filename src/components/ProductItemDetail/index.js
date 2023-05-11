@@ -1,4 +1,3 @@
-import './ProductItemDetail.css';
 import { Rate, Tag, Divider, Button, message, Pagination, Breadcrumb } from 'antd';
 import {
     ShoppingCartOutlined,
@@ -17,7 +16,7 @@ import { handleMoney } from '@/utils';
 import customerService from '@/services/customerService';
 import { addToWishlist } from '@/actions/userActions';
 import reviewService from '@/services/reviewService';
-
+import './ProductItemDetail.css';
 function ProductItemDetail() {
     const dispatch = useDispatch();
     const { product_id } = useParams();
@@ -101,10 +100,11 @@ function ProductItemDetail() {
         }
         return product.category_lst.map((category) => {
             return (
-            <li className="product-detail__category-item" key={category._id}>
-                <Tag>{category.name}</Tag>
-            </li>
-        )});
+                <li className="product-detail__category-item" key={category._id}>
+                    <Tag>{category.name}</Tag>
+                </li>
+            );
+        });
     };
     const getProductID = async (id) => {
         try {
@@ -119,27 +119,55 @@ function ProductItemDetail() {
         return newDate.toLocaleDateString('en-GB');
     };
     const getReviewById = async (id) => {
-        let userInfo = []
+        let userInfo = [];
         await reviewService.getReviewById(id).then((res) => {
-            userInfo = res.data[0].user;
+            userInfo = res?.data[0].user;
         });
         return userInfo;
     };
     useEffect(() => {
         getProductID(product_id).then(async (res) => {
             setproduct(res);
-            res.reviews = res.reviews.slice(
-                (currentPage - 1) * pageSize,
-                currentPage * pageSize,
-            );
-            for (let review of res.reviews) {
-                review.created_at = changeDateFormat(review.created_at);
-                review.ownerInfor = await getReviewById(review._id);
-                review.ownerFullName = review.ownerInfor[0].last_name + ' ' + review.ownerInfor[0].first_name;
+
+            if (res?.reviews) {
+                const slicedReviews = res.reviews.slice(
+                    (currentPage - 1) * pageSize,
+                    currentPage * pageSize,
+                );
+
+                const transformedReviews = await Promise.all(
+                    slicedReviews.map(async (review) => {
+                        review.created_at = changeDateFormat(review.created_at);
+                        review.ownerInfor = await getReviewById(review._id);
+                        review.ownerFullName =
+                            review.ownerInfor[0].last_name +
+                            ' ' +
+                            review.ownerInfor[0].first_name;
+                        return review;
+                    }),
+                );
+
+                setReviews(transformedReviews);
             }
-            setReviews(res.reviews);
         });
-    }, [product_id]);
+    }, [product_id, currentPage, pageSize]);
+    const displayDiscount = (product) => {
+        if (product?.campaign?.active) {
+            let discountType = product.campaign.sale_type;
+            let discount = 0;
+            if (discountType === 'percent') {
+                discount = product.campaign.amount * 100;
+            } else {
+                discount = product.campaign.amount;
+            }
+            return (
+                <span className="product-item__discount">
+                    {`- ${discount} ${changeType(discountType)}`}
+                </span>
+            );
+        }
+        return <></>;
+    };
     return product ? (
         <div className="container">
             {contextHolder}
@@ -163,7 +191,7 @@ function ProductItemDetail() {
 
                 <div className="product-detail__container">
                     <div className="product-detail__heading">
-                        <h1>{product && product.name}</h1>
+                        <h2>{product && product.name}</h2>
                         <div className="product-detail__subheading">
                             Sản xuất bởi: {product && product.brand}{' '}
                             &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -178,100 +206,100 @@ function ProductItemDetail() {
                         </div>
                     </div>
                     <div className="product-detail__content">
-                        <div className="product-detail__thumb product-detail__main-col-1">
-                            <Splide
-                                options={splideOptions}
-                                aria-label="My Favorite Images"
-                            >
-                                {product &&
-                                    product.image.map((image, index) => {
-                                        return (
-                                            <SplideSlide
+                        <div className="product-detail_content-group">
+                            <div className="product-detail__thumb product-detail__main-col-1">
+                                <Splide
+                                    options={splideOptions}
+                                    aria-label="My Favorite Images"
+                                >
+                                    {product &&
+                                        product.image.map((image, index) => {
+                                            return (
+                                                <SplideSlide
+                                                    key={index}
+                                                    className={
+                                                        index === activeIndex
+                                                            ? 'active'
+                                                            : ''
+                                                    }
+                                                >
+                                                    <img
+                                                        src={
+                                                            product &&
+                                                            product.image[activeIndex]
+                                                        }
+                                                        alt={product && product.title}
+                                                    />
+                                                </SplideSlide>
+                                            );
+                                        })}
+                                </Splide>
+                                <div className="product-detail__thumb--mini">
+                                    {product &&
+                                        product.image.map((image, index) => (
+                                            <img
                                                 key={index}
+                                                src={image}
+                                                alt={image.title}
                                                 className={
                                                     index === activeIndex ? 'active' : ''
                                                 }
-                                            >
-                                                <img
-                                                    src={
-                                                        product &&
-                                                        product.image[activeIndex]
-                                                    }
-                                                    alt={product && product.title}
-                                                />
-                                            </SplideSlide>
-                                        );
-                                    })}
-                            </Splide>
-                            <div className="product-detail__thumb--mini">
-                                {product &&
-                                    product.image.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={image.title}
-                                            className={
-                                                index === activeIndex ? 'active' : ''
-                                            }
-                                            onClick={() => handleSlideClick(index)}
-                                        />
-                                    ))}
+                                                onClick={() => handleSlideClick(index)}
+                                            />
+                                        ))}
+                                </div>
+                                <div className="product-detail__col">
+                                    <Tag color="#f50">{displayDiscount(product)}</Tag>
+                                </div>
                             </div>
-                            <div className="product-detail__col">
-                                <Tag color="#f50">
-                                    {product.campaign.active &&
-                                        `- ${product.campaign.amount}${changeType(
-                                            product.campaign.sale_type,
-                                        )}`}
-                                </Tag>
-                            </div>
-                        </div>
-                        <div className="product-detail__info  product-detail__main-col-2">
-                            <div className="product-detail__price">
-                                <span>
-                                    {' '}
-                                    {handleMoney(displayNewPrice(product.price))}{' '}
-                                </span>
-                                <span> {handleMoney(product.price)} </span>
-                            </div>
-                            <div className="product-detail__status">
-                                {product && product.inventory_qty > 0 ? (
-                                    <Tag color="success">Còn hàng</Tag>
-                                ) : (
-                                    <Tag color="error">Hết hàng</Tag>
-                                )}
-                            </div>
-                            <div className="product-detail__describe">
-                                {product && product.description}
-                            </div>
-                            <div className="product-detail__cart-update">
-                                <Button
-                                    block
-                                    type="primary"
-                                    className="product-item__btn product-view__addcart"
-                                    onClick={() => handleAddToCart(product)}
+                            <div className="product-detail__info  product-detail__main-col-2">
+                                <div className="product-detail__price">
+                                    <span>
+                                        {' '}
+                                        {handleMoney(displayNewPrice(product.price))}{' '}
+                                    </span>
+                                    <span> {handleMoney(product.price)} </span>
+                                </div>
+                                <div className="product-detail__status">
+                                    {product && product.inventory_qty > 0 ? (
+                                        <Tag color="success">Còn hàng</Tag>
+                                    ) : (
+                                        <Tag color="error">Hết hàng</Tag>
+                                    )}
+                                </div>
+                                <div className="product-detail__describe">
+                                    {product && product.description}
+                                </div>
+                                <div className="product-detail__cart-update">
+                                    <Button
+                                        block
+                                        type="primary"
+                                        className="product-item__btn product-view__addcart"
+                                        onClick={() => handleAddToCart(product)}
+                                    >
+                                        <ShoppingCartOutlined />
+                                        Thêm vào giỏ
+                                    </Button>
+                                </div>
+                                <div
+                                    className="product-detail__wishlist product-detail__tag"
+                                    onClick={() => addProductToWishList(product)}
                                 >
-                                    <ShoppingCartOutlined />
-                                    Thêm vào giỏ
-                                </Button>
+                                    <HeartOutlined />
+                                    &nbsp;&nbsp;Thêm vào ưa thích
+                                </div>
+                                <div>
+                                    <ul className="product-detail__category">
+                                        <h4 className="product-detail__category-heading">
+                                            Danh mục:
+                                        </h4>
+                                        {displayCategory(product)}
+                                    </ul>
+                                </div>
+                                <Divider></Divider>
                             </div>
-                            <div
-                                className="product-detail__wishlist product-detail__tag"
-                                onClick={() => addProductToWishList(product)}
-                            >
-                                <HeartOutlined />
-                                &nbsp;&nbsp;Thêm vào ưa thích
-                            </div>
-                            <div>
-                                <ul className="product-detail__category">
-                                    <h4 className="product-detail__category-heading">
-                                        Danh mục:
-                                    </h4>
-                                    {displayCategory(product)}
-                                </ul>
-                            </div>
-                            <Divider></Divider>
                         </div>
+
                         <div className="product-detail__info  product-detail__main-col-3">
                             <div className="product-detail__warning">
                                 <span>
@@ -288,19 +316,19 @@ function ProductItemDetail() {
                                         />{' '}
                                     </span>
 
-                                        <span>
-                                            Miễn phí giao hàng cho tất cả hóa đơn trên
-                                            200.000VND
-                                        </span>
-                                    </p>
-                                    <p>
-                                        <span>
-                                            <FileDoneOutlined
-                                                style={{
-                                                    fontSize: '25px',
-                                                }}
-                                            />{' '}
-                                        </span>
+                                    <span>
+                                        Miễn phí giao hàng cho tất cả hóa đơn trên
+                                        200.000VND
+                                    </span>
+                                </p>
+                                <p>
+                                    <span>
+                                        <FileDoneOutlined
+                                            style={{
+                                                fontSize: '25px',
+                                            }}
+                                        />{' '}
+                                    </span>
 
                                     <span>
                                         Đảm bảo 100% Organic từ trang trại tự nhiên
