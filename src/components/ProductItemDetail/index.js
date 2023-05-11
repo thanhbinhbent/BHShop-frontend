@@ -122,7 +122,7 @@ function ProductItemDetail() {
     const getProductID = async (id) => {
         try {
             const response = await productService.getProduct(id);
-            return response.data;
+            return response?.data;
         } catch (err) {
             console.log('Error', err);
         }
@@ -134,7 +134,7 @@ function ProductItemDetail() {
     const getReviewById = async (id) => {
         let userInfo = []
         await reviewService.getReviewById(id).then((res) => {
-            userInfo = res.data[0].user;
+            userInfo = res?.data[0].user;
         });
         return userInfo;
     };
@@ -242,66 +242,68 @@ function ProductItemDetail() {
                             </div>
                         </div>
                         <div className="product-detail__info  product-detail__main-col-2">
-                            <div className="product-detail__price">
-                                <span>
-                                    {' '}
-                                    {handleMoney(displayNewPrice(product.price))}{' '}
-                                </span>
-                                <span> {handleMoney(product.price)} </span>
-                            </div>
-                            <div className="product-detail__status">
-                                {product && product.inventory_qty > 0 ? (
-                                    <Tag color="success">Còn hàng</Tag>
-                                ) : (
-                                    <Tag color="error">Hết hàng</Tag>
-                                )}
-                            </div>
-                            <div className="product-detail__describe">
-                                {product && product.description}
-                            </div>
-                            <div className="product-detail__cart-update">
-                                <Button
-                                    block
-                                    type="primary"
-                                    className="product-item__btn product-view__addcart"
-                                    onClick={() => handleAddToCart(product)}
-                                >
-                                    <ShoppingCartOutlined />
-                                    Thêm vào giỏ
-                                </Button>
-                            </div>
-                            <div
-                                className="product-detail__wishlist product-detail__tag"
-                                onClick={() => addProductToWishList(product)}
-                            >
-                                <HeartOutlined />
-                                &nbsp;&nbsp;Thêm vào ưa thích
-                            </div>
-                            <div>
-                                <ul className="product-detail__category">
-                                    <h4 className="product-detail__category-heading">
-                                        Danh mục:
-                                    </h4>
-                                    {displayCategory(product)}
-                                </ul>
-                            </div>
-                            <Divider></Divider>
-                        </div>
-                        <div className="product-detail__info  product-detail__main-col-3">
-                            <div className="product-detail__warning">
-                                <span>
-                                    Thông tin Covid-19: Chúng tôi vẫn tiếp tục giao hàng
-                                </span>
-                            </div>
-                            <div className="product-detail__bonus">
-                                <p>
+                            <div className="product-detail__info  product-detail__mini-col-1">
+                                <div className="product-detail__price">
                                     <span>
-                                        <CarOutlined
-                                            style={{
-                                                fontSize: '25px',
-                                            }}
-                                        />{' '}
+                                        {' '}
+                                        {handleMoney(displayNewPrice(product.price))}{' '}
                                     </span>
+                                    <span> {handleMoney(product.price)} </span>
+                                </div>
+                                <div className="product-detail__status">
+                                    {product && product.inventory_qty > 0 ? (
+                                        <Tag color="success">Còn hàng</Tag>
+                                    ) : (
+                                        <Tag color="error">Hết hàng</Tag>
+                                    )}
+                                </div>
+                                <div className="product-detail__describe">
+                                    {product && product.description}
+                                </div>
+                                <div className="product-detail__cart-update">
+                                    <Button
+                                        block
+                                        type="primary"
+                                        className="product-item__btn product-view__addcart"
+                                        onClick={() => handleAddToCart(product)}
+                                    >
+                                        <ShoppingCartOutlined />
+                                        Thêm vào giỏ
+                                    </Button>
+                                </div>
+                                <div
+                                    className="product-detail__wishlist product-detail__tag"
+                                    onClick={() => addProductToWishList(product)}
+                                >
+                                    <HeartOutlined />
+                                    &nbsp;&nbsp;Thêm vào ưa thích
+                                </div>
+                                <div>
+                                    <ul className="product-detail__category">
+                                        <h4 className="product-detail__category-heading">
+                                            Danh mục:
+                                        </h4>
+                                        {displayCategory(product)}
+                                    </ul>
+                                </div>
+                                <Divider></Divider>
+                            </div>
+                            <div className="product-detail__info  product-detail__mini-col-2">
+                                <div className="product-detail__warning">
+                                    <span>
+                                        Thông tin Covid-19: Chúng tôi vẫn tiếp tục giao
+                                        hàng
+                                    </span>
+                                </div>
+                                <div className="product-detail__bonus">
+                                    <p>
+                                        <span>
+                                            <CarOutlined
+                                                style={{
+                                                    fontSize: '25px',
+                                                }}
+                                            />{' '}
+                                        </span>
 
                                         <span>
                                             Miễn phí giao hàng cho tất cả hóa đơn trên
@@ -317,24 +319,25 @@ function ProductItemDetail() {
                                             />{' '}
                                         </span>
 
-                                    <span>
-                                        Đảm bảo 100% Organic từ trang trại tự nhiên
-                                    </span>
-                                </p>
-                                <p>
-                                    <span>
-                                        <DollarOutlined
-                                            style={{
-                                                fontSize: '25px',
-                                            }}
-                                        />{' '}
-                                    </span>
-                                    <span>
-                                        {' '}
-                                        Được hoàn trả hàng trong 1 ngày nếu bạn có nhu cầu
-                                        thay đổi.
-                                    </span>
-                                </p>
+                                        <span>
+                                            Đảm bảo 100% Organic từ trang trại tự nhiên
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span>
+                                            <DollarOutlined
+                                                style={{
+                                                    fontSize: '25px',
+                                                }}
+                                            />{' '}
+                                        </span>
+                                        <span>
+                                            {' '}
+                                            Được hoàn trả hàng trong 1 ngày nếu bạn có nhu
+                                            cầu thay đổi.
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
