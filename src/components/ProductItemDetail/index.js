@@ -179,14 +179,6 @@ function ProductItemDetail() {
                     </div>
                     <div className="product-detail__content">
                         <div className="product-detail__thumb product-detail__main-col-1">
-                            <div className="product-detail__col">
-                                {product.campaign.active &&
-                                    `- ${
-                                        product.campaign.sale_type === 'percent'
-                                            ? product.campaign.amount * 100
-                                            : product.campaign.amount
-                                    }${changeType(product.campaign.sale_type)}`}
-                            </div>
                             <Splide
                                 options={splideOptions}
                                 aria-label="My Favorite Images"
@@ -224,6 +216,14 @@ function ProductItemDetail() {
                                             onClick={() => handleSlideClick(index)}
                                         />
                                     ))}
+                            </div>
+                            <div className="product-detail__col">
+                                <Tag color="#f50">
+                                    {product.campaign.active &&
+                                        `- ${product.campaign.amount}${changeType(
+                                            product.campaign.sale_type,
+                                        )}`}
+                                </Tag>
                             </div>
                         </div>
                         <div className="product-detail__info  product-detail__main-col-2">
@@ -288,19 +288,19 @@ function ProductItemDetail() {
                                         />{' '}
                                     </span>
 
-                                    <span>
-                                        Miễn phí giao hàng cho tất cả hóa đơn trên
-                                        200.000VND
-                                    </span>
-                                </p>
-                                <p>
-                                    <span>
-                                        <FileDoneOutlined
-                                            style={{
-                                                fontSize: '25px',
-                                            }}
-                                        />{' '}
-                                    </span>
+                                        <span>
+                                            Miễn phí giao hàng cho tất cả hóa đơn trên
+                                            200.000VND
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span>
+                                            <FileDoneOutlined
+                                                style={{
+                                                    fontSize: '25px',
+                                                }}
+                                            />{' '}
+                                        </span>
 
                                     <span>
                                         Đảm bảo 100% Organic từ trang trại tự nhiên
